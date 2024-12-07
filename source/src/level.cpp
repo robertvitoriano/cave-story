@@ -61,7 +61,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 			std::stringstream ss;
 			ss << source;
 			pTileset->QueryIntAttribute("firstgid", &firstgid);
-			SDL_Texture *tex = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(ss.str()));
+			SDL_Texture *tex = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(ss.str().erase(0, 3)));
 			this->_tilesets.push_back(Tileset(tex, firstgid));
 
 			// Get all of the animations for that tileset
