@@ -715,7 +715,7 @@
  <objectgroup id="6" name="doors">
   <object id="32" x="147.466" y="50.8598" width="9.14938" height="12.6477">
    <properties>
-    <property name="destination" value="Map 2"/>
+    <property name="destination" value="Map_2"/>
    </properties>
   </object>
  </objectgroup>
