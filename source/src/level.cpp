@@ -8,6 +8,7 @@
 #include "tinyxml2.h"
 
 #include <SDL2/SDL.h>
+#include "globals.h"
 
 #include <sstream>
 #include <algorithm>
@@ -42,7 +43,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 	mapNode->QueryIntAttribute("width", &width);
 	mapNode->QueryIntAttribute("height", &height);
 	this->_size = Vector2(width, height);
-
+	std::cout << "WIDTH OF THE MAP: " << width << std::endl;
 	// Get the width and the height of the tiles and store it in _tileSize
 	int tileWidth, tileHeight;
 	mapNode->QueryIntAttribute("tilewidth", &tileWidth);
@@ -403,11 +404,25 @@ void Level::update(int elapsedTime, Player &player)
 	}
 }
 
-void Level::draw(Graphics &graphics)
+void Level::draw(Graphics &graphics, Player &player)
 {
+
 	for (int i = 0; i < this->_tileList.size(); i++)
 	{
-		this->_tileList.at(i).draw(graphics);
+		bool isBehindPlayer = this->_tileList.at(i).getPosition().x <= player.getX();
+
+		if (!isBehindPlayer && this->_tileList.at(i).getPosition().x <= player.getX() + 100)
+		{
+			this->_tileList.at(i).draw(graphics);
+		}
+		if (this->_tileList.at(i).getPosition().x > SCREEN_W)
+		{
+			std::cout << "IS OUT OF BOUNDS: " << this->_tileList.at(i).getPosition().x << std::endl;
+		}
+		if (isBehindPlayer && this->_tileList.at(i).getPosition().x >= player.getX() - 100)
+		{
+			this->_tileList.at(i).draw(graphics);
+		}
 	}
 	for (int i = 0; i < this->_animatedTileList.size(); i++)
 	{
