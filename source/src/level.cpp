@@ -4,7 +4,7 @@
 #include "utils.h"
 #include "player.h"
 #include "enemy.h"
-
+#include "bat.h"
 #include "tinyxml2.h"
 
 #include <SDL2/SDL.h>
