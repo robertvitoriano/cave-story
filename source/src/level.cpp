@@ -13,7 +13,6 @@
 #include <sstream>
 #include <algorithm>
 #include <cmath>
-
 using namespace tinyxml2;
 
 Level::Level() {}
@@ -415,7 +414,7 @@ void Level::draw(Graphics &graphics, Player &player)
 		{
 			this->_tileList.at(i).draw(graphics);
 		}
-		if (this->_tileList.at(i).getPosition().x > SCREEN_W)
+		if (this->_tileList.at(i).getPosition().x > globals::SCREEN_WIDTH)
 		{
 			std::cout << "IS OUT OF BOUNDS: " << this->_tileList.at(i).getPosition().x << std::endl;
 		}

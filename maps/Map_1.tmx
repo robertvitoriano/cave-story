@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="47" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="38">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="47" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="40">
  <tileset firstgid="1" name="PrtCave" tilewidth="16" tileheight="16" tilecount="80" columns="16">
   <image source="../content/tilesets/PrtCave.png" width="256" height="80"/>
  </tileset>
@@ -1024,7 +1024,7 @@
    <tile gid="2"/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
+   <tile gid="67"/>
    <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
@@ -1071,14 +1071,14 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="34"/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="67"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1539,7 +1539,8 @@
  <objectgroup id="3" name="collisions">
   <object id="1" x="144.823" y="17.4994" width="14.1805" height="14.4823"/>
   <object id="2" x="144.219" y="64.8685" width="15.3874" height="14.4823"/>
-  <object id="3" x="111.634" y="79.9541" width="80.2559" height="15.3874"/>
+  <object id="3" x="111.884" y="96.4541" width="80.2559" height="15.3874"/>
+  <object id="39" x="128.134" y="79.9541" width="62.7559" height="15.3874"/>
   <object id="4" x="58.2308" y="28.0594" width="23.5337" height="107.41"/>
   <object id="5" x="53.4033" y="125.513" width="60.041" height="16.5943"/>
   <object id="6" x="107.41" y="126.116" width="6.03427" height="58.2308"/>
@@ -1548,7 +1549,7 @@
   <object id="9" x="209.088" y="128.228" width="31.0765" height="14.784"/>
   <object id="11" x="174.089" y="25.6457" width="12.0685" height="37.7142"/>
   <object id="14" x="241.052" y="127.66" width="77.4651" height="32.2834"/>
-  <object id="37" x="231.719" y="60.9937" width="519.465" height="32.2834"/>
+  <object id="37" x="229.385" y="60.9937" width="521.798" height="34.2834"/>
   <object id="33" x="319.552" y="160.66" width="32.4651" height="61.2834"/>
   <object id="34" x="352.052" y="224.66" width="79.4651" height="31.7834"/>
   <object id="36" x="431.052" y="209.66" width="320.465" height="48.2834"/>
@@ -1559,7 +1560,6 @@
   <object id="26" x="82.2259" y="53.4561" width="12.436" height="5.56834"/>
   <object id="27" x="159.997" y="31.3683" width="13.5496" height="5.56834"/>
   <object id="28" x="192.108" y="90.3928" width="36.9367" height="5.19712"/>
-  <object id="29" x="226.075" y="96.5179" width="11.8791" height="4.45467"/>
  </objectgroup>
  <objectgroup color="#00ff00" id="4" name="spawn points">
   <object id="17" name="player" x="158.337" y="136.764" width="2.57298" height="2.77091">
