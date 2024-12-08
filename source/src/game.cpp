@@ -3,11 +3,6 @@
 #include "game.h"
 #include "graphics.h"
 #include "input.h"
-
-/* Game class
- * This class holds all information for our main game loop
- */
-
 namespace
 {
 	const int FPS = 50;
@@ -30,7 +25,7 @@ void Game::gameLoop()
 	Input input;
 	SDL_Event event;
 
-	this->_level = Level("Map_1", graphics);
+	this->_level = Level("Map_2", graphics);
 	this->_player = Player(graphics, this->_level.getPlayerSpawnPoint());
 	this->_hud = HUD(graphics, this->_player);
 

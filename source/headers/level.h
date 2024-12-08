@@ -13,6 +13,7 @@
 #include <iostream>
 class Graphics;
 class Enemy;
+class Bat;
 class Player;
 struct SDL_Texture;
 struct SDL_Rect;
