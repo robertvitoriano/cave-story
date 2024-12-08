@@ -5,11 +5,13 @@
 #include "level.h"
 #include "hud.h"
 #include "graphics.h"
-
-class Game {
+#include "MusicPlayer.h"
+class Game
+{
 public:
 	Game();
 	~Game();
+
 private:
 	void gameLoop();
 	void draw(Graphics &graphics);

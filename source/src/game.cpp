@@ -12,6 +12,8 @@ namespace
 Game::Game()
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
+	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
+	musicPlayer.playMusic("content/sounds/background.mp3", -1);
 	this->gameLoop();
 }
 
