@@ -408,20 +408,8 @@ void Level::draw(Graphics &graphics, Player &player)
 
 	for (int i = 0; i < this->_tileList.size(); i++)
 	{
-		bool isBehindPlayer = this->_tileList.at(i).getPosition().x <= player.getX();
 
-		if (!isBehindPlayer && this->_tileList.at(i).getPosition().x <= player.getX() + 100)
-		{
-			this->_tileList.at(i).draw(graphics);
-		}
-		if (this->_tileList.at(i).getPosition().x > globals::SCREEN_WIDTH)
-		{
-			std::cout << "IS OUT OF BOUNDS: " << this->_tileList.at(i).getPosition().x << std::endl;
-		}
-		if (isBehindPlayer && this->_tileList.at(i).getPosition().x >= player.getX() - 100)
-		{
-			this->_tileList.at(i).draw(graphics);
-		}
+		this->_tileList.at(i).draw(graphics);
 	}
 	for (int i = 0; i < this->_animatedTileList.size(); i++)
 	{

@@ -1,32 +1,29 @@
-#ifndef MUSIC_PLAYER_H
-#define MUSIC_PLAYER_H
+#ifndef MUSICPLAYER_H
+#define MUSICPLAYER_H
 
-#include <SDL2/SDL_mixer.h>
-
-#include <map>
-#include <memory>
 #include <string>
+#include <unordered_map>
+#include <vector>
+
+#include <SDL_mixer.h>
 
 class MusicPlayer
 {
-public:
-  static MusicPlayer &getInstance();
-
-  void playMusic(const std::string &musicPath, int loops);
-  void playSound(const std::string &soundPath, int loops);
-  void setVolume(int volume);
-  void destroy();
-
 private:
+  std::unordered_map<std::string, Mix_Chunk *> soundEffects;
+  std::unordered_map<std::string, int> activeChannels;
+  std::vector<std::string> soundOrder;
+  int globalVolume;
+
   MusicPlayer();
   ~MusicPlayer();
+  void destroy();
 
-  MusicPlayer(const MusicPlayer &) = delete;
-  MusicPlayer &operator=(const MusicPlayer &) = delete;
-
-  std::map<std::string, Mix_Music *> musicTracks;
-  std::map<std::string, Mix_Chunk *> soundEffects;
-  int globalVolume;
+public:
+  static MusicPlayer &getInstance();
+  void playSound(const std::string &soundPath, int loops);
+  void stopSound(const std::string &soundPath);
+  void setVolume(int volume);
 };
 
-#endif
+#endif // MUSICPLAYER_H

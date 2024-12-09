@@ -1,6 +1,6 @@
 #include "MusicPlayer.h"
-
 #include <stdexcept>
+#include <algorithm>
 
 MusicPlayer &MusicPlayer::getInstance()
 {
@@ -16,28 +16,12 @@ MusicPlayer::MusicPlayer() : globalVolume(30)
   }
 }
 
-MusicPlayer::~MusicPlayer() { destroy(); }
-
-void MusicPlayer::playMusic(const std::string &musicPath, int loops = -1)
+MusicPlayer::~MusicPlayer()
 {
-  if (musicTracks.find(musicPath) == musicTracks.end())
-  {
-    Mix_Music *music = Mix_LoadMUS(musicPath.c_str());
-    if (!music)
-    {
-      throw std::runtime_error("Failed to load music! Error: " + std::string(Mix_GetError()));
-    }
-    musicTracks[musicPath] = music;
-  }
-
-  if (Mix_PlayMusic(musicTracks[musicPath], loops) == -1)
-  {
-    throw std::runtime_error("Failed to play music! Error: " + std::string(Mix_GetError()));
-  }
-  Mix_VolumeMusic(globalVolume);
+  destroy();
 }
 
-void MusicPlayer::playSound(const std::string &soundPath, int loops = 0)
+void MusicPlayer::playSound(const std::string &soundPath, int loops)
 {
   if (soundEffects.find(soundPath) == soundEffects.end())
   {
@@ -47,39 +31,61 @@ void MusicPlayer::playSound(const std::string &soundPath, int loops = 0)
       throw std::runtime_error("Failed to load sound effect! Error: " + std::string(Mix_GetError()));
     }
     soundEffects[soundPath] = sound;
+    soundOrder.push_back(soundPath);
   }
 
-  if (Mix_PlayChannel(-1, soundEffects[soundPath], loops) == -1)
+  auto it = std::find(soundOrder.begin(), soundOrder.end(), soundPath);
+  if (it == soundOrder.end())
+  {
+    throw std::runtime_error("Sound path not found in order list!");
+  }
+
+  int channel = std::distance(soundOrder.begin(), it);
+
+  if (Mix_PlayChannel(channel, soundEffects[soundPath], loops) == -1)
   {
     throw std::runtime_error("Failed to play sound effect! Error: " + std::string(Mix_GetError()));
   }
-  Mix_VolumeMusic(globalVolume);
+
+  activeChannels[soundPath] = channel;
+  Mix_Volume(channel, globalVolume);
+}
+
+void MusicPlayer::stopSound(const std::string &soundPath)
+{
+  auto it = activeChannels.find(soundPath);
+  if (it != activeChannels.end())
+  {
+    Mix_HaltChannel(it->second);
+    activeChannels.erase(it);
+  }
 }
 
 void MusicPlayer::setVolume(int volume)
 {
-  if (volume < 0)
-    volume = 0;
-  if (volume > 128)
-    volume = 128;
-  globalVolume = volume;
+  globalVolume = std::clamp(volume, 0, 128);
+
   Mix_VolumeMusic(globalVolume);
+
+  for (const auto &[path, channel] : activeChannels)
+  {
+    Mix_Volume(channel, globalVolume);
+  }
 }
 
 void MusicPlayer::destroy()
 {
-  for (auto &[path, music] : musicTracks)
-  {
-    Mix_FreeMusic(music);
-  }
-  musicTracks.clear();
-
   for (auto &[path, sound] : soundEffects)
   {
     Mix_FreeChunk(sound);
   }
   soundEffects.clear();
 
-  Mix_HaltMusic();
+  for (const auto &[path, channel] : activeChannels)
+  {
+    Mix_HaltChannel(channel);
+  }
+  activeChannels.clear();
+
   Mix_CloseAudio();
 }
