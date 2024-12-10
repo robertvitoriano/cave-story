@@ -42,6 +42,11 @@ void MusicPlayer::playSound(const std::string &soundPath, int loops)
 
   int channel = std::distance(soundOrder.begin(), sound);
 
+  if (Mix_Playing(channel))
+  {
+    return;
+  }
+
   if (Mix_PlayChannel(channel, soundEffects[soundPath], loops) == -1)
   {
     throw std::runtime_error("Failed to play sound effect! Error: " + std::string(Mix_GetError()));
