@@ -34,13 +34,13 @@ void MusicPlayer::playSound(const std::string &soundPath, int loops)
     soundOrder.push_back(soundPath);
   }
 
-  auto it = std::find(soundOrder.begin(), soundOrder.end(), soundPath);
-  if (it == soundOrder.end())
+  auto sound = std::find(soundOrder.begin(), soundOrder.end(), soundPath);
+  if (sound == soundOrder.end())
   {
     throw std::runtime_error("Sound path not found in order list!");
   }
 
-  int channel = std::distance(soundOrder.begin(), it);
+  int channel = std::distance(soundOrder.begin(), sound);
 
   if (Mix_PlayChannel(channel, soundEffects[soundPath], loops) == -1)
   {
@@ -53,11 +53,11 @@ void MusicPlayer::playSound(const std::string &soundPath, int loops)
 
 void MusicPlayer::stopSound(const std::string &soundPath)
 {
-  auto it = activeChannels.find(soundPath);
-  if (it != activeChannels.end())
+  auto channel = activeChannels.find(soundPath);
+  if (channel != activeChannels.end())
   {
-    Mix_HaltChannel(it->second);
-    activeChannels.erase(it);
+    Mix_HaltChannel(channel->second);
+    activeChannels.erase(channel);
   }
 }
 
