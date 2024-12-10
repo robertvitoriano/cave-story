@@ -65,6 +65,8 @@ void Player::moveLeft()
 	this->_dx = -player_constants::WALK_SPEED;
 	if (this->_lookingUp == false)
 	{
+		MusicPlayer &musicPlayer = MusicPlayer::getInstance();
+		musicPlayer.playSound("content/sounds/walk.wav", -1);
 		this->playAnimation("RunLeft");
 	}
 	this->_facing = LEFT;
