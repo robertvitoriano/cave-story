@@ -6,6 +6,7 @@
 #include "hud.h"
 #include "graphics.h"
 #include "MusicPlayer.h"
+#include "LevelPassage.h"
 class Game
 {
 public:

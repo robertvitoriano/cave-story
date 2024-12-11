@@ -27,7 +27,7 @@ void Game::gameLoop()
 	Input input;
 	SDL_Event event;
 
-	this->_level = Level("Map_2", graphics);
+	this->_level = Level("Map_1", graphics);
 	this->_player = Player(graphics, this->_level.getPlayerSpawnPoint());
 	this->_hud = HUD(graphics, this->_player);
 
@@ -138,13 +138,16 @@ void Game::update(float elapsedTime)
 	{
 		this->_player.handleSlopeCollisions(otherSlopes);
 	}
-	// Check doors
 	std::vector<Door> otherDoors;
 	if ((otherDoors = this->_level.checkDoorCollisions(this->_player.getBoundingBox())).size() > 0)
 	{
 		this->_player.handleDoorCollision(otherDoors, this->_level, this->_graphics);
 	}
-	// Check enemies
+	std::vector<LevelPassage> levelPassages;
+	if ((levelPassages = this->_level.checkLevelPassage(this->_player.getBoundingBox())).size() > 0)
+	{
+		this->_player.handleLevelPassage(levelPassages, this->_level, this->_graphics);
+	}
 	std::vector<Enemy *> otherEnemies;
 	if ((otherEnemies = this->_level.checkEnemyCollisions(this->_player.getBoundingBox())).size() > 0)
 	{

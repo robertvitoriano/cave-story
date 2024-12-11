@@ -226,6 +226,16 @@ void Player::handleDoorCollision(std::vector<Door> &others, Level &level, Graphi
 	}
 }
 
+void Player::handleLevelPassage(std::vector<LevelPassage> &levelPassages, Level &level, Graphics &graphics)
+{
+	for (int i = 0; i < levelPassages.size(); i++)
+	{
+		level = Level(levelPassages.at(i).getDestination(), graphics);
+		this->_x = level.getPlayerSpawnPoint().x;
+		this->_y = level.getPlayerSpawnPoint().y;
+	}
+}
+
 void Player::handleEnemyCollisions(std::vector<Enemy *> &others)
 {
 	for (int i = 0; i < others.size(); i++)

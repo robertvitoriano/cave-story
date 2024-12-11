@@ -13,6 +13,7 @@
 #include <sstream>
 #include <algorithm>
 #include <cmath>
+#include "LevelPassage.h"
 using namespace tinyxml2;
 
 Level::Level() {}
@@ -361,7 +362,51 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					}
 				}
 			}
+			else if (ss.str() == "level_passage")
+			{
+				XMLElement *pObject = pObjectGroup->FirstChildElement("object");
+				if (pObject != NULL)
+				{
+					while (pObject)
+					{
+						float x = pObject->FloatAttribute("x");
+						float y = pObject->FloatAttribute("y");
+						float w = pObject->FloatAttribute("width");
+						float h = pObject->FloatAttribute("height");
+						Rectangle rect = Rectangle(x, y, w, h);
 
+						XMLElement *pProperties = pObject->FirstChildElement("properties");
+						if (pProperties != NULL)
+						{
+							while (pProperties)
+							{
+								XMLElement *pProperty = pProperties->FirstChildElement("property");
+								if (pProperty != NULL)
+								{
+									while (pProperty)
+									{
+										const char *name = pProperty->Attribute("name");
+										std::stringstream ss;
+										ss << name;
+										if (ss.str() == "destination")
+										{
+											const char *value = pProperty->Attribute("value");
+											std::stringstream ss2;
+											ss2 << value;
+											LevelPassage levelPassage = LevelPassage(rect, ss2.str());
+											this->_levelPassagesList.push_back(levelPassage);
+										}
+										pProperty = pProperty->NextSiblingElement("property");
+									}
+								}
+								pProperties = pProperties->NextSiblingElement("properties");
+							}
+						}
+
+						pObject = pObject->NextSiblingElement("object");
+					}
+				}
+			}
 			else if (ss.str() == "enemies")
 			{
 				float x, y;
@@ -458,6 +503,19 @@ std::vector<Door> Level::checkDoorCollisions(const Rectangle &other)
 		}
 	}
 	return others;
+}
+
+std::vector<LevelPassage> Level::checkLevelPassage(const Rectangle &rectangle)
+{
+	std::vector<LevelPassage> levelPassages;
+	for (int i = 0; i < this->_levelPassagesList.size(); i++)
+	{
+		if (this->_levelPassagesList.at(i).collidesWith(rectangle))
+		{
+			levelPassages.push_back(this->_levelPassagesList.at(i));
+		}
+	}
+	return levelPassages;
 }
 
 std::vector<Enemy *> Level::checkEnemyCollisions(const Rectangle &other)

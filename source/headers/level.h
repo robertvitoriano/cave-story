@@ -10,6 +10,7 @@
 #include "slope.h"
 #include "animatedtile.h"
 #include "door.h"
+#include "LevelPassage.h"
 #include <iostream>
 class Graphics;
 class Enemy;
@@ -31,6 +32,7 @@ public:
 	std::vector<Rectangle> checkTileCollisions(const Rectangle &other);
 	std::vector<Slope> checkSlopeCollisions(const Rectangle &other);
 	std::vector<Door> checkDoorCollisions(const Rectangle &other);
+	std::vector<LevelPassage> checkLevelPassage(const Rectangle &otherRectangle);
 	std::vector<Enemy *> checkEnemyCollisions(const Rectangle &other);
 
 	const Vector2 getPlayerSpawnPoint() const;
@@ -53,7 +55,7 @@ private:
 	std::vector<AnimatedTileInfo> _animatedTileInfos;
 
 	std::vector<Door> _doorList;
-
+	std::vector<LevelPassage> _levelPassagesList;
 	std::vector<Enemy *> _enemies;
 
 	/* void loadMap
