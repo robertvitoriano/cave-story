@@ -362,8 +362,10 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					}
 				}
 			}
-			else if (ss.str() == "level_passage")
+			else if (ss.str() == "level_passages")
 			{
+
+				std::cout << "LEVEL PASSAGE" << std::endl;
 				XMLElement *pObject = pObjectGroup->FirstChildElement("object");
 				if (pObject != NULL)
 				{
@@ -374,6 +376,10 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 						float w = pObject->FloatAttribute("width");
 						float h = pObject->FloatAttribute("height");
 						Rectangle rect = Rectangle(x, y, w, h);
+						std::cout << "PASSAGE X " << x << std::endl;
+						std::cout << "PASSAGE Y " << y << std::endl;
+						std::cout << "PASSAGE w " << w << std::endl;
+						std::cout << "PASSAGE h " << h << std::endl;
 
 						XMLElement *pProperties = pObject->FirstChildElement("properties");
 						if (pProperties != NULL)
@@ -390,6 +396,9 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 										ss << name;
 										if (ss.str() == "destination")
 										{
+
+											std::cout << "DESTINATION " << ss.str() << std::endl;
+
 											const char *value = pProperty->Attribute("value");
 											std::stringstream ss2;
 											ss2 << value;
@@ -510,6 +519,7 @@ std::vector<LevelPassage> Level::checkLevelPassage(const Rectangle &rectangle)
 	std::vector<LevelPassage> levelPassages;
 	for (int i = 0; i < this->_levelPassagesList.size(); i++)
 	{
+
 		if (this->_levelPassagesList.at(i).collidesWith(rectangle))
 		{
 			levelPassages.push_back(this->_levelPassagesList.at(i));

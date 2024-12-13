@@ -4,7 +4,7 @@
 #include "globals.h"
 #include "rectangle.h"
 #include <string>
-
+#include <iostream>
 class LevelPassage : public Rectangle
 {
 public:
