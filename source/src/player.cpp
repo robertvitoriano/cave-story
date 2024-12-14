@@ -242,11 +242,11 @@ void Player::handleLevelPassage(std::vector<LevelPassage> &levelPassages, Level 
 	}
 }
 
-void Player::handleEnemyCollisions(std::vector<Enemy *> &others)
+void Player::handleEnemyCollisions(std::vector<Enemy *> &enemies)
 {
-	for (int i = 0; i < others.size(); i++)
+	for (int i = 0; i < enemies.size(); i++)
 	{
-		others.at(i)->touchPlayer(this);
+		enemies.at(i)->touchPlayer(this);
 	}
 }
 

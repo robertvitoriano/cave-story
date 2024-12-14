@@ -15,7 +15,6 @@
 #include <cmath>
 #include "LevelPassage.h"
 using namespace tinyxml2;
-
 Level::Level() {}
 
 Level::Level(std::string mapName, Graphics &graphics) : _mapName(mapName),
@@ -245,7 +244,6 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 								std::ceil(y) * globals::SPRITE_SCALE,
 								std::ceil(width) * globals::SPRITE_SCALE,
 								std::ceil(height) * globals::SPRITE_SCALE));
-
 						pObject = pObject->NextSiblingElement("object");
 					}
 				}

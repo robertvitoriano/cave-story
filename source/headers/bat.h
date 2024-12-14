@@ -3,7 +3,7 @@
 
 #include "enemy.h"
 #include "player.h"
-
+#include <iostream>
 class Bat : public Enemy
 {
 public:
