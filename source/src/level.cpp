@@ -56,11 +56,9 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 		{
 			int firstgid;
 			const char *source = pTileset->FirstChildElement("image")->Attribute("source");
-			char *path;
-			std::stringstream ss;
-			ss << source;
+			std::string parsedString = this->parseString(source);
 			pTileset->QueryIntAttribute("firstgid", &firstgid);
-			SDL_Texture *tex = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(ss.str().erase(0, 3)));
+			SDL_Texture *tex = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(parsedString.erase(0, 3)));
 			this->_tilesets.push_back(Tileset(tex, firstgid));
 
 			// Get all of the animations for that tileset
@@ -225,9 +223,8 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 		while (pObjectGroup)
 		{
 			const char *name = pObjectGroup->Attribute("name");
-			std::stringstream ss;
-			ss << name;
-			if (ss.str() == "collisions")
+			std::string objectLayerName = this->parseString(name);
+			if (objectLayerName == "collisions")
 			{
 				XMLElement *pObject = pObjectGroup->FirstChildElement("object");
 				if (pObject != NULL)
@@ -248,7 +245,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					}
 				}
 			}
-			else if (ss.str() == "slopes")
+			else if (objectLayerName == "slopes")
 			{
 				XMLElement *pObject = pObjectGroup->FirstChildElement("object");
 				if (pObject != NULL)
@@ -263,11 +260,10 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 						if (pPolyline != NULL)
 						{
 							std::vector<std::string> pairs;
-							const char *pointString = pPolyline->Attribute("points");
+							const char *pPoints = pPolyline->Attribute("points");
 
-							std::stringstream ss;
-							ss << pointString;
-							Utils::split(ss.str(), pairs, ' ');
+							std::string pointsParsed = this->parseString(pPoints);
+							Utils::split(pointsParsed, pairs, ' ');
 							// Now we have each of the pairs. Loop through the list of pairs
 							// and split them into Vector2s and then store them in our points vector
 							for (int i = 0; i < pairs.size(); i++)
@@ -291,7 +287,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					}
 				}
 			}
-			else if (ss.str() == "spawn points")
+			else if (objectLayerName == "spawn points")
 			{
 				XMLElement *pObject = pObjectGroup->FirstChildElement("object");
 				if (pObject != NULL)
@@ -301,9 +297,8 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 						float x = pObject->FloatAttribute("x");
 						float y = pObject->FloatAttribute("y");
 						const char *name = pObject->Attribute("name");
-						std::stringstream ss;
-						ss << name;
-						if (ss.str() == "player")
+						std::string parsedString = this->parseString(name);
+						if (parsedString == "player")
 						{
 							this->_spawnPoint = Vector2(std::ceil(x) * globals::SPRITE_SCALE,
 																					std::ceil(y) * globals::SPRITE_SCALE);
@@ -313,7 +308,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					}
 				}
 			}
-			else if (ss.str() == "doors")
+			else if (objectLayerName == "doors")
 			{
 				XMLElement *pObject = pObjectGroup->FirstChildElement("object");
 				if (pObject != NULL)
@@ -337,14 +332,12 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 									while (pProperty)
 									{
 										const char *name = pProperty->Attribute("name");
-										std::stringstream ss;
-										ss << name;
-										if (ss.str() == "destination")
+										std::string propertyName = this->parseString(name);
+										if (propertyName == "destination")
 										{
 											const char *value = pProperty->Attribute("value");
-											std::stringstream ss2;
-											ss2 << value;
-											Door door = Door(rect, ss2.str());
+											std::string destination = this->parseString(value);
+											Door door = Door(rect, destination);
 											this->_doorList.push_back(door);
 										}
 										pProperty = pProperty->NextSiblingElement("property");
@@ -358,7 +351,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					}
 				}
 			}
-			else if (ss.str() == "level_passages")
+			else if (objectLayerName == "level_passages")
 			{
 
 				XMLElement *pObject = pObjectGroup->FirstChildElement("object");
@@ -386,16 +379,13 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 									while (pProperty)
 									{
 										const char *name = pProperty->Attribute("name");
-										std::stringstream ss;
-										ss << name;
-										if (ss.str() == "destination")
+										std::string propertyName = this->parseString(name);
+										if (propertyName == "destination")
 										{
 											const char *value = pProperty->Attribute("value");
-											std::stringstream destinationStream;
-											destinationStream << value;
-											destination = destinationStream.str();
+											destination = this->parseString(value);
 										}
-										if (ss.str() == "spawn_position")
+										if (propertyName == "spawn_position")
 										{
 											const char *value = pProperty->Attribute("value");
 											spawnPosition = this->parsePosition(value);
@@ -413,7 +403,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					}
 				}
 			}
-			else if (ss.str() == "enemies")
+			else if (objectLayerName == "enemies")
 			{
 				float x, y;
 				XMLElement *pObject = pObjectGroup->FirstChildElement("object");
@@ -424,9 +414,8 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 						x = pObject->FloatAttribute("x");
 						y = pObject->FloatAttribute("y");
 						const char *name = pObject->Attribute("name");
-						std::stringstream ss;
-						ss << name;
-						if (ss.str() == "bat")
+						std::string enemyName = this->parseString(name);
+						if (enemyName == "bat")
 						{
 							this->_enemies.push_back(new Bat(graphics, Vector2(std::floor(x) * globals::SPRITE_SCALE,
 																																 std::floor(y) * globals::SPRITE_SCALE)));
@@ -474,19 +463,24 @@ void Level::draw(Graphics &graphics, Player &player)
 
 Vector2 Level::parsePosition(const char *positionValue)
 {
-	std::stringstream positionStream;
-	positionStream << positionValue;
-
-	std::string positionString = positionStream.str();
-	size_t commaPosition = positionString.find(',');
-	std::string X = positionString.substr(0, commaPosition);
-	std::string Y = positionString.substr(commaPosition + 1);
+	std::string stringParsed = this->parseString(positionValue);
+	size_t commaPosition = stringParsed.find(',');
+	std::string X = stringParsed.substr(0, commaPosition);
+	std::string Y = stringParsed.substr(commaPosition + 1);
 
 	int xInt = std::stoi(X);
 	int yInt = std::stoi(Y);
 
 	return Vector2(std::ceil(xInt) * globals::SPRITE_SCALE,
 								 std::ceil(yInt) * globals::SPRITE_SCALE);
+}
+
+std::string Level::parseString(const char *stringValue)
+{
+	std::stringstream stringStream;
+	stringStream << stringValue;
+
+	return stringStream.str();
 }
 
 std::vector<Rectangle> Level::checkTileCollisions(const Rectangle &other)

@@ -65,6 +65,7 @@ private:
 
 	Vector2 getTilesetPosition(Tileset tls, int gid, int tileWidth, int tileHeight);
 	Vector2 parsePosition(const char *positionValue);
+	std::string parseString(const char *stringValue);
 };
 
 // Tileset structure
