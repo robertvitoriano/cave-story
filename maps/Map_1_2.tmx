@@ -667,8 +667,6 @@
   <object id="1" name="player" x="119.741" y="161.982" width="3.32613" height="3.65874">
    <ellipse/>
   </object>
-  <object id="49" x="246.368" y="70.4334" width="27.5" height="39.5" rotation="334.723"/>
-  <object id="50" x="246.368" y="70.4334" width="27.5" height="39.5" rotation="334.723"/>
  </objectgroup>
  <objectgroup id="4" name="collisions">
   <object id="2" x="81.4901" y="129.386" width="13.9697" height="47.5636"/>
@@ -704,11 +702,11 @@
  </objectgroup>
  <objectgroup id="7" name="level_passages">
   <properties>
-   <property name="destination" value="Map_3"/>
+   <property name="destination" value="Map_1_3"/>
   </properties>
-  <object id="51" x="247.368" y="70.4334" width="27.5" height="39.5" rotation="334.723">
+  <object id="51" x="318.94" y="10.7022" width="1.00344" height="39.5" rotation="359.871">
    <properties>
-    <property name="destination" value="MAP_3"/>
+    <property name="destination" value="Map_1_3"/>
    </properties>
   </object>
  </objectgroup>

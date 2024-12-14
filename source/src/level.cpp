@@ -251,7 +251,6 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					}
 				}
 			}
-			// Other objectgroups go here with an else if (ss.str() == "whatever")
 			else if (ss.str() == "slopes")
 			{
 				XMLElement *pObject = pObjectGroup->FirstChildElement("object");
@@ -365,21 +364,19 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 			else if (ss.str() == "level_passages")
 			{
 
-				std::cout << "LEVEL PASSAGE" << std::endl;
 				XMLElement *pObject = pObjectGroup->FirstChildElement("object");
 				if (pObject != NULL)
 				{
 					while (pObject)
 					{
+						std::string destination;
+						std::string spawnPosition;
+
 						float x = pObject->FloatAttribute("x");
 						float y = pObject->FloatAttribute("y");
 						float w = pObject->FloatAttribute("width");
 						float h = pObject->FloatAttribute("height");
 						Rectangle rect = Rectangle(x, y, w, h);
-						std::cout << "PASSAGE X " << x << std::endl;
-						std::cout << "PASSAGE Y " << y << std::endl;
-						std::cout << "PASSAGE w " << w << std::endl;
-						std::cout << "PASSAGE h " << h << std::endl;
 
 						XMLElement *pProperties = pObject->FirstChildElement("properties");
 						if (pProperties != NULL)
@@ -396,14 +393,18 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 										ss << name;
 										if (ss.str() == "destination")
 										{
-
-											std::cout << "DESTINATION " << ss.str() << std::endl;
-
 											const char *value = pProperty->Attribute("value");
-											std::stringstream ss2;
-											ss2 << value;
-											LevelPassage levelPassage = LevelPassage(rect, ss2.str());
-											this->_levelPassagesList.push_back(levelPassage);
+											std::stringstream destinationStream;
+											destinationStream << value;
+											destination = destinationStream.str();
+										}
+										if (ss.str() == "spawn_position")
+										{
+											const char *value = pProperty->Attribute("value");
+											std::cout << value << std::endl;
+											std::stringstream spawnPositionStream;
+											spawnPositionStream << value;
+											spawnPosition = spawnPositionStream.str();
 										}
 										pProperty = pProperty->NextSiblingElement("property");
 									}
@@ -411,7 +412,8 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 								pProperties = pProperties->NextSiblingElement("properties");
 							}
 						}
-
+						LevelPassage levelPassage = LevelPassage(rect, destination);
+						this->_levelPassagesList.push_back(levelPassage);
 						pObject = pObject->NextSiblingElement("object");
 					}
 				}
