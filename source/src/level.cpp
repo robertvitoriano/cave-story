@@ -43,7 +43,6 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 	mapNode->QueryIntAttribute("width", &width);
 	mapNode->QueryIntAttribute("height", &height);
 	this->_size = Vector2(width, height);
-	std::cout << "WIDTH OF THE MAP: " << width << std::endl;
 	// Get the width and the height of the tiles and store it in _tileSize
 	int tileWidth, tileHeight;
 	mapNode->QueryIntAttribute("tilewidth", &tileWidth);
@@ -401,7 +400,6 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 										if (ss.str() == "spawn_position")
 										{
 											const char *value = pProperty->Attribute("value");
-											std::cout << value << std::endl;
 											std::stringstream spawnPositionStream;
 											spawnPositionStream << value;
 
