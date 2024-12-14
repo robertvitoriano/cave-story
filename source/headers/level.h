@@ -64,6 +64,7 @@ private:
 	void loadMap(std::string mapName, Graphics &graphics);
 
 	Vector2 getTilesetPosition(Tileset tls, int gid, int tileWidth, int tileHeight);
+	Vector2 parsePosition(const char *positionValue);
 };
 
 // Tileset structure

@@ -398,19 +398,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 										if (ss.str() == "spawn_position")
 										{
 											const char *value = pProperty->Attribute("value");
-											std::stringstream spawnPositionStream;
-											spawnPositionStream << value;
-
-											std::string spawnPositionString = spawnPositionStream.str();
-											size_t commaPosition = spawnPositionString.find(',');
-											std::string spawnX = spawnPositionString.substr(0, commaPosition);
-											std::string spawnY = spawnPositionString.substr(commaPosition + 1);
-
-											int spawnXInt = std::stoi(spawnX);
-											int spawnYInt = std::stoi(spawnY);
-
-											spawnPosition = Vector2(std::ceil(spawnXInt) * globals::SPRITE_SCALE,
-																							std::ceil(spawnYInt) * globals::SPRITE_SCALE);
+											spawnPosition = this->parsePosition(value);
 										}
 										pProperty = pProperty->NextSiblingElement("property");
 									}
@@ -484,6 +472,23 @@ void Level::draw(Graphics &graphics, Player &player)
 	}
 }
 
+Vector2 Level::parsePosition(const char *positionValue)
+{
+	std::stringstream positionStream;
+	positionStream << positionValue;
+
+	std::string positionString = positionStream.str();
+	size_t commaPosition = positionString.find(',');
+	std::string X = positionString.substr(0, commaPosition);
+	std::string Y = positionString.substr(commaPosition + 1);
+
+	int xInt = std::stoi(X);
+	int yInt = std::stoi(Y);
+
+	return Vector2(std::ceil(xInt) * globals::SPRITE_SCALE,
+								 std::ceil(yInt) * globals::SPRITE_SCALE);
+}
+
 std::vector<Rectangle> Level::checkTileCollisions(const Rectangle &other)
 {
 	std::vector<Rectangle> others;
@@ -554,7 +559,6 @@ const Vector2 Level::getPlayerSpawnPoint() const
 {
 	return this->_spawnPoint;
 }
-
 Vector2 Level::getTilesetPosition(Tileset tls, int gid, int tileWidth, int tileHeight)
 {
 	int tilesetWidth, tilesetHeight;
