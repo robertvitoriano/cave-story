@@ -212,9 +212,6 @@ void Player::handleSlopeCollisions(std::vector<Slope> &others)
 
 void Player::handleDoorCollision(std::vector<Door> &others, Level &level, Graphics &graphics)
 {
-	// Check if the player is grounded and holding the down arrow
-	// If so, go through the door
-	// If not, do nothing
 	for (int i = 0; i < others.size(); i++)
 	{
 		if (this->_grounded == true && this->_lookingDown == true)
@@ -231,8 +228,17 @@ void Player::handleLevelPassage(std::vector<LevelPassage> &levelPassages, Level 
 	for (int i = 0; i < levelPassages.size(); i++)
 	{
 		level = Level(levelPassages.at(i).getDestination(), graphics);
-		this->_x = level.getPlayerSpawnPoint().x;
-		this->_y = level.getPlayerSpawnPoint().y;
+		if (levelPassages.at(i).getSpawnPosition().x != 0 && levelPassages.at(i).getSpawnPosition().y != 0)
+		{
+
+			this->_x = levelPassages.at(i).getSpawnPosition().x;
+			this->_y = levelPassages.at(i).getSpawnPosition().y;
+		}
+		else
+		{
+			this->_x = level.getPlayerSpawnPoint().x;
+			this->_y = level.getPlayerSpawnPoint().y;
+		}
 	}
 }
 

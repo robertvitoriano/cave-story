@@ -370,7 +370,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					while (pObject)
 					{
 						std::string destination;
-						std::string spawnPosition;
+						Vector2 spawnPosition = {0, 0};
 
 						float x = pObject->FloatAttribute("x");
 						float y = pObject->FloatAttribute("y");
@@ -404,7 +404,17 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 											std::cout << value << std::endl;
 											std::stringstream spawnPositionStream;
 											spawnPositionStream << value;
-											spawnPosition = spawnPositionStream.str();
+
+											std::string spawnPositionString = spawnPositionStream.str();
+											size_t commaPosition = spawnPositionString.find(',');
+											std::string spawnX = spawnPositionString.substr(0, commaPosition);
+											std::string spawnY = spawnPositionString.substr(commaPosition + 1);
+
+											int spawnXInt = std::stoi(spawnX);
+											int spawnYInt = std::stoi(spawnY);
+
+											spawnPosition = Vector2(std::ceil(spawnXInt) * globals::SPRITE_SCALE,
+																							std::ceil(spawnYInt) * globals::SPRITE_SCALE);
 										}
 										pProperty = pProperty->NextSiblingElement("property");
 									}
@@ -412,7 +422,8 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 								pProperties = pProperties->NextSiblingElement("properties");
 							}
 						}
-						LevelPassage levelPassage = LevelPassage(rect, destination);
+
+						LevelPassage levelPassage = LevelPassage(rect, destination, spawnPosition);
 						this->_levelPassagesList.push_back(levelPassage);
 						pObject = pObject->NextSiblingElement("object");
 					}
