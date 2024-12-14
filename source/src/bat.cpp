@@ -12,12 +12,15 @@ Bat::Bat(Graphics &graphics, Vector2 spawnPoint)
 
 void Bat::update(int elapsedTime, Player &player)
 {
+  double flightSpeed = 0.05;
+  int flightLimit = 30;
+
   this->_direction = player.getX() > this->_x ? RIGHT : LEFT;
   this->playAnimation(this->_direction == RIGHT ? "FlyRight" : "FlyLeft");
 
-  this->_y += this->_shouldMoveUp ? -.4 : .4;
+  this->_y += this->_shouldMoveUp ? -flightSpeed : flightSpeed;
 
-  if (this->_y > (this->_startingY + 30) || this->_y < this->_startingY - 30)
+  if (this->_y > (this->_startingY + flightLimit) || this->_y < this->_startingY - flightLimit)
   {
     this->_shouldMoveUp = !this->_shouldMoveUp;
   }
