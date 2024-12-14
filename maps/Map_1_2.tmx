@@ -664,6 +664,7 @@
   <object id="54" x="112" y="159.5" width="15.5" height="15.5" visible="0">
    <properties>
     <property name="destination" value="Map_1"/>
+    <property name="spawn_position" value="134,72"/>
    </properties>
   </object>
  </objectgroup>

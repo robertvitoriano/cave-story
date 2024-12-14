@@ -320,7 +320,8 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 						float w = pObject->FloatAttribute("width");
 						float h = pObject->FloatAttribute("height");
 						Rectangle rect = Rectangle(x, y, w, h);
-
+						Vector2 spawnPosition = {0, 0};
+						std::string destination;
 						XMLElement *pProperties = pObject->FirstChildElement("properties");
 						if (pProperties != NULL)
 						{
@@ -336,9 +337,12 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 										if (propertyName == "destination")
 										{
 											const char *value = pProperty->Attribute("value");
-											std::string destination = this->parseString(value);
-											Door door = Door(rect, destination);
-											this->_doorList.push_back(door);
+											destination = this->parseString(value);
+										}
+										if (propertyName == "spawn_position")
+										{
+											const char *value = pProperty->Attribute("value");
+											spawnPosition = this->parsePosition(value);
 										}
 										pProperty = pProperty->NextSiblingElement("property");
 									}
@@ -346,7 +350,8 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 								pProperties = pProperties->NextSiblingElement("properties");
 							}
 						}
-
+						Door door = Door(rect, destination, spawnPosition);
+						this->_doorList.push_back(door);
 						pObject = pObject->NextSiblingElement("object");
 					}
 				}

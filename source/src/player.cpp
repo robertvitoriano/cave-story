@@ -210,15 +210,25 @@ void Player::handleSlopeCollisions(std::vector<Slope> &others)
 	}
 }
 
-void Player::handleDoorCollision(std::vector<Door> &others, Level &level, Graphics &graphics)
+void Player::handleDoorCollision(std::vector<Door> &doors, Level &level, Graphics &graphics)
 {
-	for (int i = 0; i < others.size(); i++)
+	for (int i = 0; i < doors.size(); i++)
 	{
 		if (this->_grounded == true && this->_lookingDown == true)
 		{
-			level = Level(others.at(i).getDestination(), graphics);
-			this->_x = level.getPlayerSpawnPoint().x;
-			this->_y = level.getPlayerSpawnPoint().y;
+			level = Level(doors.at(i).getDestination(), graphics);
+			bool positionIsValid = doors.at(i).getSpawnPosition().x != 0 && doors.at(i).getSpawnPosition().y != 0;
+			if (positionIsValid)
+			{
+
+				this->_x = doors.at(i).getSpawnPosition().x;
+				this->_y = doors.at(i).getSpawnPosition().y;
+			}
+			else
+			{
+				this->_x = level.getPlayerSpawnPoint().x;
+				this->_y = level.getPlayerSpawnPoint().y;
+			}
 		}
 	}
 }
