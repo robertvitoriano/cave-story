@@ -100,8 +100,8 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 
 				if (tls.FirstGid == -1)
 				{
-					// No tileset was found for this gid
-					tileCounter++;
+
+					continue;
 				}
 
 				// Get the position of the tile in the level
