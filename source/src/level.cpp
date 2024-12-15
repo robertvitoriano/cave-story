@@ -29,20 +29,18 @@ Level::~Level()
 
 void Level::loadMap(std::string mapName, Graphics &graphics)
 {
-	// Parse the .tmx file
 	XMLDocument doc;
 	std::stringstream ss;
-	ss << "maps/" << mapName << ".tmx"; // Pass in Map 1, we get maps/Map 1.tmx
+	ss << "maps/" << mapName << ".tmx";
 	doc.LoadFile(ss.str().c_str());
 
 	XMLElement *mapNode = doc.FirstChildElement("map");
 
-	// Get the width and the height of the whole map and store it in _size
 	int width, height;
 	mapNode->QueryIntAttribute("width", &width);
 	mapNode->QueryIntAttribute("height", &height);
 	this->_size = Vector2(width, height);
-	// Get the width and the height of the tiles and store it in _tileSize
+
 	int tileWidth, tileHeight;
 	mapNode->QueryIntAttribute("tilewidth", &tileWidth);
 	mapNode->QueryIntAttribute("tileheight", &tileHeight);
@@ -90,17 +88,14 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 		pTileset = pTileset->NextSiblingElement("tileset");
 	}
 
-	// Loading the layers
 	XMLElement *pLayer = mapNode->FirstChildElement("layer");
 
 	while (pLayer)
 	{
-		// Loading the data element
 		XMLElement *pData = pLayer->FirstChildElement("data");
 
 		while (pData)
 		{
-			// Loading the tile element
 			XMLElement *pTile = pData->FirstChildElement("tile");
 
 			int tileCounter = 0;
