@@ -1,7 +1,7 @@
 # Compiler and flags
 CXX := g++
-CXXFLAGS := -Wall -Wextra -g -std=c++17 -I source/headers -I /usr/include/tinyxml2 $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf SDL2_mixer)
-LDFLAGS := $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer) -ltinyxml2
+CXXFLAGS := -Wall -Wextra -g -std=c++17 -I source/headers -I /usr/include/nlohmann/json.hpp $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf SDL2_mixer)
+LDFLAGS := $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer) 
 
 # Directories
 SRC_DIR := source/src
