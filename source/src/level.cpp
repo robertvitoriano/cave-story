@@ -183,46 +183,30 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					}
 				}
 			}
-			// else if (objectLayerName == "slopes")
-			// {
-			// 	XMLElement *pObject = pObjectGroup->FirstChildElement("object");
+			else if (layer["name"] == "slopes")
+			{
+				for (nlohmann::json object : layer["objects"])
+				{
+					std::vector<Vector2> points;
+					Vector2 p1;
+					p1 = Vector2(std::ceil(object["x"].get<double>()), std::ceil(object["y"].get<double>()));
 
-			// 	while (pObject)
-			// 	{
-			// 		std::vector<Vector2> points;
-			// 		Vector2 p1;
-			// 		p1 = Vector2(std::ceil(pObject->FloatAttribute("x")), std::ceil(pObject->FloatAttribute("y")));
+					nlohmann::json polylinePoints = object["polyline"];
+					for (nlohmann::json point : polylinePoints)
+					{
+						points.push_back(Vector2(point["x"], point["y"]));
+					}
 
-			// 		XMLElement *pPolyline = pObject->FirstChildElement("polyline");
-			// 		if (pPolyline != NULL)
-			// 		{
-			// 			std::vector<std::string> pairs;
-			// 			const char *pPoints = pPolyline->Attribute("points");
-
-			// 			std::string pointsParsed = this->parseString(pPoints);
-			// 			Utils::split(pointsParsed, pairs, ' ');
-			// 			// Now we have each of the pairs. Loop through the list of pairs
-			// 			// and split them into Vector2s and then store them in our points vector
-			// 			for (int i = 0; i < pairs.size(); i++)
-			// 			{
-			// 				std::vector<std::string> ps;
-			// 				Utils::split(pairs.at(i), ps, ',');
-			// 				points.push_back(Vector2(std::stoi(ps.at(0)), std::stoi(ps.at(1))));
-			// 			}
-			// 		}
-
-			// 		for (int i = 0; i < points.size(); i += 2)
-			// 		{
-			// 			this->_slopes.push_back(Slope(
-			// 					Vector2((p1.x + points.at(i < 2 ? i : i - 1).x) * globals::SPRITE_SCALE,
-			// 									(p1.y + points.at(i < 2 ? i : i - 1).y) * globals::SPRITE_SCALE),
-			// 					Vector2((p1.x + points.at(i < 2 ? i + 1 : i).x) * globals::SPRITE_SCALE,
-			// 									(p1.y + points.at(i < 2 ? i + 1 : i).y) * globals::SPRITE_SCALE)));
-			// 		}
-
-			// 		pObject = pObject->NextSiblingElement("object");
-			// 	}
-			// }
+					for (int i = 0; i < points.size(); i += 2)
+					{
+						this->_slopes.push_back(Slope(
+								Vector2((p1.x + points.at(i < 2 ? i : i - 1).x) * globals::SPRITE_SCALE,
+												(p1.y + points.at(i < 2 ? i : i - 1).y) * globals::SPRITE_SCALE),
+								Vector2((p1.x + points.at(i < 2 ? i + 1 : i).x) * globals::SPRITE_SCALE,
+												(p1.y + points.at(i < 2 ? i + 1 : i).y) * globals::SPRITE_SCALE)));
+					}
+				}
+			}
 		}
 		// else if (objectLayerName == "doors")
 		// {
@@ -230,10 +214,10 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 
 		// 	while (pObject)
 		// 	{
-		// 		float x = pObject->FloatAttribute("x");
-		// 		float y = pObject->FloatAttribute("y");
-		// 		float w = pObject->FloatAttribute("width");
-		// 		float h = pObject->FloatAttribute("height");
+		// 		float x = object("x");
+		// 		float y = object("y");
+		// 		float w = object("width");
+		// 		float h = object("height");
 		// 		Rectangle rect = Rectangle(x, y, w, h);
 		// 		Vector2 spawnPosition = {0, 0};
 		// 		std::string destination;
@@ -276,10 +260,10 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 		// 		std::string destination;
 		// 		Vector2 spawnPosition = {0, 0};
 
-		// 		float x = pObject->FloatAttribute("x");
-		// 		float y = pObject->FloatAttribute("y");
-		// 		float w = pObject->FloatAttribute("width");
-		// 		float h = pObject->FloatAttribute("height");
+		// 		float x = object("x");
+		// 		float y = object("y");
+		// 		float w = object("width");
+		// 		float h = object("height");
 		// 		Rectangle rect = Rectangle(x, y, w, h);
 
 		// 		XMLElement *pProperties = pObject->FirstChildElement("properties");
@@ -320,8 +304,8 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 
 		// 	while (pObject)
 		// 	{
-		// 		x = pObject->FloatAttribute("x");
-		// 		y = pObject->FloatAttribute("y");
+		// 		x = object("x");
+		// 		y = object("y");
 		// 		const char *name = pObject->Attribute("name");
 		// 		std::string enemyName = this->parseString(name);
 		// 		if (enemyName == "bat")
