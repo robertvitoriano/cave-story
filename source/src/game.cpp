@@ -27,7 +27,7 @@ void Game::gameLoop()
 	Input input;
 	SDL_Event event;
 
-	this->_level = Level("Map_1", graphics);
+	this->_level = Level("Map_1_2", graphics);
 	this->_player = Player(graphics, this->_level.getPlayerSpawnPoint());
 	this->_hud = HUD(graphics, this->_player);
 
@@ -112,10 +112,10 @@ void Game::draw(Graphics &graphics)
 	graphics.clear();
 
 	this->_level.draw(graphics, this->_player);
-	this->_player.draw(graphics);
 
 	this->_hud.draw(graphics);
 
+	this->_player.draw(graphics);
 	graphics.flip();
 }
 

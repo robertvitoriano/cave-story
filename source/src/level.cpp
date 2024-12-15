@@ -15,6 +15,7 @@
 #include <cmath>
 #include "LevelPassage.h"
 #include <fstream>
+#include <vector>
 
 Level::Level() {}
 
@@ -74,9 +75,11 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 			this->_animatedTileInfos.push_back(animatedTileInfo);
 		}
 	}
+	std::vector<std::string> layerNames = {};
 
 	for (nlohmann::json layer : levelData["layers"])
 	{
+		layerNames.push_back(layer["name"]);
 		if (layer["type"] == "tilelayer")
 		{
 
@@ -85,7 +88,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 			{
 
 				Tileset tileset;
-				int closest = 0;
+
 				for (int i = 0; i < this->_tilesets.size(); i++)
 				{
 					if (this->_tilesets[i].FirstGid <= tileGID)
@@ -170,6 +173,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 			}
 			else if (layer["name"] == "slopes")
 			{
+
 				for (nlohmann::json object : layer["objects"])
 				{
 					std::vector<Vector2> points;
@@ -192,74 +196,74 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					}
 				}
 			}
-		}
-		else if (layer["name"] == "doors")
-		{
-			for (nlohmann::json object : layer["objects"])
+			else if (layer["name"] == "doors")
 			{
-				float x = object["x"];
-				float y = object["y"];
-				float w = object["width"];
-				float h = object["height"];
-				Rectangle rect = Rectangle(x, y, w, h);
-				Vector2 spawnPosition = {0, 0};
-				std::string destination;
-				for (nlohmann::json property : object["properties"])
+				for (nlohmann::json object : layer["objects"])
 				{
-					if (property["name"] == "destination")
+					float x = object["x"];
+					float y = object["y"];
+					float w = object["width"];
+					float h = object["height"];
+					Rectangle rect = Rectangle(x, y, w, h);
+					Vector2 spawnPosition = {0, 0};
+					std::string destination;
+					for (nlohmann::json property : object["properties"])
 					{
-						destination = property["value"];
+						if (property["name"] == "destination")
+						{
+							destination = property["value"];
+						}
+						if (property["name"] == "spawn_position")
+						{
+							spawnPosition = this->parsePosition(property["value"]);
+						}
 					}
-					if (property["name"] == "spawn_position")
-					{
-						spawnPosition = this->parsePosition(property["value"]);
-					}
-				}
-				Door door = Door(rect, destination, spawnPosition);
-				this->_doorList.push_back(door);
-			}
-		}
-		else if (layer["name"] == "level_passages")
-		{
-
-			for (nlohmann::json object : layer["objects"])
-			{
-				std::string destination;
-				Vector2 spawnPosition = {0, 0};
-
-				float x = object["x"];
-				float y = object["y"];
-				float w = object["width"];
-				float h = object["height"];
-				Rectangle rect = Rectangle(x, y, w, h);
-
-				for (nlohmann::json property : object["properties"])
-				{
-					if (property["name"] == "destination")
-					{
-						destination = property["value"];
-					}
-					if (property["name"] == "spawn_position")
-					{
-						spawnPosition = this->parsePosition(property["value"]);
-					}
-					LevelPassage levelPassage = LevelPassage(rect, destination, spawnPosition);
-					this->_levelPassagesList.push_back(levelPassage);
+					Door door = Door(rect, destination, spawnPosition);
+					this->_doorList.push_back(door);
 				}
 			}
-		}
-		else if (layer["name"] == "enemies")
-		{
-
-			for (nlohmann::json object : layer["objects"])
+			else if (layer["name"] == "level_passages")
 			{
 
-				float x = object["x"];
-				float y = object["y"];
-				if (object["name"] == "bat")
+				for (nlohmann::json object : layer["objects"])
 				{
-					this->_enemies.push_back(new Bat(graphics, Vector2(std::floor(x) * globals::SPRITE_SCALE,
-																														 std::floor(y) * globals::SPRITE_SCALE)));
+					std::string destination;
+					Vector2 spawnPosition = {0, 0};
+
+					float x = object["x"];
+					float y = object["y"];
+					float w = object["width"];
+					float h = object["height"];
+					Rectangle rect = Rectangle(x, y, w, h);
+
+					for (nlohmann::json property : object["properties"])
+					{
+						if (property["name"] == "destination")
+						{
+							destination = property["value"];
+						}
+						if (property["name"] == "spawn_position")
+						{
+							spawnPosition = this->parsePosition(property["value"]);
+						}
+						LevelPassage levelPassage = LevelPassage(rect, destination, spawnPosition);
+						this->_levelPassagesList.push_back(levelPassage);
+					}
+				}
+			}
+			else if (layer["name"] == "enemies")
+			{
+
+				for (nlohmann::json object : layer["objects"])
+				{
+
+					float x = object["x"];
+					float y = object["y"];
+					if (object["name"] == "bat")
+					{
+						this->_enemies.push_back(new Bat(graphics, Vector2(std::floor(x) * globals::SPRITE_SCALE,
+																															 std::floor(y) * globals::SPRITE_SCALE)));
+					}
 				}
 			}
 		}
