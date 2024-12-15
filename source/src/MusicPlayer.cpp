@@ -53,7 +53,7 @@ void MusicPlayer::playSound(const std::string &soundPath, int loops)
   }
 
   activeChannels[soundPath] = channel;
-  Mix_Volume(channel, globalVolume);
+  Mix_Volume(channel, 0);
 }
 
 void MusicPlayer::stopSound(const std::string &soundPath)

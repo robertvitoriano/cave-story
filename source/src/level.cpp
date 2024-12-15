@@ -48,9 +48,12 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 		std::cerr << "Error parsing JSON: " << e.what() << std::endl;
 	}
 	inputFile.close();
-
-	this->_size = Vector2(levelData["width"], levelData["height"]);
-	this->_tileSize = Vector2(levelData["tilewidth"], levelData["tileheight"]);
+	int tileWidth = levelData["tilewidth"];
+	int tileHeight = levelData["tileheight"];
+	int width = 20;
+	int height = levelData["height"];
+	this->_size = Vector2(width, height);
+	this->_tileSize = Vector2(tileWidth, tileHeight);
 
 	for (nlohmann::json tileSet : levelData["tilesets"])
 	{
@@ -72,6 +75,77 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 	}
 	for (nlohmann::json layer : levelData["layers"])
 	{
+		int tileCounter = 0;
+		for (nlohmann::json tileGID : layer["data"])
+		{
+			if (tileGID == 0)
+				continue;
+
+			// Get the tileset for this specific gid
+
+			Tileset tls;
+			int closest = 0;
+			for (int i = 0; i < this->_tilesets.size(); i++)
+			{
+				if (this->_tilesets[i].FirstGid <= tileGID)
+				{
+					if (this->_tilesets[i].FirstGid > closest)
+					{
+						closest = this->_tilesets[i].FirstGid;
+						tls = this->_tilesets.at(i);
+					}
+				}
+			}
+
+			if (tls.FirstGid == -1)
+			{
+				// No tileset was found for this gid
+				tileCounter++;
+			}
+
+			// Get the position of the tile in the level
+			int xx = 0;
+			int yy = 0;
+			xx = tileCounter % width;
+			xx *= tileWidth;
+			yy += tileHeight * (tileCounter / width);
+			Vector2 finalTilePosition = Vector2(xx, yy);
+
+			// Calculate the position of the tile in the tileset
+			Vector2 finalTilesetPosition = this->getTilesetPosition(tls, tileGID, tileWidth, tileHeight);
+
+			// Build the actual tile and add it to the level's tile list
+			bool isAnimatedTile = false;
+			AnimatedTileInfo ati;
+			for (int i = 0; i < this->_animatedTileInfos.size(); i++)
+			{
+				if (this->_animatedTileInfos.at(i).StartTileId == tileGID)
+				{
+					ati = this->_animatedTileInfos.at(i);
+					isAnimatedTile = true;
+					break;
+				}
+			}
+			if (isAnimatedTile == true)
+			{
+				std::vector<Vector2> tilesetPositions;
+				for (int i = 0; i < ati.TileIds.size(); i++)
+				{
+					tilesetPositions.push_back(this->getTilesetPosition(tls, ati.TileIds.at(i),
+																															tileWidth, tileHeight));
+				}
+				AnimatedTile tile(tilesetPositions, ati.Duration,
+													tls.Texture, Vector2(tileWidth, tileHeight), finalTilePosition);
+				this->_animatedTileList.push_back(tile);
+			}
+			else
+			{
+				Tile tile(tls.Texture, Vector2(tileWidth, tileHeight),
+									finalTilesetPosition, finalTilePosition);
+				this->_tileList.push_back(tile);
+			}
+			tileCounter++;
+		}
 	}
 }
 
