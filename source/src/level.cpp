@@ -124,11 +124,6 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 						this->_animatedTileList.push_back(tile);
 					}
 				}
-				if (isAnimatedTile)
-				{
-					std::cout << "IS ANIMATED TILE" << std::endl;
-					continue;
-				}
 
 				Tile tile(tileset.Texture, Vector2(tileWidth, tileHeight),
 									finalTilesetPosition, finalTilePosition);
