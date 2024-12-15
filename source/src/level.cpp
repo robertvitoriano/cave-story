@@ -83,8 +83,6 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 			int tileCounter = 0;
 			for (nlohmann::json tileGID : layer["data"])
 			{
-				if (tileGID == 0)
-					continue;
 
 				Tileset tileset;
 				for (int i = 0; i < this->_tilesets.size(); i++)
