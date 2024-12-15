@@ -266,8 +266,6 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 
 			for (nlohmann::json object : layer["objects"])
 			{
-				std::string destination;
-				Vector2 spawnPosition = {0, 0};
 
 				float x = object["x"];
 				float y = object["y"];
