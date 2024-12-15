@@ -77,6 +77,10 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 	{
 		if (layer["type"] == "tilelayer")
 		{
+			if (layer["name"] == "tile layer")
+			{
+				std::cout << "LAYER IS TILE LAYER" << std::endl;
+			}
 
 			int tileCounter = 0;
 			for (nlohmann::json tileGID : layer["data"])
@@ -105,24 +109,22 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 				}
 
 				// Get the position of the tile in the level
-				int xx = 0;
-				int yy = 0;
-				xx = tileCounter % width;
-				xx *= tileWidth;
-				yy += tileHeight * (tileCounter / width);
-				Vector2 finalTilePosition = Vector2(xx, yy);
+				int x = 0;
+				int y = 0;
+				x = tileCounter % width;
+				x *= tileWidth;
+				y += tileHeight * (tileCounter / width);
+				Vector2 finalTilePosition = Vector2(x, y);
 
-				// Calculate the position of the tile in the tileset
 				Vector2 finalTilesetPosition = this->getTilesetPosition(tileset, tileGID, tileWidth, tileHeight);
 
-				// Build the actual tile and add it to the level's tile list
 				bool isAnimatedTile = false;
-				AnimatedTileInfo ati;
+				AnimatedTileInfo animatedTileInfo;
 				for (int i = 0; i < this->_animatedTileInfos.size(); i++)
 				{
 					if (this->_animatedTileInfos.at(i).StartTileId == tileGID)
 					{
-						ati = this->_animatedTileInfos.at(i);
+						animatedTileInfo = this->_animatedTileInfos.at(i);
 						isAnimatedTile = true;
 						break;
 					}
@@ -130,12 +132,12 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 				if (isAnimatedTile == true)
 				{
 					std::vector<Vector2> tilesetPositions;
-					for (int i = 0; i < ati.TileIds.size(); i++)
+					for (int i = 0; i < animatedTileInfo.TileIds.size(); i++)
 					{
-						tilesetPositions.push_back(this->getTilesetPosition(tileset, ati.TileIds.at(i),
+						tilesetPositions.push_back(this->getTilesetPosition(tileset, animatedTileInfo.TileIds.at(i),
 																																tileWidth, tileHeight));
 					}
-					AnimatedTile tile(tilesetPositions, ati.Duration,
+					AnimatedTile tile(tilesetPositions, animatedTileInfo.Duration,
 														tileset.Texture, Vector2(tileWidth, tileHeight), finalTilePosition);
 					this->_animatedTileList.push_back(tile);
 				}

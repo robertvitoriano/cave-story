@@ -12,6 +12,8 @@
 #include "door.h"
 #include "LevelPassage.h"
 #include <iostream>
+#include <nlohmann/json.hpp>
+
 class Graphics;
 class Enemy;
 class Bat;
@@ -65,6 +67,7 @@ private:
 
 	Vector2 getTilesetPosition(Tileset tls, int gid, int tileWidth, int tileHeight);
 	Vector2 parsePosition(std::string positionString);
+	void parseTileLayer(nlohmann::json layer);
 	std::string parseString(const char *stringValue);
 };
 
