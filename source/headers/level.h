@@ -65,7 +65,7 @@ private:
 	 */
 	void loadMap(std::string mapName, Graphics &graphics);
 
-	Vector2 getTilesetPosition(Tileset tls, int gid, int tileWidth, int tileHeight);
+	Vector2 getTilesetPosition(Tileset tileset, int gid, int tileWidth, int tileHeight);
 	Vector2 parsePosition(std::string positionString);
 	void parseTileLayer(nlohmann::json layer);
 	std::string parseString(const char *stringValue);

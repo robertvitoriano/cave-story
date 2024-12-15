@@ -386,13 +386,18 @@ const Vector2 Level::getPlayerSpawnPoint() const
 Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int tileHeight)
 {
 	int tilesetWidth, tilesetHeight;
+
 	SDL_QueryTexture(tileset.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
+
 	int numberOfTilesPerRow = tilesetWidth / tileWidth;
+
 	int tileXPosition = gid % numberOfTilesPerRow - 1;
 	tileXPosition *= tileWidth;
-	int tileYPosition = 0;
-	int rowPosition = ((gid - tileset.FirstGid) / numberOfTilesPerRow);
-	tileYPosition = tileHeight * rowPosition;
+
+	int distanceFromFirstTile = gid - tileset.FirstGid;
+	int rowPosition = (distanceFromFirstTile / numberOfTilesPerRow);
+
+	int tileYPosition = tileHeight * rowPosition;
 	Vector2 finalTilesetPosition = Vector2(tileXPosition, tileYPosition);
 	return finalTilesetPosition;
 }
