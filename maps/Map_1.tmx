@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="49">
+ <editorsettings>
+  <export target="Map_1.json" format="json"/>
+ </editorsettings>
  <tileset firstgid="1" name="PrtCave" tilewidth="16" tileheight="16" tilecount="80" columns="16">
   <image source="../content/tilesets/PrtCave.png" width="256" height="80"/>
  </tileset>
@@ -115,7 +118,7 @@
    <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="1"/>
-   <tile gid="1"/>
+   <tile gid="2"/>
    <tile gid="34"/>
    <tile gid="33"/>
    <tile gid="34"/>
@@ -130,18 +133,18 @@
    <tile gid="49"/>
    <tile gid="50"/>
    <tile gid="49"/>
-   <tile gid="1"/>
+   <tile gid="2"/>
    <tile gid="38"/>
    <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile gid="3"/>
    <tile gid="6"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile gid="50"/>
    <tile gid="49"/>
    <tile gid="50"/>
@@ -160,7 +163,7 @@
    <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="1"/>
-   <tile gid="37"/>
+   <tile gid="1"/>
    <tile gid="67"/>
    <tile gid="67"/>
    <tile gid="67"/>
@@ -180,7 +183,7 @@
    <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="1"/>
-   <tile gid="53"/>
+   <tile gid="1"/>
    <tile gid="67"/>
    <tile gid="67"/>
    <tile gid="67"/>
@@ -199,8 +202,8 @@
    <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile gid="33"/>
    <tile gid="34"/>
    <tile gid="33"/>
@@ -210,15 +213,15 @@
    <tile gid="49"/>
    <tile gid="50"/>
    <tile gid="49"/>
-   <tile gid="1"/>
+   <tile gid="2"/>
    <tile gid="49"/>
-   <tile gid="1"/>
+   <tile gid="2"/>
    <tile gid="54"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
+   <tile gid="2"/>
    <tile gid="49"/>
    <tile gid="50"/>
    <tile gid="49"/>
@@ -379,7 +382,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -409,7 +411,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -429,7 +430,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="49"/>
    <tile/>
    <tile/>
    <tile/>
@@ -439,7 +439,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -453,19 +452,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
-   <tile gid="2"/>
    <tile/>
    <tile/>
-   <tile gid="50"/>
-   <tile gid="50"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
-   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -477,14 +467,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="164"/>
-   <tile gid="164"/>
-   <tile gid="164"/>
-   <tile gid="164"/>
-   <tile gid="164"/>
    <tile/>
    <tile/>
-   <tile gid="67"/>
    <tile/>
    <tile/>
    <tile/>
@@ -503,8 +487,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="99"/>
-   <tile gid="107"/>
    <tile/>
    <tile/>
    <tile/>
@@ -523,8 +505,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
-   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -534,22 +514,15 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
    <tile/>
-   <tile gid="2"/>
    <tile/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
    <tile/>
-   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -569,7 +542,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -589,7 +561,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -609,7 +580,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -629,7 +599,40 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="49"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
