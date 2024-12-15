@@ -73,14 +73,12 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 			this->_animatedTileInfos.push_back(animatedTileInfo);
 		}
 	}
+
 	for (nlohmann::json layer : levelData["layers"])
 	{
 		if (layer["type"] == "tilelayer")
 		{
-			if (layer["name"] == "tile layer")
-			{
-				std::cout << "LAYER IS TILE LAYER" << std::endl;
-			}
+			std::cout << "LAYER NAME: " << layer["name"] << std::endl;
 
 			int tileCounter = 0;
 			for (nlohmann::json tileGID : layer["data"])
@@ -89,64 +87,28 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					continue;
 
 				Tileset tileset;
-				int closest = 0;
 				for (int i = 0; i < this->_tilesets.size(); i++)
 				{
 					if (this->_tilesets[i].FirstGid <= tileGID)
 					{
-						if (this->_tilesets[i].FirstGid > closest)
-						{
-							closest = this->_tilesets[i].FirstGid;
-							tileset = this->_tilesets.at(i);
-						}
+
+						tileset = this->_tilesets.at(i);
 					}
 				}
 
-				if (tileset.FirstGid == -1)
-				{
-
-					continue;
-				}
-
-				// Get the position of the tile in the level
 				int x = 0;
 				int y = 0;
 				x = tileCounter % width;
 				x *= tileWidth;
 				y += tileHeight * (tileCounter / width);
+
 				Vector2 finalTilePosition = Vector2(x, y);
 
 				Vector2 finalTilesetPosition = this->getTilesetPosition(tileset, tileGID, tileWidth, tileHeight);
 
-				bool isAnimatedTile = false;
-				AnimatedTileInfo animatedTileInfo;
-				for (int i = 0; i < this->_animatedTileInfos.size(); i++)
-				{
-					if (this->_animatedTileInfos.at(i).StartTileId == tileGID)
-					{
-						animatedTileInfo = this->_animatedTileInfos.at(i);
-						isAnimatedTile = true;
-						break;
-					}
-				}
-				if (isAnimatedTile == true)
-				{
-					std::vector<Vector2> tilesetPositions;
-					for (int i = 0; i < animatedTileInfo.TileIds.size(); i++)
-					{
-						tilesetPositions.push_back(this->getTilesetPosition(tileset, animatedTileInfo.TileIds.at(i),
-																																tileWidth, tileHeight));
-					}
-					AnimatedTile tile(tilesetPositions, animatedTileInfo.Duration,
-														tileset.Texture, Vector2(tileWidth, tileHeight), finalTilePosition);
-					this->_animatedTileList.push_back(tile);
-				}
-				else
-				{
-					Tile tile(tileset.Texture, Vector2(tileWidth, tileHeight),
-										finalTilesetPosition, finalTilePosition);
-					this->_tileList.push_back(tile);
-				}
+				Tile tile(tileset.Texture, Vector2(tileWidth, tileHeight),
+									finalTilesetPosition, finalTilePosition);
+				this->_tileList.push_back(tile);
 				tileCounter++;
 			}
 		}
