@@ -64,10 +64,11 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 		for (nlohmann::json animatedTile : tileSet["tiles"])
 		{
 			AnimatedTileInfo animatedTileInfo;
-			animatedTileInfo.StartTileId = animatedTile["id"];
+			animatedTileInfo.StartTileId = animatedTile["id"].get<int>() + firstgid;
+
 			for (nlohmann::json animatedFrame : animatedTile["animation"])
 			{
-				animatedTileInfo.TileIds.push_back(animatedFrame["tileid"].get<int>());
+				animatedTileInfo.TileIds.push_back(animatedFrame["tileid"].get<int>() + firstgid);
 				animatedTileInfo.Duration = animatedFrame["duration"];
 			}
 			this->_animatedTileInfos.push_back(animatedTileInfo);
@@ -107,9 +108,6 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 				AnimatedTileInfo animatedTileInfo;
 				for (int i = 0; i < this->_animatedTileInfos.size(); i++)
 				{
-					std::cout << "STARTING TILE ID " << this->_animatedTileInfos.at(i).StartTileId << std::endl;
-					std::cout << "CURRENT TILE ID " << tileGID << std::endl;
-
 					if (this->_animatedTileInfos.at(i).StartTileId == tileGID)
 					{
 						animatedTileInfo = this->_animatedTileInfos.at(i);
