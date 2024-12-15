@@ -84,7 +84,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 				if (tileGID == 0)
 					continue;
 
-				Tileset tls;
+				Tileset tileset;
 				int closest = 0;
 				for (int i = 0; i < this->_tilesets.size(); i++)
 				{
@@ -93,12 +93,12 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 						if (this->_tilesets[i].FirstGid > closest)
 						{
 							closest = this->_tilesets[i].FirstGid;
-							tls = this->_tilesets.at(i);
+							tileset = this->_tilesets.at(i);
 						}
 					}
 				}
 
-				if (tls.FirstGid == -1)
+				if (tileset.FirstGid == -1)
 				{
 
 					continue;
@@ -113,7 +113,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 				Vector2 finalTilePosition = Vector2(xx, yy);
 
 				// Calculate the position of the tile in the tileset
-				Vector2 finalTilesetPosition = this->getTilesetPosition(tls, tileGID, tileWidth, tileHeight);
+				Vector2 finalTilesetPosition = this->getTilesetPosition(tileset, tileGID, tileWidth, tileHeight);
 
 				// Build the actual tile and add it to the level's tile list
 				bool isAnimatedTile = false;
@@ -132,16 +132,16 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					std::vector<Vector2> tilesetPositions;
 					for (int i = 0; i < ati.TileIds.size(); i++)
 					{
-						tilesetPositions.push_back(this->getTilesetPosition(tls, ati.TileIds.at(i),
+						tilesetPositions.push_back(this->getTilesetPosition(tileset, ati.TileIds.at(i),
 																																tileWidth, tileHeight));
 					}
 					AnimatedTile tile(tilesetPositions, ati.Duration,
-														tls.Texture, Vector2(tileWidth, tileHeight), finalTilePosition);
+														tileset.Texture, Vector2(tileWidth, tileHeight), finalTilePosition);
 					this->_animatedTileList.push_back(tile);
 				}
 				else
 				{
-					Tile tile(tls.Texture, Vector2(tileWidth, tileHeight),
+					Tile tile(tileset.Texture, Vector2(tileWidth, tileHeight),
 										finalTilesetPosition, finalTilePosition);
 					this->_tileList.push_back(tile);
 				}
@@ -399,14 +399,14 @@ const Vector2 Level::getPlayerSpawnPoint() const
 {
 	return this->_spawnPoint;
 }
-Vector2 Level::getTilesetPosition(Tileset tls, int gid, int tileWidth, int tileHeight)
+Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int tileHeight)
 {
 	int tilesetWidth, tilesetHeight;
-	SDL_QueryTexture(tls.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
+	SDL_QueryTexture(tileset.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
 	int tsxx = gid % (tilesetWidth / tileWidth) - 1;
 	tsxx *= tileWidth;
 	int tsyy = 0;
-	int amt = ((gid - tls.FirstGid) / (tilesetWidth / tileWidth));
+	int amt = ((gid - tileset.FirstGid) / (tilesetWidth / tileWidth));
 	tsyy = tileHeight * amt;
 	Vector2 finalTilesetPosition = Vector2(tsxx, tsyy);
 	return finalTilesetPosition;
