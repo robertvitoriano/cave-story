@@ -261,21 +261,23 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 				}
 			}
 		}
+		else if (layer["name"] == "enemies")
+		{
 
-		// else if (layer["name"] == "enemies")
-		// {
-		// 	float x, y;
+			for (nlohmann::json object : layer["objects"])
+			{
+				std::string destination;
+				Vector2 spawnPosition = {0, 0};
 
-		// 	for (nlohmann::json object : layer["objects"])
-		// 	{
-		// 		x = object["x"];
-		// 		y = object["y"];
-		// 		if (object["name"] == "bat")
-		// 		{
-		// 			this->_enemies.push_back(new Bat(graphics, Vector2(std::floor(x) * globals::SPRITE_SCALE,
-		// 																												 std::floor(y) * globals::SPRITE_SCALE)));
-		// 		}
-		// 	}
+				float x = object["x"];
+				float y = object["y"];
+				if (object["name"] == "bat")
+				{
+					this->_enemies.push_back(new Bat(graphics, Vector2(std::floor(x) * globals::SPRITE_SCALE,
+																														 std::floor(y) * globals::SPRITE_SCALE)));
+				}
+			}
+		}
 	}
 }
 
