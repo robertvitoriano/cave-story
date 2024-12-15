@@ -123,6 +123,8 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 						this->_animatedTileList.push_back(tile);
 					}
 				}
+				if (isAnimatedTile)
+					continue;
 
 				Tile tile(tileset.Texture, Vector2(tileWidth, tileHeight),
 									finalTilesetPosition, finalTilePosition);
@@ -385,11 +387,12 @@ Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int t
 {
 	int tilesetWidth, tilesetHeight;
 	SDL_QueryTexture(tileset.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
-	int tsxx = gid % (tilesetWidth / tileWidth) - 1;
-	tsxx *= tileWidth;
-	int tsyy = 0;
-	int amt = ((gid - tileset.FirstGid) / (tilesetWidth / tileWidth));
-	tsyy = tileHeight * amt;
-	Vector2 finalTilesetPosition = Vector2(tsxx, tsyy);
+	int numberOfTilesPerRow = tilesetWidth / tileWidth;
+	int tileXPosition = gid % numberOfTilesPerRow - 1;
+	tileXPosition *= tileWidth;
+	int tileYPosition = 0;
+	int rowPosition = ((gid - tileset.FirstGid) / numberOfTilesPerRow);
+	tileYPosition = tileHeight * rowPosition;
+	Vector2 finalTilesetPosition = Vector2(tileXPosition, tileYPosition);
 	return finalTilesetPosition;
 }
