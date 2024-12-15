@@ -84,8 +84,6 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 				if (tileGID == 0)
 					continue;
 
-				// Get the tileset for this specific gid
-
 				Tileset tls;
 				int closest = 0;
 				for (int i = 0; i < this->_tilesets.size(); i++)
@@ -208,117 +206,76 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 				}
 			}
 		}
-		// else if (objectLayerName == "doors")
-		// {
-		// 	XMLElement *pObject = pObjectGroup->FirstChildElement("object");
+		else if (layer["name"] == "doors")
+		{
+			for (nlohmann::json object : layer["objects"])
+			{
+				float x = object["x"];
+				float y = object["y"];
+				float w = object["width"];
+				float h = object["height"];
+				Rectangle rect = Rectangle(x, y, w, h);
+				Vector2 spawnPosition = {0, 0};
+				std::string destination;
+				for (nlohmann::json property : object["properties"])
+				{
+					if (property["name"] == "destination")
+					{
+						destination = property["value"];
+					}
+					if (property["name"] == "spawn_position")
+					{
+						spawnPosition = this->parsePosition(property["value"]);
+					}
+				}
+				Door door = Door(rect, destination, spawnPosition);
+				this->_doorList.push_back(door);
+			}
+		}
+		else if (layer["name"] == "level_passages")
+		{
 
-		// 	while (pObject)
-		// 	{
-		// 		float x = object("x");
-		// 		float y = object("y");
-		// 		float w = object("width");
-		// 		float h = object("height");
-		// 		Rectangle rect = Rectangle(x, y, w, h);
-		// 		Vector2 spawnPosition = {0, 0};
-		// 		std::string destination;
-		// 		XMLElement *pProperties = pObject->FirstChildElement("properties");
+			for (nlohmann::json object : layer["objects"])
+			{
+				std::string destination;
+				Vector2 spawnPosition = {0, 0};
 
-		// 		while (pProperties)
-		// 		{
-		// 			XMLElement *pProperty = pProperties->FirstChildElement("property");
+				float x = object["x"];
+				float y = object["y"];
+				float w = object["width"];
+				float h = object["height"];
+				Rectangle rect = Rectangle(x, y, w, h);
 
-		// 			while (pProperty)
-		// 			{
-		// 				const char *name = pProperty->Attribute("name");
-		// 				std::string propertyName = this->parseString(name);
-		// 				if (propertyName == "destination")
-		// 				{
-		// 					const char *value = pProperty->Attribute("value");
-		// 					destination = this->parseString(value);
-		// 				}
-		// 				if (propertyName == "spawn_position")
-		// 				{
-		// 					const char *value = pProperty->Attribute("value");
-		// 					spawnPosition = this->parsePosition(value);
-		// 				}
-		// 				pProperty = pProperty->NextSiblingElement("property");
-		// 			}
-		// 			pProperties = pProperties->NextSiblingElement("properties");
-		// 		}
+				for (nlohmann::json property : object["properties"])
+				{
+					if (property["name"] == "destination")
+					{
+						destination = property["value"];
+					}
+					if (property["name"] == "spawn_position")
+					{
+						spawnPosition = this->parsePosition(property["value"]);
+					}
+					LevelPassage levelPassage = LevelPassage(rect, destination, spawnPosition);
+					this->_levelPassagesList.push_back(levelPassage);
+				}
+			}
+		}
 
-		// 		Door door = Door(rect, destination, spawnPosition);
-		// 		this->_doorList.push_back(door);
-		// 		pObject = pObject->NextSiblingElement("object");
-		// 	}
-		// }
-		// else if (objectLayerName == "level_passages")
-		// {
-		// 	XMLElement *pObject = pObjectGroup->FirstChildElement("object");
-
-		// 	while (pObject)
-		// 	{
-		// 		std::string destination;
-		// 		Vector2 spawnPosition = {0, 0};
-
-		// 		float x = object("x");
-		// 		float y = object("y");
-		// 		float w = object("width");
-		// 		float h = object("height");
-		// 		Rectangle rect = Rectangle(x, y, w, h);
-
-		// 		XMLElement *pProperties = pObject->FirstChildElement("properties");
-
-		// 		while (pProperties)
-		// 		{
-		// 			XMLElement *pProperty = pProperties->FirstChildElement("property");
-
-		// 			while (pProperty)
-		// 			{
-		// 				const char *name = pProperty->Attribute("name");
-		// 				std::string propertyName = this->parseString(name);
-		// 				if (propertyName == "destination")
-		// 				{
-		// 					const char *value = pProperty->Attribute("value");
-		// 					destination = this->parseString(value);
-		// 				}
-		// 				if (propertyName == "spawn_position")
-		// 				{
-		// 					const char *value = pProperty->Attribute("value");
-		// 					spawnPosition = this->parsePosition(value);
-		// 				}
-		// 				pProperty = pProperty->NextSiblingElement("property");
-		// 			}
-
-		// 			pProperties = pProperties->NextSiblingElement("properties");
-		// 		}
-
-		// 		LevelPassage levelPassage = LevelPassage(rect, destination, spawnPosition);
-		// 		this->_levelPassagesList.push_back(levelPassage);
-		// 		pObject = pObject->NextSiblingElement("object");
-		// 	}
-		// }
-		// else if (objectLayerName == "enemies")
+		// else if (layer["name"] == "enemies")
 		// {
 		// 	float x, y;
-		// 	XMLElement *pObject = pObjectGroup->FirstChildElement("object");
 
-		// 	while (pObject)
+		// 	for (nlohmann::json object : layer["objects"])
 		// 	{
-		// 		x = object("x");
-		// 		y = object("y");
-		// 		const char *name = pObject->Attribute("name");
-		// 		std::string enemyName = this->parseString(name);
-		// 		if (enemyName == "bat")
+		// 		x = object["x"];
+		// 		y = object["y"];
+		// 		if (object["name"] == "bat")
 		// 		{
 		// 			this->_enemies.push_back(new Bat(graphics, Vector2(std::floor(x) * globals::SPRITE_SCALE,
 		// 																												 std::floor(y) * globals::SPRITE_SCALE)));
 		// 		}
-
-		// 		pObject = pObject->NextSiblingElement("object");
 		// 	}
-		// }
-
-		// pObjectGroup = pObjectGroup->NextSiblingElement("objectgroup");
 	}
 }
 
@@ -352,18 +309,16 @@ void Level::draw(Graphics &graphics, Player &player)
 	}
 }
 
-Vector2 Level::parsePosition(const char *positionValue)
+Vector2 Level::parsePosition(std::string positionString)
 {
-	std::string stringParsed = this->parseString(positionValue);
-	size_t commaPosition = stringParsed.find(',');
-	std::string X = stringParsed.substr(0, commaPosition);
-	std::string Y = stringParsed.substr(commaPosition + 1);
+	size_t commaPosition = positionString.find(',');
+	std::string xStr = positionString.substr(0, commaPosition);
+	std::string yStr = positionString.substr(commaPosition + 1);
 
-	int xInt = std::stoi(X);
-	int yInt = std::stoi(Y);
+	int xInt = std::stoi(xStr);
+	int yInt = std::stoi(yStr);
 
-	return Vector2(std::ceil(xInt) * globals::SPRITE_SCALE,
-								 std::ceil(yInt) * globals::SPRITE_SCALE);
+	return Vector2(xInt, yInt);
 }
 
 std::string Level::parseString(const char *stringValue)
