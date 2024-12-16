@@ -405,6 +405,8 @@ Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int t
 	int rowPosition = (distanceFromFirstTile / numberOfTilesPerRow);
 
 	int tileYPosition = tileHeight * rowPosition;
+
 	Vector2 finalTilesetPosition = Vector2(tileXPosition, tileYPosition);
+
 	return finalTilesetPosition;
 }
