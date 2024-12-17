@@ -60,24 +60,7 @@
          "draworder":"topdown",
          "id":7,
          "name":"level_passages",
-         "objects":[
-                {
-                 "height":31.75,
-                 "id":41,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"destination",
-                         "type":"string",
-                         "value":"Map_1_4"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0.3125,
-                 "x":319.563,
-                 "y":96.1875
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -190,7 +173,7 @@
                         {
                          "name":"spawn_position",
                          "type":"string",
-                         "value":"400,160"
+                         "value":"220,90"
                         }],
                  "rotation":0,
                  "type":"",
