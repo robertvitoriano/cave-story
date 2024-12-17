@@ -3,11 +3,11 @@
 #include "MusicPlayer.h"
 namespace player_constants
 {
-	const float WALK_SPEED = 0.2f;
-	const float JUMP_SPEED = 0.7f;
+	const float WALK_SPEED = 0.4f;
+	const float JUMP_SPEED = 1.4f;
 
-	const float GRAVITY = 0.002f;
-	const float GRAVITY_CAP = 0.8f;
+	const float GRAVITY = 0.004f;
+	const float GRAVITY_CAP = 1.6f;
 }
 
 Player::Player() {}
