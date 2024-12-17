@@ -12,8 +12,8 @@ Bat::Bat(Graphics &graphics, Vector2 spawnPoint)
 
 void Bat::update(int elapsedTime, Player &player)
 {
-  double flightSpeed = 0.10;
-  int flightLimit = 60;
+  double flightSpeed = 0.03;
+  int flightLimit = 30;
 
   this->_direction = player.getX() > this->_x ? RIGHT : LEFT;
   this->playAnimation(this->_direction == RIGHT ? "FlyRight" : "FlyLeft");

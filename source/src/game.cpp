@@ -138,10 +138,10 @@ void Game::update(float elapsedTime)
 	{
 		this->_player.handleSlopeCollisions(otherSlopes);
 	}
-	std::vector<Door> otherDoors;
-	if ((otherDoors = this->_level.checkDoorCollisions(this->_player.getBoundingBox())).size() > 0)
+	std::vector<Door> doors;
+	if ((doors = this->_level.checkDoorCollisions(this->_player.getBoundingBox())).size() > 0)
 	{
-		this->_player.handleDoorCollision(otherDoors, this->_level, this->_graphics);
+		this->_player.handleDoorCollision(doors, this->_level, this->_graphics);
 	}
 	std::vector<LevelPassage> levelPassages;
 	if ((levelPassages = this->_level.checkLevelPassage(this->_player.getBoundingBox())).size() > 0)

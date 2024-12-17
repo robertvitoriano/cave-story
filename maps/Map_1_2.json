@@ -188,9 +188,9 @@
                          "value":"Map_1"
                         }, 
                         {
-                         "name":"spawn position",
+                         "name":"spawn_position",
                          "type":"string",
-                         "value":"300,50"
+                         "value":"400,160"
                         }],
                  "rotation":0,
                  "type":"",
