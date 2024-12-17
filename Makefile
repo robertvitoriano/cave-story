@@ -16,6 +16,11 @@ TARGET := $(BIN_DIR)/game
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC_FILES))
 
+rebuild-level:
+	@mkdir -p $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/level.cpp -o $(OBJ_DIR)/level.o
+	@echo "level.cpp has been recompiled."
+
 # Default target
 all: $(TARGET)
 
