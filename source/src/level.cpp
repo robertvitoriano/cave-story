@@ -103,6 +103,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 				x = tileCounter % width;
 				x *= tileWidth;
 				y += tileHeight * (tileCounter / width);
+
 				Vector2 finalTilePosition = Vector2(x, y);
 
 				Vector2 finalTilesetPosition = this->getTilesetPosition(tileset, tileGID, tileWidth, tileHeight);
@@ -114,6 +115,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					if (this->_animatedTileInfos.at(i).StartTileId == tileGID)
 					{
 						animatedTileInfo = this->_animatedTileInfos.at(i);
+
 						isAnimatedTile = true;
 
 						std::vector<Vector2> tilesetPositions;
@@ -145,10 +147,13 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 				for (nlohmann::json object : layer["objects"])
 				{
 					float x, y, width, height;
+
 					x = object["x"];
 					y = object["y"];
+
 					width = object["width"];
 					height = object["height"];
+
 					this->_collisionRects.push_back(Rectangle(
 							std::ceil(x) * globals::SPRITE_SCALE,
 							std::ceil(y) * globals::SPRITE_SCALE,
@@ -202,10 +207,13 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 				{
 					float x = object["x"];
 					float y = object["y"];
+
 					float w = object["width"];
 					float h = object["height"];
+
 					Rectangle rect = Rectangle(x, y, w, h);
 					Vector2 spawnPosition = {0, 0};
+
 					std::string destination;
 					for (nlohmann::json property : object["properties"])
 					{
@@ -228,12 +236,15 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 				for (nlohmann::json object : layer["objects"])
 				{
 					std::string destination;
+
 					Vector2 spawnPosition = {0, 0};
 
 					float x = object["x"];
 					float y = object["y"];
+
 					float w = object["width"];
 					float h = object["height"];
+
 					Rectangle rect = Rectangle(x, y, w, h);
 
 					for (nlohmann::json property : object["properties"])
@@ -247,6 +258,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 							spawnPosition = this->parsePosition(property["value"]);
 						}
 						LevelPassage levelPassage = LevelPassage(rect, destination, spawnPosition);
+
 						this->_levelPassagesList.push_back(levelPassage);
 					}
 				}
