@@ -405,14 +405,27 @@ Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int t
 	int tilesetWidth, tilesetHeight;
 
 	SDL_QueryTexture(tileset.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
-
 	int numberOfTilesPerRow = tilesetWidth / tileWidth;
-
 	int columnPosition = gid % numberOfTilesPerRow - 1;
+	if (tileset.FirstGid == 381)
+	{
+		int relativeGid = gid - tileset.FirstGid;
+
+		columnPosition = (relativeGid % numberOfTilesPerRow);
+	}
+
 	int tileXPosition = columnPosition * tileWidth;
 
 	int distanceFromFirstTile = gid - tileset.FirstGid;
 	int rowPosition = (distanceFromFirstTile / numberOfTilesPerRow);
+	if (gid == 381)
+	{
+
+		std::cout << "TILES PER ROW " << numberOfTilesPerRow << std::endl;
+		std::cout << "COLUMMN POSITION " << columnPosition << std::endl;
+		std::cout << "first tile gid " << tileset.FirstGid << std::endl;
+		std::cout << "row position " << rowPosition << std::endl;
+	}
 
 	int tileYPosition = tileHeight * rowPosition;
 

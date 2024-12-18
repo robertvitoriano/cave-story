@@ -329,7 +329,14 @@
          "spacing":0,
          "tilecount":96,
          "tileheight":16,
-         "tilewidth":16
+         "tilewidth":16,
+         "transformations":
+            {
+             "hflip":true,
+             "preferuntransformed":false,
+             "rotate":false,
+             "vflip":false
+            }
         }],
  "tilewidth":16,
  "type":"map",
