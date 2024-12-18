@@ -75,11 +75,9 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 			this->_animatedTileInfos.push_back(animatedTileInfo);
 		}
 	}
-	std::vector<std::string> layerNames = {};
 
 	for (nlohmann::json layer : levelData["layers"])
 	{
-		layerNames.push_back(layer["name"]);
 		if (layer["type"] == "tilelayer")
 		{
 
