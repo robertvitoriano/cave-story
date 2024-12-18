@@ -421,8 +421,7 @@ Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int t
 
 	int tileXPosition = columnPosition * tileWidth;
 
-	int distanceFromFirstTile = gid - tileset.FirstGid;
-	int rowPosition = (distanceFromFirstTile / numberOfTilesPerRow);
+	int rowPosition = (relativeGid / numberOfTilesPerRow);
 	int tileYPosition = tileHeight * rowPosition;
 
 	return Vector2(tileXPosition, tileYPosition);
