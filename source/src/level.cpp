@@ -419,9 +419,9 @@ Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int t
 		columnPosition = (relativeGid % numberOfTilesPerRow);
 	}
 
-	int tileXPosition = columnPosition * tileWidth;
-
 	int rowPosition = (relativeGid / numberOfTilesPerRow);
+
+	int tileXPosition = columnPosition * tileWidth;
 	int tileYPosition = tileHeight * rowPosition;
 
 	return Vector2(tileXPosition, tileYPosition);
