@@ -112,6 +112,10 @@ void Player::moveDown()
 void Player::stopMoving()
 {
 	this->_dx = 0.0f;
+	if (!this->isGravityEnabled())
+	{
+		this->_dy = 0.0f;
+	}
 	if (this->_lookingUp == false && this->_lookingDown == false)
 	{
 		this->playAnimation(this->_facing == RIGHT ? "IdleRight" : "IdleLeft");

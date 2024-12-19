@@ -99,7 +99,7 @@ void Game::gameLoop()
 			this->_player.jump();
 		}
 
-		if (!input.isKeyHeld(SDL_SCANCODE_LEFT) && !input.isKeyHeld(SDL_SCANCODE_RIGHT))
+		if ((!input.isKeyHeld(SDL_SCANCODE_LEFT) && !input.isKeyHeld(SDL_SCANCODE_RIGHT) && this->_player.isGravityEnabled()) || (!input.isKeyHeld(SDL_SCANCODE_DOWN) && !input.isKeyHeld(SDL_SCANCODE_UP) && !this->_player.isGravityEnabled() && !input.isKeyHeld(SDL_SCANCODE_LEFT) && !input.isKeyHeld(SDL_SCANCODE_RIGHT)))
 		{
 			this->_player.stopMoving();
 		}
