@@ -51,10 +51,19 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 	inputFile.close();
 	int tileWidth = levelData["tilewidth"];
 	int tileHeight = levelData["tileheight"];
+	this->_isLevel3D = false;
 	int width = 20;
 	int height = levelData["height"];
 	this->_size = Vector2(width, height);
 	this->_tileSize = Vector2(tileWidth, tileHeight);
+
+	for (nlohmann::json property : levelData["properties"])
+	{
+		if (property["is_3d"] != NULL)
+		{
+			this->_isLevel3D = property["value"];
+		}
+	}
 
 	for (nlohmann::json tileSet : levelData["tilesets"])
 	{
@@ -290,6 +299,15 @@ void Level::update(int elapsedTime, Player &player)
 	{
 		this->_enemies.at(i)->update(elapsedTime, player);
 	}
+
+	if (this->_isLevel3D)
+	{
+		player.disableGravity();
+	}
+	else
+	{
+		player.enableGravity();
+	}
 }
 
 void Level::draw(Graphics &graphics, Player &player)
@@ -297,7 +315,6 @@ void Level::draw(Graphics &graphics, Player &player)
 
 	for (int i = 0; i < this->_tileList.size(); i++)
 	{
-
 		this->_tileList.at(i).draw(graphics);
 	}
 	for (int i = 0; i < this->_animatedTileList.size(); i++)

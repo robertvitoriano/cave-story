@@ -27,6 +27,16 @@ public:
 	 */
 	void moveRight();
 
+	/* void moveUp
+	 * Moves the player right by dy
+	 */
+	void moveUp();
+
+	/* void moveDown
+	 * Moves the player right by dx
+	 */
+	void moveDown();
+
 	/* void stopMoving
 	 * Stops moving the player
 	 */
@@ -66,7 +76,7 @@ public:
 	void handleDoorCollision(std::vector<Door> &others, Level &level, Graphics &graphics);
 	void handleLevelPassage(std::vector<LevelPassage> &others, Level &level, Graphics &graphics);
 	void handleEnemyCollisions(std::vector<Enemy *> &others);
-
+	void handle3DimensionalLevel();
 	const float getX() const;
 	const float getY() const;
 
@@ -74,14 +84,18 @@ public:
 	const inline int getCurrentHealth() const { return this->_currentHealth; }
 
 	void gainHealth(int amount);
+	void disableGravity();
+	void enableGravity();
+	bool isGravityEnabled();
 
 private:
-	float _dx, _dy;
+	float _dx,
+			_dy;
 
 	Direction _facing;
 
 	bool _grounded;
-
+	bool _shouldApplyGravity;
 	bool _lookingUp;
 	bool _lookingDown;
 
