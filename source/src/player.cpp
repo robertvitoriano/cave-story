@@ -20,7 +20,8 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 																												 _lookingUp(false),
 																												 _lookingDown(false),
 																												 _maxHealth(3),
-																												 _currentHealth(3)
+																												 _currentHealth(3),
+																												 _shouldApplyGravity(true)
 {
 	graphics.loadImage("content/sprites/MyChar.png");
 
@@ -58,7 +59,7 @@ const float Player::getY() const
 
 void Player::moveLeft()
 {
-	if (this->_lookingDown == true && this->_grounded == true)
+	if (this->_lookingDown == true && this->_grounded == true && this->_shouldApplyGravity)
 	{
 		return;
 	}
@@ -74,7 +75,7 @@ void Player::moveLeft()
 
 void Player::moveRight()
 {
-	if (this->_lookingDown == true && this->_grounded == true)
+	if (this->_lookingDown == true && this->_grounded == true && this->_shouldApplyGravity)
 	{
 		return;
 	}
@@ -87,7 +88,27 @@ void Player::moveRight()
 	}
 	this->_facing = RIGHT;
 }
+void Player::moveUp()
+{
 
+	this->_dy = -player_constants::WALK_SPEED;
+
+	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
+	musicPlayer.playSound("content/sounds/walk.wav", -1);
+	this->playAnimation("RunRight");
+
+	this->_facing = RIGHT;
+}
+void Player::moveDown()
+{
+
+	this->_dy = player_constants::WALK_SPEED;
+
+	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
+	musicPlayer.playSound("content/sounds/walk.wav", -1);
+	this->playAnimation("RunRight");
+	this->_facing = RIGHT;
+}
 void Player::stopMoving()
 {
 	this->_dx = 0.0f;
@@ -97,6 +118,16 @@ void Player::stopMoving()
 		MusicPlayer &musicPlayer = MusicPlayer::getInstance();
 		musicPlayer.stopSound("content/sounds/walk.wav");
 	}
+}
+
+void Player::disableGravity()
+{
+	this->_shouldApplyGravity = false;
+}
+
+void Player::enableGravity()
+{
+	this->_shouldApplyGravity = true;
 }
 
 void Player::lookUp()
@@ -144,6 +175,11 @@ void Player::jump()
 		this->_dy -= player_constants::JUMP_SPEED;
 		this->_grounded = false;
 	}
+}
+
+bool Player::isGravityEnabled()
+{
+	return this->_shouldApplyGravity;
 }
 
 // void handleTileCollisions
@@ -233,6 +269,11 @@ void Player::handleDoorCollision(std::vector<Door> &doors, Level &level, Graphic
 	}
 }
 
+void Player::handle3DimensionalLevel()
+{
+	std::cout << "Handle 3d Level" << std::endl;
+}
+
 void Player::handleLevelPassage(std::vector<LevelPassage> &levelPassages, Level &level, Graphics &graphics)
 {
 	for (int i = 0; i < levelPassages.size(); i++)
@@ -268,7 +309,7 @@ void Player::gainHealth(int amount)
 void Player::update(float elapsedTime)
 {
 	// Apply gravity
-	if (this->_dy <= player_constants::GRAVITY_CAP)
+	if (this->_shouldApplyGravity && this->_dy <= player_constants::GRAVITY_CAP)
 	{
 		this->_dy += player_constants::GRAVITY * elapsedTime;
 	}
