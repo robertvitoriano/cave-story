@@ -31,21 +31,22 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 
 void Player::setupAnimations()
 {
-	this->addAnimation(1, 0, 0, "IdleLeft", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 0, 16, "IdleRight", 16, 16, Vector2(0, 0));
-	this->addAnimation(3, 0, 0, "RunLeft", 16, 16, Vector2(0, 0));
-	this->addAnimation(5, 0, 16, "RunRight", 16, 16, Vector2(0, 0));
-	this->addAnimation(2, 6, 1, "RunUp", 16, 16, Vector2(0, 0));
-	this->addAnimation(2, 5, 0, "RunDown", 16, 16, Vector2(0, 0));
-
-	this->addAnimation(1, 3, 0, "IdleLeftUp", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 3, 16, "IdleRightUp", 16, 16, Vector2(0, 0));
-	this->addAnimation(3, 3, 0, "RunLeftUp", 16, 16, Vector2(0, 0));
-	this->addAnimation(3, 3, 16, "RunRightUp", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 6, 0, "LookDownLeft", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 6, 16, "LookDownRight", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 7, 0, "LookBackwardsLeft", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 7, 16, "LookBackwardsRight", 16, 16, Vector2(0, 0));
+	this->addAnimation(1, 0, 0, "IdleLeft", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(1, 0, 16, "IdleRight", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(3, 0, 0, "RunLeft", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(3, 0, 16, "RunRight", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(2, 7, 0, "RunUp", 16, 16, Vector2(0, 0), "column");
+	this->addAnimation(1, 7, 0, "IdleUp", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(2, 5, 0, "RunDown", 16, 16, Vector2(0, 0), "column");
+	this->addAnimation(1, 5, 0, "IdleDown", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(1, 3, 0, "IdleLeftUp", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(1, 3, 16, "IdleRightUp", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(3, 3, 0, "RunLeftUp", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(3, 3, 16, "RunRightUp", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(1, 6, 0, "LookDownLeft", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(1, 6, 16, "LookDownRight", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(1, 7, 0, "LookBackwardsLeft", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(1, 7, 16, "LookBackwardsRight", 16, 16, Vector2(0, 0), "row");
 }
 
 void Player::animationDone(std::string currentAnimation) {}
@@ -121,7 +122,26 @@ void Player::stopMoving()
 	}
 	if (this->_lookingUp == false && this->_lookingDown == false)
 	{
-		this->playAnimation(this->_facing == RIGHT ? "IdleRight" : "IdleLeft");
+		switch (this->_facing)
+		{
+		case RIGHT:
+			this->playAnimation("IdleRight");
+			break;
+		case LEFT:
+			this->playAnimation("IdleLeft");
+			break;
+
+		case DOWN:
+			this->playAnimation("IdleDown");
+			break;
+
+		case UP:
+			this->playAnimation("IdleUp");
+			break;
+
+		default:
+			this->playAnimation("IdleRight");
+		}
 		MusicPlayer &musicPlayer = MusicPlayer::getInstance();
 		musicPlayer.stopSound("content/sounds/walk.wav");
 	}

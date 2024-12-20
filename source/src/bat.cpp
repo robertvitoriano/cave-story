@@ -40,8 +40,8 @@ void Bat::animationDone(std::string currentAnimation)
 
 void Bat::setupAnimations()
 {
-  this->addAnimation(3, 2, 32, "FlyLeft", 16, 16, Vector2(0, 0));
-  this->addAnimation(3, 2, 48, "FlyRight", 16, 16, Vector2(0, 0));
+  this->addAnimation(3, 2, 32, "FlyLeft", 16, 16, Vector2(0, 0), "row");
+  this->addAnimation(3, 2, 48, "FlyRight", 16, 16, Vector2(0, 0), "row");
 }
 
 void Bat::touchPlayer(Player *player)

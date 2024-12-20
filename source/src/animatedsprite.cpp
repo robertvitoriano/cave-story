@@ -18,13 +18,25 @@ AnimatedSprite::AnimatedSprite(Graphics &graphics, const std::string &filePath, 
 {
 }
 
-void AnimatedSprite::addAnimation(int frames, int x, int y, std::string name, int width, int height, Vector2 offset)
+void AnimatedSprite::addAnimation(int frames, int x, int y, std::string name, int width, int height, Vector2 offset, std::string orientation = "row")
 {
+
 	std::vector<SDL_Rect> rectangles;
-	for (int i = 0; i < frames; i++)
+	if (orientation == "row")
 	{
-		SDL_Rect newRect = {(i + x) * width, y, width, height};
-		rectangles.push_back(newRect);
+		for (int i = 0; i < frames; i++)
+		{
+			SDL_Rect newRect = {(i + x) * width, y, width, height};
+			rectangles.push_back(newRect);
+		}
+	}
+	else if (orientation == "column")
+	{
+		for (int i = 0; i < frames; i++)
+		{
+			SDL_Rect newRect = {x * width, (i + y) * width, width, height};
+			rectangles.push_back(newRect);
+		}
 	}
 	this->_animations.insert(std::pair<std::string, std::vector<SDL_Rect>>(name, rectangles));
 	this->_offsets.insert(std::pair<std::string, Vector2>(name, offset));
