@@ -34,7 +34,10 @@ void Player::setupAnimations()
 	this->addAnimation(1, 0, 0, "IdleLeft", 16, 16, Vector2(0, 0));
 	this->addAnimation(1, 0, 16, "IdleRight", 16, 16, Vector2(0, 0));
 	this->addAnimation(3, 0, 0, "RunLeft", 16, 16, Vector2(0, 0));
-	this->addAnimation(3, 0, 16, "RunRight", 16, 16, Vector2(0, 0));
+	this->addAnimation(5, 0, 16, "RunRight", 16, 16, Vector2(0, 0));
+	this->addAnimation(2, 6, 1, "RunUp", 16, 16, Vector2(0, 0));
+	this->addAnimation(2, 5, 0, "RunDown", 16, 16, Vector2(0, 0));
+
 	this->addAnimation(1, 3, 0, "IdleLeftUp", 16, 16, Vector2(0, 0));
 	this->addAnimation(1, 3, 16, "IdleRightUp", 16, 16, Vector2(0, 0));
 	this->addAnimation(3, 3, 0, "RunLeftUp", 16, 16, Vector2(0, 0));
@@ -95,9 +98,9 @@ void Player::moveUp()
 
 	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
 	musicPlayer.playSound("content/sounds/walk.wav", -1);
-	this->playAnimation("RunRight");
+	this->playAnimation("RunUp");
 
-	this->_facing = RIGHT;
+	this->_facing = UP;
 }
 void Player::moveDown()
 {
@@ -106,8 +109,8 @@ void Player::moveDown()
 
 	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
 	musicPlayer.playSound("content/sounds/walk.wav", -1);
-	this->playAnimation("RunRight");
-	this->_facing = RIGHT;
+	this->playAnimation("RunDown");
+	this->_facing = DOWN;
 }
 void Player::stopMoving()
 {

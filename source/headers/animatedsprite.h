@@ -7,18 +7,19 @@
 
 #include "sprite.h"
 #include "globals.h"
-
+#include <iostream>
 class Graphics;
 
 /* AnimatedSprite class
  * Holds logic for animating sprites
  */
 
-class AnimatedSprite : public Sprite {
+class AnimatedSprite : public Sprite
+{
 public:
 	AnimatedSprite();
 	AnimatedSprite(Graphics &graphics, const std::string &filePath, int sourceX, int sourceY, int width, int height,
-			float posX, float posY, float timeToUpdate);
+								 float posX, float posY, float timeToUpdate);
 
 	/* void playAnimation
 	 * Plays the animation provided if it's not already playing
@@ -70,9 +71,8 @@ protected:
 	 */
 	virtual void setupAnimations() = 0;
 
-
 private:
-	std::map<std::string, std::vector<SDL_Rect> > _animations;
+	std::map<std::string, std::vector<SDL_Rect>> _animations;
 	std::map<std::string, Vector2> _offsets;
 
 	int _frameIndex;
