@@ -63,5 +63,8 @@
     "span": "cpp",
     "valarray": "cpp",
     "variant": "cpp"
-  }
+  },
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wordWrapColumn": 140,
+  "editor.rulers": [140, 140]
 }

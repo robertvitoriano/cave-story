@@ -27,6 +27,16 @@ public:
 	 */
 	void moveRight();
 
+	/* void moveDown
+	 * Moves the player down by +dy
+	 */
+	void moveDown();
+
+	/* void moveRight
+	 * Moves the player right by -dy
+	 */
+	void moveUp();
+
 	/* void stopMoving
 	 * Stops moving the player
 	 */
@@ -74,14 +84,19 @@ public:
 	const inline int getCurrentHealth() const { return this->_currentHealth; }
 
 	void gainHealth(int amount);
+	void disableGravity();
+	void enableGravity();
+	bool isGravityEnabled();
+	void handle3DimensionalLevel();
 
 private:
-	float _dx, _dy;
+	float _dx,
+			_dy;
 
 	Direction _facing;
 
 	bool _grounded;
-
+	bool _shouldApplyGravity;
 	bool _lookingUp;
 	bool _lookingDown;
 

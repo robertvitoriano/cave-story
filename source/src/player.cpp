@@ -20,7 +20,8 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 																												 _lookingUp(false),
 																												 _lookingDown(false),
 																												 _maxHealth(3),
-																												 _currentHealth(3)
+																												 _currentHealth(3),
+																												 _shouldApplyGravity(true)
 {
 	graphics.loadImage("content/sprites/MyChar.png");
 
@@ -30,18 +31,22 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 
 void Player::setupAnimations()
 {
-	this->addAnimation(1, 0, 0, "IdleLeft", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 0, 16, "IdleRight", 16, 16, Vector2(0, 0));
-	this->addAnimation(3, 0, 0, "RunLeft", 16, 16, Vector2(0, 0));
-	this->addAnimation(3, 0, 16, "RunRight", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 3, 0, "IdleLeftUp", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 3, 16, "IdleRightUp", 16, 16, Vector2(0, 0));
-	this->addAnimation(3, 3, 0, "RunLeftUp", 16, 16, Vector2(0, 0));
-	this->addAnimation(3, 3, 16, "RunRightUp", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 6, 0, "LookDownLeft", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 6, 16, "LookDownRight", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 7, 0, "LookBackwardsLeft", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 7, 16, "LookBackwardsRight", 16, 16, Vector2(0, 0));
+	this->addAnimation(1, 0, 0, "IdleLeft", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(1, 0, 16, "IdleRight", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(3, 0, 0, "RunLeft", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(3, 0, 16, "RunRight", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(2, 7, 0, "RunUp", 16, 16, Vector2(0, 0), "column");
+	this->addAnimation(1, 7, 0, "IdleUp", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(2, 5, 0, "RunDown", 16, 16, Vector2(0, 0), "column");
+	this->addAnimation(1, 5, 0, "IdleDown", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(1, 3, 0, "IdleLeftUp", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(1, 3, 16, "IdleRightUp", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(3, 3, 0, "RunLeftUp", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(3, 3, 16, "RunRightUp", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(1, 6, 0, "LookDownLeft", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(1, 6, 16, "LookDownRight", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(1, 7, 0, "LookBackwardsLeft", 16, 16, Vector2(0, 0), "row");
+	this->addAnimation(1, 7, 16, "LookBackwardsRight", 16, 16, Vector2(0, 0), "row");
 }
 
 void Player::animationDone(std::string currentAnimation) {}
@@ -58,7 +63,7 @@ const float Player::getY() const
 
 void Player::moveLeft()
 {
-	if (this->_lookingDown == true && this->_grounded == true)
+	if (this->_lookingDown == true && this->_grounded == true && this->_shouldApplyGravity)
 	{
 		return;
 	}
@@ -74,7 +79,7 @@ void Player::moveLeft()
 
 void Player::moveRight()
 {
-	if (this->_lookingDown == true && this->_grounded == true)
+	if (this->_lookingDown == true && this->_grounded == true && this->_shouldApplyGravity)
 	{
 		return;
 	}
@@ -87,16 +92,69 @@ void Player::moveRight()
 	}
 	this->_facing = RIGHT;
 }
+void Player::moveUp()
+{
 
+	this->_dy = -player_constants::WALK_SPEED;
+
+	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
+	musicPlayer.playSound("content/sounds/walk.wav", -1);
+	this->playAnimation("RunUp");
+
+	this->_facing = UP;
+}
+void Player::moveDown()
+{
+
+	this->_dy = player_constants::WALK_SPEED;
+
+	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
+	musicPlayer.playSound("content/sounds/walk.wav", -1);
+	this->playAnimation("RunDown");
+	this->_facing = DOWN;
+}
 void Player::stopMoving()
 {
 	this->_dx = 0.0f;
+	if (!this->isGravityEnabled())
+	{
+		this->_dy = 0.0f;
+	}
 	if (this->_lookingUp == false && this->_lookingDown == false)
 	{
-		this->playAnimation(this->_facing == RIGHT ? "IdleRight" : "IdleLeft");
+		switch (this->_facing)
+		{
+		case RIGHT:
+			this->playAnimation("IdleRight");
+			break;
+		case LEFT:
+			this->playAnimation("IdleLeft");
+			break;
+
+		case DOWN:
+			this->playAnimation("IdleDown");
+			break;
+
+		case UP:
+			this->playAnimation("IdleUp");
+			break;
+
+		default:
+			this->playAnimation("IdleRight");
+		}
 		MusicPlayer &musicPlayer = MusicPlayer::getInstance();
 		musicPlayer.stopSound("content/sounds/walk.wav");
 	}
+}
+
+void Player::disableGravity()
+{
+	this->_shouldApplyGravity = false;
+}
+
+void Player::enableGravity()
+{
+	this->_shouldApplyGravity = true;
 }
 
 void Player::lookUp()
@@ -144,6 +202,11 @@ void Player::jump()
 		this->_dy -= player_constants::JUMP_SPEED;
 		this->_grounded = false;
 	}
+}
+
+bool Player::isGravityEnabled()
+{
+	return this->_shouldApplyGravity;
 }
 
 // void handleTileCollisions
@@ -233,6 +296,11 @@ void Player::handleDoorCollision(std::vector<Door> &doors, Level &level, Graphic
 	}
 }
 
+void Player::handle3DimensionalLevel()
+{
+	std::cout << "Handle 3d Level" << std::endl;
+}
+
 void Player::handleLevelPassage(std::vector<LevelPassage> &levelPassages, Level &level, Graphics &graphics)
 {
 	for (int i = 0; i < levelPassages.size(); i++)
@@ -268,7 +336,7 @@ void Player::gainHealth(int amount)
 void Player::update(float elapsedTime)
 {
 	// Apply gravity
-	if (this->_dy <= player_constants::GRAVITY_CAP)
+	if (this->_shouldApplyGravity && this->_dy <= player_constants::GRAVITY_CAP)
 	{
 		this->_dy += player_constants::GRAVITY * elapsedTime;
 	}
