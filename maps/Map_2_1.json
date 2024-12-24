@@ -45,7 +45,7 @@
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            0, 0, 0, 0, 0, 0, 0, 432, 432, 432, 432, 432, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":16,
          "id":2,
          "name":"Tile Layer 1",
@@ -62,28 +62,39 @@
          "name":"level_passages",
          "objects":[
                 {
-                 "height":46.75,
+                 "height":14,
                  "id":60,
                  "name":"",
                  "properties":[
                         {
                          "name":"destination",
                          "type":"string",
-                         "value":"Map_1_5"
+                         "value":"Map_2"
                         }, 
                         {
                          "name":"spawn_position",
                          "type":"string",
-                         "value":"60, 210"
+                         "value":"70,110"
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":0.666666666666629,
-                 "x":319.25,
-                 "y":80.5833333333333
+                 "width":79.1666666666666,
+                 "x":111.25,
+                 "y":241.333333333333
                 }],
          "opacity":1,
+         "properties":[
+                {
+                 "name":"destination",
+                 "type":"string",
+                 "value":"Map_2"
+                }, 
+                {
+                 "name":"spawn_position",
+                 "type":"string",
+                 "value":"70,110"
+                }],
          "type":"objectgroup",
          "visible":true,
          "x":0,
