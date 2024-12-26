@@ -85,11 +85,11 @@ void Game::gameLoop()
 			this->_player.lookDown();
 		}
 
-		if (input.wasKeyReleased(SDL_SCANCODE_UP) == true && this->_player.isGravityEnabled())
+		if (input.wasKeyReleased(SDL_SCANCODE_UP) == true)
 		{
 			this->_player.stopLookingUp();
 		}
-		if (input.wasKeyReleased(SDL_SCANCODE_DOWN) == true && this->_player.isGravityEnabled())
+		if (input.wasKeyReleased(SDL_SCANCODE_DOWN) == true)
 		{
 			this->_player.stopLookingDown();
 		}
@@ -99,7 +99,10 @@ void Game::gameLoop()
 			this->_player.jump();
 		}
 
-		if ((!input.isKeyHeld(SDL_SCANCODE_LEFT) && !input.isKeyHeld(SDL_SCANCODE_RIGHT) && this->_player.isGravityEnabled()) || (!input.isKeyHeld(SDL_SCANCODE_DOWN) && !input.isKeyHeld(SDL_SCANCODE_UP) && !this->_player.isGravityEnabled() && !input.isKeyHeld(SDL_SCANCODE_LEFT) && !input.isKeyHeld(SDL_SCANCODE_RIGHT)))
+		if ((!input.isKeyHeld(SDL_SCANCODE_LEFT) &&
+				 !input.isKeyHeld(SDL_SCANCODE_RIGHT) &&
+				 !input.isKeyHeld(SDL_SCANCODE_DOWN) &&
+				 !input.isKeyHeld(SDL_SCANCODE_UP)))
 		{
 			this->_player.stopMoving();
 		}
