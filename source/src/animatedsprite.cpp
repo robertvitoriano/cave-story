@@ -94,8 +94,6 @@ void AnimatedSprite::update(int elapsedTime)
 
 void AnimatedSprite::draw(Graphics &graphics, int x, int y)
 {
-	std::cout << "X" << x << std::endl;
-	std::cout << "X" << y << std::endl;
 
 	if (this->_visible)
 	{
