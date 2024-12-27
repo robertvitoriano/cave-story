@@ -227,9 +227,11 @@ void Player::handleTileCollisions(std::vector<Rectangle> &others)
 				if (this->_grounded)
 				{
 					this->_dx = 0;
-					this->_x -= this->_facing == RIGHT ? 1.0f : -1.0f;
+					if (this->isGravityEnabled())
+					{
+						this->_x -= this->_facing == RIGHT ? 1.0f : -1.0f;
+					}
 				}
-
 				break;
 			case sides::BOTTOM:
 				this->_y = others.at(i).getTop() - this->_boundingBox.getHeight() - 1;
