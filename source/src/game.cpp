@@ -59,50 +59,50 @@ void Game::gameLoop()
 		{
 			return;
 		}
-		else if (input.isKeyHeld(SDL_SCANCODE_LEFT) == true)
+		else if (input.isKeyHeld(SDL_SCANCODE_A) == true)
 		{
 			this->_player.moveLeft();
 		}
-		else if (input.isKeyHeld(SDL_SCANCODE_RIGHT) == true)
+		else if (input.isKeyHeld(SDL_SCANCODE_D) == true)
 		{
 			this->_player.moveRight();
 		}
-		else if (input.isKeyHeld(SDL_SCANCODE_UP) == true && !this->_player.isGravityEnabled())
+		else if (input.isKeyHeld(SDL_SCANCODE_W) == true && !this->_player.isGravityEnabled())
 		{
 			this->_player.moveUp();
 		}
-		else if (input.isKeyHeld(SDL_SCANCODE_DOWN) == true && !this->_player.isGravityEnabled())
+		else if (input.isKeyHeld(SDL_SCANCODE_S) == true && !this->_player.isGravityEnabled())
 		{
 			this->_player.moveDown();
 		}
 
-		if (input.isKeyHeld(SDL_SCANCODE_UP) == true && this->_player.isGravityEnabled())
+		if (input.isKeyHeld(SDL_SCANCODE_W) == true && this->_player.isGravityEnabled())
 		{
 			this->_player.lookUp();
 		}
-		else if (input.isKeyHeld(SDL_SCANCODE_DOWN) == true && this->_player.isGravityEnabled())
+		else if (input.isKeyHeld(SDL_SCANCODE_S) == true && this->_player.isGravityEnabled())
 		{
 			this->_player.lookDown();
 		}
 
-		if (input.wasKeyReleased(SDL_SCANCODE_UP) == true)
+		if (input.wasKeyReleased(SDL_SCANCODE_W) == true)
 		{
 			this->_player.stopLookingUp();
 		}
-		if (input.wasKeyReleased(SDL_SCANCODE_DOWN) == true)
+		if (input.wasKeyReleased(SDL_SCANCODE_S) == true)
 		{
 			this->_player.stopLookingDown();
 		}
 
-		if (input.wasKeyPressed(SDL_SCANCODE_Z) == true)
+		if (input.wasKeyPressed(SDL_SCANCODE_SPACE) == true)
 		{
 			this->_player.jump();
 		}
 
-		if ((!input.isKeyHeld(SDL_SCANCODE_LEFT) &&
-				 !input.isKeyHeld(SDL_SCANCODE_RIGHT) &&
-				 !input.isKeyHeld(SDL_SCANCODE_DOWN) &&
-				 !input.isKeyHeld(SDL_SCANCODE_UP)))
+		if ((!input.isKeyHeld(SDL_SCANCODE_A) &&
+				 !input.isKeyHeld(SDL_SCANCODE_D) &&
+				 !input.isKeyHeld(SDL_SCANCODE_S) &&
+				 !input.isKeyHeld(SDL_SCANCODE_W)))
 		{
 			this->_player.stopMoving();
 		}
