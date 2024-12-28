@@ -102,6 +102,8 @@ private:
 
 	int _maxHealth;
 	int _currentHealth;
+	Uint32 _healthTimer;
+	Uint32 _healthInterval;
 };
 
 #endif

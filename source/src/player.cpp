@@ -21,7 +21,9 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 																												 _lookingDown(false),
 																												 _maxHealth(3),
 																												 _currentHealth(3),
-																												 _shouldApplyGravity(true)
+																												 _shouldApplyGravity(true),
+																												 _healthInterval(10),
+																												 _healthTimer(0)
 {
 	graphics.loadImage("content/sprites/MyChar.png");
 
@@ -332,12 +334,18 @@ void Player::handleEnemyCollisions(std::vector<Enemy *> &enemies)
 
 void Player::gainHealth(int amount)
 {
-	this->_currentHealth += amount;
+
+	if (SDL_GetTicks() >= this->_healthTimer)
+	{
+		std::cout << "SDL TICKS" << SDL_GetTicks() << std::endl;
+		std::cout << "health timer" << this->_healthTimer << std::endl;
+		this->_currentHealth += amount;
+		this->_healthTimer = SDL_GetTicks() + this->_healthInterval;
+	}
 }
 
 void Player::update(float elapsedTime)
 {
-	// Apply gravity
 	if (this->_shouldApplyGravity && this->_dy <= player_constants::GRAVITY_CAP)
 	{
 		this->_dy += player_constants::GRAVITY * elapsedTime;
