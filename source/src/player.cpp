@@ -22,7 +22,7 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 																												 _maxHealth(3),
 																												 _currentHealth(3),
 																												 _shouldApplyGravity(true),
-																												 _healthInterval(10),
+																												 _healthInterval(1000),
 																												 _healthTimer(0)
 {
 	graphics.loadImage("content/sprites/MyChar.png");
