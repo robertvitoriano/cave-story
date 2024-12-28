@@ -63,7 +63,8 @@ void Game::gameLoop()
 		LAST_UPDATE_TIME = CURRENT_TIME_MS;
 
 		this->draw(graphics);
-	}
+
+  }
 }
 
 void Game::handleInput(Input &input)
