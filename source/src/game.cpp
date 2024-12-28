@@ -30,42 +30,39 @@ void Game::gameLoop()
 	this->_hud = HUD(graphics, this->_player);
 
 	int LAST_UPDATE_TIME = SDL_GetTicks();
-	// Start the game loop
+
 	while (true)
 	{
-		while (true)
-		{
-			input.beginNewFrame();
+		input.beginNewFrame();
 
-			if (SDL_PollEvent(&event))
+		if (SDL_PollEvent(&event))
+		{
+			if (event.type == SDL_KEYDOWN)
 			{
-				if (event.type == SDL_KEYDOWN)
+				if (event.key.repeat == 0)
 				{
-					if (event.key.repeat == 0)
-					{
-						input.keyDownEvent(event);
-					}
-				}
-				else if (event.type == SDL_KEYUP)
-				{
-					input.keyUpEvent(event);
-				}
-				else if (event.type == SDL_QUIT)
-				{
-					return;
+					input.keyDownEvent(event);
 				}
 			}
-
-			handleInput(input);
-
-			const int CURRENT_TIME_MS = SDL_GetTicks();
-			int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
-
-			this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME), graphics);
-			LAST_UPDATE_TIME = CURRENT_TIME_MS;
-
-			this->draw(graphics);
+			else if (event.type == SDL_KEYUP)
+			{
+				input.keyUpEvent(event);
+			}
+			else if (event.type == SDL_QUIT)
+			{
+				return;
+			}
 		}
+
+		handleInput(input);
+
+		const int CURRENT_TIME_MS = SDL_GetTicks();
+		int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
+
+		this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME), graphics);
+		LAST_UPDATE_TIME = CURRENT_TIME_MS;
+
+		this->draw(graphics);
 	}
 }
 
@@ -73,7 +70,6 @@ void Game::handleInput(Input &input)
 {
 	if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE) == true)
 	{
-		// Escape key pressed: Exit the game loop
 		return;
 	}
 	else if (input.isKeyHeld(SDL_SCANCODE_A) == true)
