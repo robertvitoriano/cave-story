@@ -402,3 +402,8 @@ void Player::attack()
 {
 	this->_currentWeapon.performAttack();
 }
+
+void Player::stopAttack()
+{
+	this->_currentWeapon.stopAttack();
+}

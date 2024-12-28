@@ -37,3 +37,7 @@ void Sword::performAttack()
 {
   this->playAnimation("sword-attack");
 }
+void Sword::stopAttack()
+{
+  this->playAnimation("sword-idle");
+}

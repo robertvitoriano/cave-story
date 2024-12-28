@@ -114,6 +114,10 @@ void Game::handleInput(Input &input)
 	{
 		this->_player.stopLookingDown();
 	}
+	if (input.wasKeyReleased(SDL_SCANCODE_F) == true)
+	{
+		this->_player.stopAttack();
+	}
 
 	if (input.wasKeyPressed(SDL_SCANCODE_SPACE) == true)
 	{

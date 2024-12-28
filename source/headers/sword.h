@@ -14,6 +14,7 @@ public:
   void animationDone(std::string currentAnimation);
   void setupAnimations();
   void performAttack();
+  void stopAttack();
 
 private:
   float _startingX;

@@ -92,6 +92,7 @@ public:
 	void renderBlinkingPlayer(Graphics &graphics);
 	void setWeapon(Sword &weapon);
 	void attack();
+	void stopAttack();
 
 private:
 	float _dx,
