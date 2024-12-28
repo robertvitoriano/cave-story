@@ -15,9 +15,11 @@ public:
   void animationDone(std::string currentAnimation);
   void setupAnimations();
   void touchPlayer(Player *player) override;
+  bool shouldBeDestroyed() override;
 
 private:
   bool _shouldMoveUp;
+  bool _wasHit;
   float _startingX;
   float _startingY;
 };

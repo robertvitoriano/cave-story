@@ -295,9 +295,21 @@ void Level::update(int elapsedTime, Player &player)
 	{
 		this->_animatedTileList.at(i).update(elapsedTime);
 	}
+	std::vector<int> enemiesToRemove;
+
 	for (int i = 0; i < this->_enemies.size(); i++)
 	{
+		if (this->_enemies.at(i)->shouldBeDestroyed())
+		{
+			enemiesToRemove.push_back(i);
+			continue;
+		}
 		this->_enemies.at(i)->update(elapsedTime, player);
+	}
+
+	for (auto it = enemiesToRemove.rbegin(); it != enemiesToRemove.rend(); ++it)
+	{
+		this->_enemies.erase(this->_enemies.begin() + *it);
 	}
 
 	if (this->_isLevel3D)
@@ -323,7 +335,10 @@ void Level::draw(Graphics &graphics, Player &player)
 	}
 	for (int i = 0; i < this->_enemies.size(); i++)
 	{
-		this->_enemies.at(i)->draw(graphics);
+		if (!this->_enemies.at(i)->shouldBeDestroyed())
+		{
+			this->_enemies.at(i)->draw(graphics);
+		}
 	}
 }
 

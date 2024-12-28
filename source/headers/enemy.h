@@ -17,6 +17,7 @@ public:
 	virtual void update(int elapsedTime, Player &player);
 	virtual void draw(Graphics &graphics);
 	virtual void touchPlayer(Player *player) = 0; // Pure virtual function
+	virtual bool shouldBeDestroyed() = 0;
 
 protected:
 	Direction _direction;

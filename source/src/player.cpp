@@ -27,7 +27,8 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 																												 _isBlinking(false),
 																												 _blinkStartTime(0),
 																												 _blinkDuration(1000),
-																												 _blinkInterval(100)
+																												 _blinkInterval(100),
+																												 _isPerformingAttack(false)
 {
 	graphics.loadImage("content/sprites/MyChar-no-bg.png");
 
@@ -400,10 +401,16 @@ void Player::setWeapon(Sword &weapon)
 
 void Player::attack()
 {
+	this->_isPerformingAttack = true;
 	this->_currentWeapon.performAttack();
 }
 
 void Player::stopAttack()
 {
 	this->_currentWeapon.stopAttack();
+	this->_isPerformingAttack = false;
+}
+bool Player::isAttacking()
+{
+	return this->_isPerformingAttack;
 }

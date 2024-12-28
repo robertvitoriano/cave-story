@@ -93,6 +93,7 @@ public:
 	void setWeapon(Sword &weapon);
 	void attack();
 	void stopAttack();
+	bool isAttacking();
 
 private:
 	float _dx,
@@ -114,6 +115,7 @@ private:
 	int _blinkDuration;
 	int _blinkInterval;
 	Sword _currentWeapon;
+	bool _isPerformingAttack;
 };
 
 #endif

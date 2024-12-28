@@ -4,7 +4,7 @@ Bat::Bat() {}
 
 Bat::Bat(Graphics &graphics, Vector2 spawnPoint)
     : Enemy(graphics, "content/sprites/NpcCemet-no-bg.png", 32, 32, 16, 16, spawnPoint, 140),
-      _startingX(spawnPoint.x), _startingY(spawnPoint.y), _shouldMoveUp(false)
+      _startingX(spawnPoint.x), _startingY(spawnPoint.y), _shouldMoveUp(false), _wasHit(false)
 {
   this->setupAnimations();
   this->playAnimation("FlyLeft");
@@ -46,5 +46,16 @@ void Bat::setupAnimations()
 
 void Bat::touchPlayer(Player *player)
 {
+  if (player->isAttacking())
+  {
+    this->_wasHit = true;
+
+    return;
+  }
   player->gainHealth(-1);
+}
+
+bool Bat::shouldBeDestroyed()
+{
+  return this->_wasHit;
 }
