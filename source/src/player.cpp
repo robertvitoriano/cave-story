@@ -22,8 +22,12 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 																												 _maxHealth(3),
 																												 _currentHealth(3),
 																												 _shouldApplyGravity(true),
-																												 _healthInterval(1000),
-																												 _healthTimer(0)
+																												 _hitInterval(1000),
+																												 _hitTimer(0),
+																												 _isBlinking(false),
+																												 _blinkStartTime(0),
+																												 _blinkDuration(1000),
+																												 _blinkInterval(100)
 {
 	graphics.loadImage("content/sprites/MyChar.png");
 
@@ -211,11 +215,8 @@ bool Player::isGravityEnabled()
 	return this->_shouldApplyGravity;
 }
 
-// void handleTileCollisions
-// Handles collisions with ALL tiles the player is colliding with
 void Player::handleTileCollisions(std::vector<Rectangle> &others)
 {
-	// Figure out what side the collision happened on and move the player accordingly
 	for (int i = 0; i < others.size(); i++)
 	{
 		sides::Side collisionSide = Sprite::getCollisionSide(others.at(i));
@@ -251,8 +252,6 @@ void Player::handleTileCollisions(std::vector<Rectangle> &others)
 	}
 }
 
-// void handleSlopeCollisions
-// Handles collisions with ALL slopes the player is colliding with
 void Player::handleSlopeCollisions(std::vector<Slope> &others)
 {
 	for (int i = 0; i < others.size(); i++)
@@ -335,10 +334,15 @@ void Player::handleEnemyCollisions(std::vector<Enemy *> &enemies)
 void Player::gainHealth(int amount)
 {
 
-	if (SDL_GetTicks() >= this->_healthTimer)
+	if (SDL_GetTicks() >= this->_hitTimer)
 	{
 		this->_currentHealth += amount;
-		this->_healthTimer = SDL_GetTicks() + this->_healthInterval;
+		this->_hitTimer = SDL_GetTicks() + this->_hitInterval;
+		if (amount < 0)
+		{
+			this->_isBlinking = true;
+			this->_blinkStartTime = SDL_GetTicks();
+		}
 	}
 }
 
@@ -349,15 +353,39 @@ void Player::update(float elapsedTime)
 		this->_dy += player_constants::GRAVITY * elapsedTime;
 	}
 
-	// Move by dx
 	this->_x += this->_dx * elapsedTime;
-	// Move by dy
 	this->_y += this->_dy * elapsedTime;
 
 	AnimatedSprite::update(elapsedTime);
 }
 
+void Player::renderBlinkingPlayer(Graphics &graphics)
+{
+
+	Uint32 currentTime = SDL_GetTicks();
+	if ((currentTime - this->_blinkStartTime) / this->_blinkInterval % 2 == 0)
+	{
+		AnimatedSprite::draw(graphics, this->_x, this->_y);
+	}
+	else
+	{
+		SDL_SetTextureColorMod(this->_spriteSheet, 255, 0, 0);
+		AnimatedSprite::draw(graphics, this->_x, this->_y);
+		SDL_SetTextureColorMod(this->_spriteSheet, 255, 255, 255);
+	}
+
+	if (currentTime > this->_blinkStartTime + this->_blinkDuration)
+	{
+		_isBlinking = false;
+	}
+}
 void Player::draw(Graphics &graphics)
 {
+
+	if (_isBlinking)
+	{
+		this->renderBlinkingPlayer(graphics);
+		return;
+	}
 	AnimatedSprite::draw(graphics, this->_x, this->_y);
 }

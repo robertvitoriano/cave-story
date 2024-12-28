@@ -88,6 +88,7 @@ public:
 	void enableGravity();
 	bool isGravityEnabled();
 	void handle3DimensionalLevel();
+	void renderBlinkingPlayer(Graphics &graphics);
 
 private:
 	float _dx,
@@ -102,8 +103,12 @@ private:
 
 	int _maxHealth;
 	int _currentHealth;
-	Uint32 _healthTimer;
-	Uint32 _healthInterval;
+	Uint32 _hitTimer;
+	Uint32 _hitInterval;
+	bool _isBlinking;
+	Uint32 _blinkStartTime;
+	int _blinkDuration;
+	int _blinkInterval;
 };
 
 #endif
