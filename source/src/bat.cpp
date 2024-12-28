@@ -3,7 +3,7 @@
 Bat::Bat() {}
 
 Bat::Bat(Graphics &graphics, Vector2 spawnPoint)
-    : Enemy(graphics, "content/sprites/NpcCemet.png", 32, 32, 16, 16, spawnPoint, 140),
+    : Enemy(graphics, "content/sprites/NpcCemet-no-bg.png", 32, 32, 16, 16, spawnPoint, 140),
       _startingX(spawnPoint.x), _startingY(spawnPoint.y), _shouldMoveUp(false)
 {
   this->setupAnimations();
