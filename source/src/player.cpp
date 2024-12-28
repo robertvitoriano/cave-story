@@ -337,8 +337,6 @@ void Player::gainHealth(int amount)
 
 	if (SDL_GetTicks() >= this->_healthTimer)
 	{
-		std::cout << "SDL TICKS" << SDL_GetTicks() << std::endl;
-		std::cout << "health timer" << this->_healthTimer << std::endl;
 		this->_currentHealth += amount;
 		this->_healthTimer = SDL_GetTicks() + this->_healthInterval;
 	}

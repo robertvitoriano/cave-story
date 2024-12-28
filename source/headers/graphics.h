@@ -6,14 +6,19 @@
  */
 
 #include <SDL2/SDL.h>
-
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include "globals.h"
+#include <iostream>
 #include <map>
 #include <string>
 
 struct SDL_Window;
 struct SDL_Renderer;
 
-class Graphics {
+class Graphics
+{
 public:
 	Graphics();
 	~Graphics();
@@ -23,12 +28,12 @@ public:
 	 * As a result, each image will only ever be loaded once
 	 * Returns the image from the map regardless of whether or not it was just loaded
 	 */
-	SDL_Surface* loadImage(const std::string &filePath);
+	SDL_Surface *loadImage(const std::string &filePath);
 
 	/* void blitSurface
 	 * Draws a texture to a certain part of the screen
 	 */
-	void blitSurface(SDL_Texture* source, SDL_Rect* sourceRectangle, SDL_Rect* destinationRectangle);
+	void blitSurface(SDL_Texture *source, SDL_Rect *sourceRectangle, SDL_Rect *destinationRectangle);
 
 	/* void flip
 	 * Renders everything to the screen
@@ -43,13 +48,15 @@ public:
 	/* SDL_Renderer* getRenderer
 	 * Returns the renderer
 	 */
-	SDL_Renderer* getRenderer() const;
+	SDL_Renderer *getRenderer() const;
+
+	void drawText(std::string text, SDL_Color color, Vector2 position);
 
 private:
-	SDL_Window* _window;
-	SDL_Renderer* _renderer;
+	SDL_Window *_window;
+	SDL_Renderer *_renderer;
 
-	std::map<std::string, SDL_Surface*> _spriteSheets;
+	std::map<std::string, SDL_Surface *> _spriteSheets;
 };
 
 #endif

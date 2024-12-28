@@ -9,7 +9,7 @@ namespace
 	const int MAX_FRAME_TIME = 1000 / FPS;
 }
 
-Game::Game()
+Game::Game() : gameIsLost(false)
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
@@ -121,11 +121,21 @@ void Game::draw(Graphics &graphics)
 {
 	graphics.clear();
 
-	this->_level.draw(graphics, this->_player);
+	if (!gameIsLost)
+	{
 
-	this->_hud.draw(graphics);
+		this->_level.draw(graphics, this->_player);
 
-	this->_player.draw(graphics);
+		this->_hud.draw(graphics);
+
+		this->_player.draw(graphics);
+	}
+	else
+	{
+		SDL_Color white = {255, 255, 255, 255};
+		Vector2 position = {globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2};
+		graphics.drawText("You Lost", white, position);
+	}
 	graphics.flip();
 }
 
@@ -134,6 +144,11 @@ void Game::update(float elapsedTime, Graphics &graphics)
 	this->_player.update(elapsedTime);
 	this->_level.update(elapsedTime, this->_player);
 	this->_hud.update(elapsedTime, this->_player);
+
+	if (this->_player.getCurrentHealth() == 0)
+	{
+		gameIsLost = true;
+	}
 
 	// Check collisions
 	std::vector<Rectangle> others;

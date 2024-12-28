@@ -7,6 +7,7 @@
 #include "graphics.h"
 #include "MusicPlayer.h"
 #include "LevelPassage.h"
+#include "globals.h"
 class Game
 {
 public:
@@ -23,6 +24,8 @@ private:
 	Level _level;
 
 	HUD _hud;
+
+	bool gameIsLost;
 };
 
 #endif
