@@ -110,8 +110,7 @@ void Game::gameLoop()
 		const int CURRENT_TIME_MS = SDL_GetTicks();
 		int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
 
-		this->_graphics = graphics;
-		this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME));
+		this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME), graphics);
 		LAST_UPDATE_TIME = CURRENT_TIME_MS;
 
 		this->draw(graphics);
@@ -130,7 +129,7 @@ void Game::draw(Graphics &graphics)
 	graphics.flip();
 }
 
-void Game::update(float elapsedTime)
+void Game::update(float elapsedTime, Graphics &graphics)
 {
 	this->_player.update(elapsedTime);
 	this->_level.update(elapsedTime, this->_player);
@@ -152,12 +151,12 @@ void Game::update(float elapsedTime)
 	std::vector<Door> doors;
 	if ((doors = this->_level.checkDoorCollisions(this->_player.getBoundingBox())).size() > 0)
 	{
-		this->_player.handleDoorCollision(doors, this->_level, this->_graphics);
+		this->_player.handleDoorCollision(doors, this->_level, graphics);
 	}
 	std::vector<LevelPassage> levelPassages;
 	if ((levelPassages = this->_level.checkLevelPassage(this->_player.getBoundingBox())).size() > 0)
 	{
-		this->_player.handleLevelPassage(levelPassages, this->_level, this->_graphics);
+		this->_player.handleLevelPassage(levelPassages, this->_level, graphics);
 	}
 	std::vector<Enemy *> otherEnemies;
 	if ((otherEnemies = this->_level.checkEnemyCollisions(this->_player.getBoundingBox())).size() > 0)
