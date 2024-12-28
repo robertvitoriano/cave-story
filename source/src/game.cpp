@@ -1,8 +1,6 @@
-#include <SDL2/SDL.h>
 
 #include "game.h"
 #include "graphics.h"
-#include "input.h"
 namespace
 {
 	const int FPS = 50;
@@ -35,85 +33,95 @@ void Game::gameLoop()
 	// Start the game loop
 	while (true)
 	{
-		input.beginNewFrame();
-
-		if (SDL_PollEvent(&event))
+		while (true)
 		{
-			if (event.type == SDL_KEYDOWN)
+			input.beginNewFrame();
+
+			if (SDL_PollEvent(&event))
 			{
-				if (event.key.repeat == 0)
+				if (event.type == SDL_KEYDOWN)
 				{
-					input.keyDownEvent(event);
+					if (event.key.repeat == 0)
+					{
+						input.keyDownEvent(event);
+					}
+				}
+				else if (event.type == SDL_KEYUP)
+				{
+					input.keyUpEvent(event);
+				}
+				else if (event.type == SDL_QUIT)
+				{
+					return;
 				}
 			}
-			else if (event.type == SDL_KEYUP)
-			{
-				input.keyUpEvent(event);
-			}
-			else if (event.type == SDL_QUIT)
-			{
-				return;
-			}
-		}
-		if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE) == true)
-		{
-			return;
-		}
-		else if (input.isKeyHeld(SDL_SCANCODE_A) == true)
-		{
-			this->_player.moveLeft();
-		}
-		else if (input.isKeyHeld(SDL_SCANCODE_D) == true)
-		{
-			this->_player.moveRight();
-		}
-		else if (input.isKeyHeld(SDL_SCANCODE_W) == true && !this->_player.isGravityEnabled())
-		{
-			this->_player.moveUp();
-		}
-		else if (input.isKeyHeld(SDL_SCANCODE_S) == true && !this->_player.isGravityEnabled())
-		{
-			this->_player.moveDown();
-		}
 
-		if (input.isKeyHeld(SDL_SCANCODE_W) == true && this->_player.isGravityEnabled())
-		{
-			this->_player.lookUp();
-		}
-		else if (input.isKeyHeld(SDL_SCANCODE_S) == true && this->_player.isGravityEnabled())
-		{
-			this->_player.lookDown();
-		}
+			handleInput(input);
 
-		if (input.wasKeyReleased(SDL_SCANCODE_W) == true)
-		{
-			this->_player.stopLookingUp();
+			const int CURRENT_TIME_MS = SDL_GetTicks();
+			int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
+
+			this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME), graphics);
+			LAST_UPDATE_TIME = CURRENT_TIME_MS;
+
+			this->draw(graphics);
 		}
-		if (input.wasKeyReleased(SDL_SCANCODE_S) == true)
-		{
-			this->_player.stopLookingDown();
-		}
+	}
+}
 
-		if (input.wasKeyPressed(SDL_SCANCODE_SPACE) == true)
-		{
-			this->_player.jump();
-		}
+void Game::handleInput(Input &input)
+{
+	if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE) == true)
+	{
+		// Escape key pressed: Exit the game loop
+		return;
+	}
+	else if (input.isKeyHeld(SDL_SCANCODE_A) == true)
+	{
+		this->_player.moveLeft();
+	}
+	else if (input.isKeyHeld(SDL_SCANCODE_D) == true)
+	{
+		this->_player.moveRight();
+	}
+	else if (input.isKeyHeld(SDL_SCANCODE_W) == true && !this->_player.isGravityEnabled())
+	{
+		this->_player.moveUp();
+	}
+	else if (input.isKeyHeld(SDL_SCANCODE_S) == true && !this->_player.isGravityEnabled())
+	{
+		this->_player.moveDown();
+	}
 
-		if ((!input.isKeyHeld(SDL_SCANCODE_A) &&
-				 !input.isKeyHeld(SDL_SCANCODE_D) &&
-				 !input.isKeyHeld(SDL_SCANCODE_S) &&
-				 !input.isKeyHeld(SDL_SCANCODE_W)))
-		{
-			this->_player.stopMoving();
-		}
+	if (input.isKeyHeld(SDL_SCANCODE_W) == true && this->_player.isGravityEnabled())
+	{
+		this->_player.lookUp();
+	}
+	else if (input.isKeyHeld(SDL_SCANCODE_S) == true && this->_player.isGravityEnabled())
+	{
+		this->_player.lookDown();
+	}
 
-		const int CURRENT_TIME_MS = SDL_GetTicks();
-		int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
+	if (input.wasKeyReleased(SDL_SCANCODE_W) == true)
+	{
+		this->_player.stopLookingUp();
+	}
+	if (input.wasKeyReleased(SDL_SCANCODE_S) == true)
+	{
+		this->_player.stopLookingDown();
+	}
 
-		this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME), graphics);
-		LAST_UPDATE_TIME = CURRENT_TIME_MS;
+	if (input.wasKeyPressed(SDL_SCANCODE_SPACE) == true)
+	{
+		this->_player.jump();
+	}
 
-		this->draw(graphics);
+	if ((!input.isKeyHeld(SDL_SCANCODE_A) &&
+			 !input.isKeyHeld(SDL_SCANCODE_D) &&
+			 !input.isKeyHeld(SDL_SCANCODE_S) &&
+			 !input.isKeyHeld(SDL_SCANCODE_W)))
+	{
+		this->_player.stopMoving();
 	}
 }
 

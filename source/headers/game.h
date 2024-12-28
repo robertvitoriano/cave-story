@@ -8,6 +8,9 @@
 #include "MusicPlayer.h"
 #include "LevelPassage.h"
 #include "globals.h"
+#include "input.h"
+#include <SDL2/SDL.h>
+
 class Game
 {
 public:
@@ -18,7 +21,7 @@ private:
 	void gameLoop();
 	void draw(Graphics &graphics);
 	void update(float elapsedTime, Graphics &graphics);
-
+	void handleInput(Input &input);
 	Player _player;
 
 	Level _level;
