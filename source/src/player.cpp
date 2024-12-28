@@ -390,7 +390,7 @@ void Player::draw(Graphics &graphics)
 		return;
 	}
 	AnimatedSprite::draw(graphics, this->_x, this->_y);
-	this->_currentWeapon.draw(graphics);
+	this->_currentWeapon.draw(graphics, this->_x, this->_y, this->_facing);
 }
 
 void Player::setWeapon(Sword &weapon)

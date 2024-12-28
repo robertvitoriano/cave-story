@@ -10,7 +10,7 @@ public:
   Sword(Graphics &graphics, Vector2 spawnPoint);
 
   void update(int elapsedTime) override;
-  void draw(Graphics &graphics) override;
+  void draw(Graphics &graphics, int x, int y, Direction direction);
   void animationDone(std::string currentAnimation);
   void setupAnimations();
   void performAttack();
@@ -19,6 +19,8 @@ public:
 private:
   float _startingX;
   float _startingY;
+  Direction _direction;
+  bool _isAttacking;
 };
 
 #endif // SWORD_H

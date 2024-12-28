@@ -14,7 +14,7 @@ public:
          int width, int height, Vector2 spawnPoint, int timeToUpdate);
 
   virtual void update(int elapsedTime);
-  virtual void draw(Graphics &graphics);
+  virtual void draw(Graphics &graphics, int x, int y);
 
 protected:
   Direction _direction;

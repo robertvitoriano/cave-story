@@ -15,7 +15,8 @@ void Weapon::update(int elapsedTime)
   AnimatedSprite::update(elapsedTime);
 }
 
-void Weapon::draw(Graphics &graphics)
+void Weapon::draw(Graphics &graphics, int x, int y)
 {
-  AnimatedSprite::draw(graphics, this->_x, this->_y);
+
+  AnimatedSprite::draw(graphics, x, y);
 }
