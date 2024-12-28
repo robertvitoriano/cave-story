@@ -13,6 +13,7 @@ public:
   void draw(Graphics &graphics) override;
   void animationDone(std::string currentAnimation);
   void setupAnimations();
+  void performAttack();
 
 private:
   float _startingX;

@@ -35,6 +35,7 @@ void AnimatedSprite::addAnimation(int frames, int x, int y, std::string name, in
 		for (int i = 0; i < frames; i++)
 		{
 			SDL_Rect newRect = {x * width, (i + y) * width, width, height};
+
 			rectangles.push_back(newRect);
 		}
 	}
@@ -94,6 +95,12 @@ void AnimatedSprite::update(int elapsedTime)
 
 void AnimatedSprite::draw(Graphics &graphics, int x, int y)
 {
+	std::cout << "animação atual: " << this->_currentAnimation << std::endl;
+	if (this->_currentAnimation == "sword-attack")
+	{
+		std::cout << "X:" << x << std::endl;
+		std::cout << "Y:" << y << std::endl;
+	}
 
 	if (this->_visible)
 	{

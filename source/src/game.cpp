@@ -76,6 +76,10 @@ void Game::handleInput(Input &input)
 	{
 		return;
 	}
+	else if (input.isKeyHeld(SDL_SCANCODE_F) == true)
+	{
+		this->_player.attack();
+	}
 	else if (input.isKeyHeld(SDL_SCANCODE_A) == true)
 	{
 		this->_player.moveLeft();

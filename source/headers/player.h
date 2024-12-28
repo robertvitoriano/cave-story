@@ -91,6 +91,7 @@ public:
 	void handle3DimensionalLevel();
 	void renderBlinkingPlayer(Graphics &graphics);
 	void setWeapon(Sword &weapon);
+	void attack();
 
 private:
 	float _dx,

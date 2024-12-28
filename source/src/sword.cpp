@@ -13,8 +13,6 @@ Sword::Sword(Graphics &graphics, Vector2 spawnPoint)
 void Sword::update(int elapsedTime)
 {
 
-  this->playAnimation("sword-idle");
-
   Weapon::update(elapsedTime);
 }
 
@@ -33,4 +31,9 @@ void Sword::setupAnimations()
   this->addAnimation(1, 0, 0, "sword-idle", 16, 16, Vector2(0, 0), "column");
 
   this->addAnimation(2, 0, 0, "sword-attack", 16, 16, Vector2(0, 0), "column");
+}
+
+void Sword::performAttack()
+{
+  this->playAnimation("sword-attack");
 }

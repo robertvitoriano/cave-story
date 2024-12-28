@@ -397,3 +397,8 @@ void Player::setWeapon(Sword &weapon)
 {
 	this->_currentWeapon = weapon;
 }
+
+void Player::attack()
+{
+	this->_currentWeapon.performAttack();
+}
