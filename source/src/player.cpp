@@ -357,6 +357,8 @@ void Player::update(float elapsedTime)
 	this->_y += this->_dy * elapsedTime;
 
 	AnimatedSprite::update(elapsedTime);
+
+	this->_currentWeapon.update(elapsedTime);
 }
 
 void Player::renderBlinkingPlayer(Graphics &graphics)
@@ -388,4 +390,10 @@ void Player::draw(Graphics &graphics)
 		return;
 	}
 	AnimatedSprite::draw(graphics, this->_x, this->_y);
+	this->_currentWeapon.draw(graphics);
+}
+
+void Player::setWeapon(Sword &weapon)
+{
+	this->_currentWeapon = weapon;
 }

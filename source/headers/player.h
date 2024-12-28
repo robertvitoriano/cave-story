@@ -6,6 +6,7 @@
 #include "slope.h"
 #include "level.h"
 #include "enemy.h"
+#include "sword.h"
 
 class Graphics;
 
@@ -89,6 +90,7 @@ public:
 	bool isGravityEnabled();
 	void handle3DimensionalLevel();
 	void renderBlinkingPlayer(Graphics &graphics);
+	void setWeapon(Sword &weapon);
 
 private:
 	float _dx,
@@ -109,6 +111,7 @@ private:
 	Uint32 _blinkStartTime;
 	int _blinkDuration;
 	int _blinkInterval;
+	Sword _currentWeapon;
 };
 
 #endif

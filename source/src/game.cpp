@@ -1,6 +1,7 @@
 
 #include "game.h"
 #include "graphics.h"
+#include "weapon.h"
 namespace
 {
 	const int FPS = 50;
@@ -28,6 +29,9 @@ void Game::gameLoop()
 	this->_level = Level("Map_1", graphics);
 	this->_player = Player(graphics, this->_level.getPlayerSpawnPoint());
 	this->_hud = HUD(graphics, this->_player);
+	Sword sword = Sword(graphics, this->_level.getPlayerSpawnPoint());
+
+	this->_player.setWeapon(sword);
 
 	int LAST_UPDATE_TIME = SDL_GetTicks();
 
@@ -63,8 +67,7 @@ void Game::gameLoop()
 		LAST_UPDATE_TIME = CURRENT_TIME_MS;
 
 		this->draw(graphics);
-
-  }
+	}
 }
 
 void Game::handleInput(Input &input)
