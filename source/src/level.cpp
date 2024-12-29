@@ -51,7 +51,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 	inputFile.close();
 	int tileWidth = levelData["tilewidth"];
 	int tileHeight = levelData["tileheight"];
-	this->_enable_gravity = true;
+	this->_enableGravity = true;
 
 	int width = levelData["width"];
 	int height = levelData["height"];
@@ -62,7 +62,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 	{
 		if (property["enable_gravity"] != NULL)
 		{
-			this->_enable_gravity = property["value"];
+			this->_enableGravity = property["value"];
 		}
 	}
 
@@ -265,10 +265,10 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 						{
 							spawnPosition = this->parsePosition(property["value"]);
 						}
-						LevelPassage levelPassage = LevelPassage(rect, destination, spawnPosition);
-
-						this->_levelPassagesList.push_back(levelPassage);
 					}
+					LevelPassage levelPassage = LevelPassage(rect, destination, spawnPosition);
+
+					this->_levelPassagesList.push_back(levelPassage);
 				}
 			}
 			else if (layer["name"] == "gravity change")
@@ -276,9 +276,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 
 				for (nlohmann::json object : layer["objects"])
 				{
-					std::string destination;
-
-					Vector2 spawnPosition = {0, 0};
+					bool enableGravity;
 
 					float x = object["x"];
 					float y = object["y"];
@@ -292,9 +290,12 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					{
 						if (property["name"] == "enable_gravity")
 						{
-							this->_enable_gravity = property["value"];
+							enableGravity = property["value"];
 						}
 					}
+					GravityChange gravityChange = GravityChange(rect, enableGravity);
+
+					this->_gravityChangersList.push_back(gravityChange);
 				}
 			}
 			else if (layer["name"] == "enemies")
@@ -339,7 +340,7 @@ void Level::update(int elapsedTime, Player &player)
 		this->_enemies.erase(this->_enemies.begin() + *it);
 	}
 
-	if (!this->_enable_gravity)
+	if (!this->_enableGravity)
 	{
 		player.disableGravity();
 	}
@@ -440,6 +441,20 @@ std::vector<LevelPassage> Level::checkLevelPassage(const Rectangle &rectangle)
 		}
 	}
 	return levelPassages;
+}
+
+std::vector<GravityChange> Level::checkGravityChange(const Rectangle &rectangle)
+{
+	std::vector<GravityChange> gravityChangersCollided;
+	for (int i = 0; i < this->_gravityChangersList.size(); i++)
+	{
+
+		if (this->_gravityChangersList.at(i).collidesWith(rectangle))
+		{
+			gravityChangersCollided.push_back(this->_gravityChangersList.at(i));
+		}
+	}
+	return gravityChangersCollided;
 }
 
 std::vector<Enemy *> Level::checkEnemyCollisions(const Rectangle &other)

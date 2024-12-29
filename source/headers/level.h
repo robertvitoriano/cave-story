@@ -11,6 +11,7 @@
 #include "animatedtile.h"
 #include "door.h"
 #include "LevelPassage.h"
+#include "GravityChange.h"
 #include <iostream>
 #include <nlohmann/json.hpp>
 
@@ -35,6 +36,7 @@ public:
 	std::vector<Slope> checkSlopeCollisions(const Rectangle &other);
 	std::vector<Door> checkDoorCollisions(const Rectangle &other);
 	std::vector<LevelPassage> checkLevelPassage(const Rectangle &otherRectangle);
+	std::vector<GravityChange> checkGravityChange(const Rectangle &other);
 	std::vector<Enemy *> checkEnemyCollisions(const Rectangle &other);
 
 	const Vector2 getPlayerSpawnPoint() const;
@@ -58,8 +60,9 @@ private:
 
 	std::vector<Door> _doorList;
 	std::vector<LevelPassage> _levelPassagesList;
+	std::vector<GravityChange> _gravityChangersList;
 	std::vector<Enemy *> _enemies;
-	bool _enable_gravity;
+	bool _enableGravity;
 
 	/* void loadMap
 	 * Loads a map
