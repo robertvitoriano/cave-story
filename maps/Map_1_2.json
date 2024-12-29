@@ -384,7 +384,7 @@
          "name":"gravity change",
          "objects":[
                 {
-                 "height":16,
+                 "height":28.6666666666667,
                  "id":562,
                  "name":"",
                  "properties":[
@@ -398,7 +398,7 @@
                  "visible":true,
                  "width":19,
                  "x":270.75,
-                 "y":224
+                 "y":211.333333333333
                 }, 
                 {
                  "height":28.5,

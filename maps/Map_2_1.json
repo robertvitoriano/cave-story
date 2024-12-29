@@ -72,6 +72,11 @@
                          "value":"Map_2"
                         }, 
                         {
+                         "name":"enable_gravity",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"spawn_position",
                          "type":"string",
                          "value":"70,110"
@@ -234,8 +239,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":8,
- "nextobjectid":74,
+ "nextlayerid":9,
+ "nextobjectid":75,
  "orientation":"orthogonal",
  "properties":[
         {

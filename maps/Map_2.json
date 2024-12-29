@@ -138,6 +138,11 @@
                          "name":"destination",
                          "type":"string",
                          "value":"Map_2_1"
+                        }, 
+                        {
+                         "name":"enable_gravity",
+                         "type":"bool",
+                         "value":false
                         }],
                  "rotation":0,
                  "type":"",
@@ -173,9 +178,27 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "color":"#aa007f",
+         "draworder":"topdown",
+         "id":8,
+         "name":"gravity change",
+         "objects":[],
+         "opacity":1,
+         "properties":[
+                {
+                 "name":"enable_gravity",
+                 "type":"bool",
+                 "value":true
+                }],
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":8,
- "nextobjectid":64,
+ "nextlayerid":9,
+ "nextobjectid":66,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",

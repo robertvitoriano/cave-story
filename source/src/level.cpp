@@ -212,6 +212,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 
 					Rectangle rect = Rectangle(x, y, w, h);
 					Vector2 spawnPosition = {0, 0};
+					bool enableGravity = true;
 
 					std::string destination;
 					for (nlohmann::json property : object["properties"])
@@ -224,8 +225,12 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 						{
 							spawnPosition = this->parsePosition(property["value"]);
 						}
+						if (property["name"] == "enable_gravity")
+						{
+							enableGravity = property["value"];
+						}
 					}
-					Door door = Door(rect, destination, spawnPosition);
+					Door door = Door(rect, destination, spawnPosition, enableGravity);
 					this->_doorList.push_back(door);
 				}
 			}
@@ -236,8 +241,6 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 				{
 					std::string destination;
 
-					Vector2 spawnPosition = {0, 0};
-
 					float x = object["x"];
 					float y = object["y"];
 
@@ -245,6 +248,8 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					float h = object["height"];
 
 					Rectangle rect = Rectangle(x, y, w, h);
+					Vector2 spawnPosition = {0, 0};
+					bool enableGravity = true;
 
 					for (nlohmann::json property : object["properties"])
 					{
@@ -256,8 +261,12 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 						{
 							spawnPosition = this->parsePosition(property["value"]);
 						}
+						if (property["name"] == "enable_gravity")
+						{
+							enableGravity = property["value"];
+						}
 					}
-					LevelPassage levelPassage = LevelPassage(rect, destination, spawnPosition);
+					LevelPassage levelPassage = LevelPassage(rect, destination, spawnPosition, enableGravity);
 
 					this->_levelPassagesList.push_back(levelPassage);
 				}
@@ -267,7 +276,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 
 				for (nlohmann::json object : layer["objects"])
 				{
-					bool enableGravity;
+					bool enableGravity = true;
 
 					float x = object["x"];
 					float y = object["y"];

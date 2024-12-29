@@ -296,6 +296,15 @@ void Player::handleDoorCollision(std::vector<Door> &doors, Level &level, Graphic
 				this->_x = level.getPlayerSpawnPoint().x;
 				this->_y = level.getPlayerSpawnPoint().y;
 			}
+
+			if (doors.at(i).shouldEnableGravity())
+			{
+				this->enableGravity();
+			}
+			else
+			{
+				this->disableGravity();
+			}
 		}
 	}
 }
@@ -334,6 +343,14 @@ void Player::handleLevelPassage(std::vector<LevelPassage> &levelPassages, Level 
 		{
 			this->_x = level.getPlayerSpawnPoint().x;
 			this->_y = level.getPlayerSpawnPoint().y;
+		}
+		if (levelPassages.at(i).shouldEnableGravity())
+		{
+			this->enableGravity();
+		}
+		else
+		{
+			this->disableGravity();
 		}
 	}
 }
