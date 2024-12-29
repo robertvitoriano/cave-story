@@ -7,14 +7,14 @@ Sword::Sword(Graphics &graphics, Vector2 spawnPoint)
       _startingX(spawnPoint.x), _startingY(spawnPoint.y), _direction(RIGHT)
 {
   this->setupAnimations();
-  this->playAnimation(_direction == RIGHT ? "sword-idle" : "sword-idle-left");
+  this->playAnimation((_direction == RIGHT || _direction == UP || _direction == DOWN) ? "sword-idle" : "sword-idle-left");
 }
 
 void Sword::update(int elapsedTime)
 {
   if (!this->_isAttacking)
   {
-    this->playAnimation(_direction == RIGHT ? "sword-idle" : "sword-idle-left");
+    this->playAnimation((_direction == RIGHT || _direction == UP || _direction == DOWN) ? "sword-idle" : "sword-idle-left");
   }
   Weapon::update(elapsedTime);
 }
@@ -22,7 +22,7 @@ void Sword::update(int elapsedTime)
 void Sword::draw(Graphics &graphics, int x, int y, Direction direction)
 {
   this->_direction = direction;
-  if (this->_direction == RIGHT)
+  if (this->_direction == RIGHT || _direction == UP || _direction == DOWN)
   {
     Weapon::draw(graphics, x + 15, y);
   }
@@ -48,11 +48,11 @@ void Sword::setupAnimations()
 void Sword::performAttack()
 {
   this->_isAttacking = true;
-  this->playAnimation(_direction == RIGHT ? "sword-attack" : "sword-attack-left");
+  this->playAnimation((_direction == RIGHT || _direction == UP || _direction == DOWN) ? "sword-attack" : "sword-attack-left");
 }
 void Sword::stopAttack()
 {
 
-  this->playAnimation(_direction == RIGHT ? "sword-idle" : "sword-idle-left");
+  this->playAnimation((_direction == RIGHT || _direction == UP || _direction == DOWN) ? "sword-idle" : "sword-idle-left");
   this->_isAttacking = false;
 }
