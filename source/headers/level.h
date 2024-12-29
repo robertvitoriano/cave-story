@@ -14,7 +14,7 @@
 #include "GravityChange.h"
 #include <iostream>
 #include <nlohmann/json.hpp>
-
+#include "Camera.h"
 class Graphics;
 class Enemy;
 class Bat;

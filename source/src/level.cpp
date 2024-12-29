@@ -346,15 +346,42 @@ void Level::draw(Graphics &graphics, Player &player)
 
 	for (int i = 0; i < this->_tileList.size(); i++)
 	{
-		Vector2 tilePosition = this->_tileList.at(i).getPosition();
-		if ((tilePosition.x <= player.getX() + 100 && tilePosition.x >= player.getX() - 100) && (tilePosition.y <= player.getY() + 100 && tilePosition.y >= player.getY() - 100))
+		Camera &camera = Camera::getInstance();
+		if (player.getX() <= camera.getCenter().x)
 		{
+			Vector2 tileOriginalPosition = this->_tileList.at(i).getPosition();
+
+			this->_tileList.at(i).setPosition({tileOriginalPosition.x + (camera.getCenter().x - player.getX()), tileOriginalPosition.y});
 			this->_tileList.at(i).draw(graphics);
+			this->_tileList.at(i).setPosition(tileOriginalPosition);
+		}
+		else if (player.getX() >= camera.getCenter().x)
+		{
+			Vector2 tileOriginalPosition = this->_tileList.at(i).getPosition();
+			this->_tileList.at(i).setPosition({tileOriginalPosition.x - (player.getX() - camera.getCenter().x), tileOriginalPosition.y});
+			this->_tileList.at(i).draw(graphics);
+			this->_tileList.at(i).setPosition(tileOriginalPosition);
 		}
 	}
 	for (int i = 0; i < this->_animatedTileList.size(); i++)
 	{
-		this->_animatedTileList.at(i).draw(graphics);
+
+		Camera &camera = Camera::getInstance();
+		if (player.getX() <= camera.getCenter().x)
+		{
+			Vector2 tileOriginalPosition = this->_animatedTileList.at(i).getPosition();
+
+			this->_animatedTileList.at(i).setPosition({tileOriginalPosition.x + (camera.getCenter().x - player.getX()), tileOriginalPosition.y});
+			this->_animatedTileList.at(i).draw(graphics);
+			this->_animatedTileList.at(i).setPosition(tileOriginalPosition);
+		}
+		else if (player.getX() >= camera.getCenter().x)
+		{
+			Vector2 tileOriginalPosition = this->_animatedTileList.at(i).getPosition();
+			this->_animatedTileList.at(i).setPosition({tileOriginalPosition.x - (player.getX() - camera.getCenter().x), tileOriginalPosition.y});
+			this->_animatedTileList.at(i).draw(graphics);
+			this->_animatedTileList.at(i).setPosition(tileOriginalPosition);
+		}
 	}
 	for (int i = 0; i < this->_enemies.size(); i++)
 	{

@@ -12,7 +12,7 @@
 #include <SDL2/SDL.h>
 #include "sword.h"
 #include "GravityChange.h"
-
+#include "Camera.h"
 class Game
 {
 public:

@@ -15,6 +15,7 @@ public:
 	void draw(Graphics &graphics);
 	Vector2 getPosition();
 	Vector2 getSize();
+	void setPosition(Vector2 position);
 
 protected:
 	SDL_Texture *_tileset;

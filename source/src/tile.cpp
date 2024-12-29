@@ -27,6 +27,11 @@ Vector2 Tile::getPosition()
 {
 	return this->_position;
 }
+
+void Tile::setPosition(Vector2 position)
+{
+	this->_position = position;
+}
 Vector2 Tile::getSize()
 {
 	return this->_size;

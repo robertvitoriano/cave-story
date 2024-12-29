@@ -25,6 +25,11 @@ public:
 
 	const int getWidth() const { return this->_width; }
 	const int getHeight() const { return this->_height; }
+	void setPosition(Vector2 position)
+	{
+		this->x = position.x;
+		this->y = position.y;
+	}
 
 	const int getSide(const sides::Side side) const
 	{
