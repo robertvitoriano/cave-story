@@ -3,10 +3,12 @@
 
 namespace globals
 {
-	const int SCREEN_WIDTH = 640;
-	const int SCREEN_HEIGHT = 480;
-
+	const int SCREEN_ORIGINAL_WIDTH = 320;
+	const int SCREEN_ORIGINAL_HEIGHT = 256;
 	const float SPRITE_SCALE = 2.0f;
+	const int SCREEN_WIDTH = SCREEN_ORIGINAL_WIDTH * SPRITE_SCALE;
+	const int SCREEN_HEIGHT = SCREEN_ORIGINAL_HEIGHT * SPRITE_SCALE;
+
 }
 
 namespace sides

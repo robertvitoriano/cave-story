@@ -52,7 +52,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 	int tileWidth = levelData["tilewidth"];
 	int tileHeight = levelData["tileheight"];
 	this->_isLevel3D = false;
-	int width = 20;
+	int width = levelData["width"];
 	int height = levelData["height"];
 	this->_size = Vector2(width, height);
 	this->_tileSize = Vector2(tileWidth, tileHeight);
@@ -382,12 +382,7 @@ std::vector<Slope> Level::checkSlopeCollisions(const Rectangle &other)
 	{
 		if (this->_slopes.at(i).collidesWith(other))
 		{
-			std::cout << "IS COLLIDING WITH SLOPE" << std::endl;
 			others.push_back(this->_slopes.at(i));
-		}
-		else
-		{
-			std::cout << "IS NOT COLLIDING WITH SLOPE" << std::endl;
 		}
 	}
 	return others;
