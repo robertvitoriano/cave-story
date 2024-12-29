@@ -27,8 +27,8 @@ public:
 	const int getHeight() const { return this->_height; }
 	void setPosition(Vector2 position)
 	{
-		this->x = position.x;
-		this->y = position.y;
+		this->_x = position.x;
+		this->_y = position.y;
 	}
 
 	const int getSide(const sides::Side side) const

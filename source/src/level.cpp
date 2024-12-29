@@ -344,20 +344,27 @@ void Level::update(int elapsedTime, Player &player)
 void Level::draw(Graphics &graphics, Player &player)
 {
 
+	Camera &camera = Camera::getInstance();
+
 	for (int i = 0; i < this->_tileList.size(); i++)
 	{
-		Camera &camera = Camera::getInstance();
+		Vector2 tileOriginalPosition = this->_tileList.at(i).getPosition();
+
 		if (player.getX() <= camera.getCenter().x)
 		{
-			Vector2 tileOriginalPosition = this->_tileList.at(i).getPosition();
-
-			this->_tileList.at(i).setPosition({tileOriginalPosition.x + (camera.getCenter().x - player.getX()), tileOriginalPosition.y});
-			this->_tileList.at(i).draw(graphics);
-			this->_tileList.at(i).setPosition(tileOriginalPosition);
+			if (tileOriginalPosition.x <= 0)
+			{
+				this->_tileList.at(i).draw(graphics);
+			}
+			else
+			{
+				this->_tileList.at(i).setPosition({tileOriginalPosition.x + (camera.getCenter().x - player.getX()), tileOriginalPosition.y});
+				this->_tileList.at(i).draw(graphics);
+				this->_tileList.at(i).setPosition(tileOriginalPosition);
+			}
 		}
 		else if (player.getX() >= camera.getCenter().x)
 		{
-			Vector2 tileOriginalPosition = this->_tileList.at(i).getPosition();
 			this->_tileList.at(i).setPosition({tileOriginalPosition.x - (player.getX() - camera.getCenter().x), tileOriginalPosition.y});
 			this->_tileList.at(i).draw(graphics);
 			this->_tileList.at(i).setPosition(tileOriginalPosition);
@@ -366,10 +373,10 @@ void Level::draw(Graphics &graphics, Player &player)
 	for (int i = 0; i < this->_animatedTileList.size(); i++)
 	{
 
-		Camera &camera = Camera::getInstance();
+		Vector2 tileOriginalPosition = this->_animatedTileList.at(i).getPosition();
+
 		if (player.getX() <= camera.getCenter().x)
 		{
-			Vector2 tileOriginalPosition = this->_animatedTileList.at(i).getPosition();
 
 			this->_animatedTileList.at(i).setPosition({tileOriginalPosition.x + (camera.getCenter().x - player.getX()), tileOriginalPosition.y});
 			this->_animatedTileList.at(i).draw(graphics);
@@ -377,7 +384,6 @@ void Level::draw(Graphics &graphics, Player &player)
 		}
 		else if (player.getX() >= camera.getCenter().x)
 		{
-			Vector2 tileOriginalPosition = this->_animatedTileList.at(i).getPosition();
 			this->_animatedTileList.at(i).setPosition({tileOriginalPosition.x - (player.getX() - camera.getCenter().x), tileOriginalPosition.y});
 			this->_animatedTileList.at(i).draw(graphics);
 			this->_animatedTileList.at(i).setPosition(tileOriginalPosition);
