@@ -346,7 +346,11 @@ void Level::draw(Graphics &graphics, Player &player)
 
 	for (int i = 0; i < this->_tileList.size(); i++)
 	{
-		this->_tileList.at(i).draw(graphics);
+		Vector2 tilePosition = this->_tileList.at(i).getPosition();
+		if ((tilePosition.x <= player.getX() + 100 && tilePosition.x >= player.getX() - 100) && (tilePosition.y <= player.getY() + 100 && tilePosition.y >= player.getY() - 100))
+		{
+			this->_tileList.at(i).draw(graphics);
+		}
 	}
 	for (int i = 0; i < this->_animatedTileList.size(); i++)
 	{
