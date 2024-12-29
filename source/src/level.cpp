@@ -382,7 +382,12 @@ std::vector<Slope> Level::checkSlopeCollisions(const Rectangle &other)
 	{
 		if (this->_slopes.at(i).collidesWith(other))
 		{
+			std::cout << "IS COLLIDING WITH SLOPE" << std::endl;
 			others.push_back(this->_slopes.at(i));
+		}
+		else
+		{
+			std::cout << "IS NOT COLLIDING WITH SLOPE" << std::endl;
 		}
 	}
 	return others;

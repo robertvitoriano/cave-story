@@ -52,6 +52,14 @@ void Game::gameLoop()
 			{
 				input.keyUpEvent(event);
 			}
+			else if (event.type == SDL_MOUSEBUTTONDOWN)
+			{
+				input.mouseButtonDownEvent(event);
+			}
+			else if (event.type == SDL_MOUSEBUTTONUP)
+			{
+				input.mouseButtonUpEvent(event);
+			}
 			else if (event.type == SDL_QUIT)
 			{
 				return;
@@ -72,62 +80,62 @@ void Game::gameLoop()
 
 void Game::handleInput(Input &input)
 {
-	if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE) == true)
+	if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE))
 	{
 		return;
 	}
-	else if (input.isKeyHeld(SDL_SCANCODE_F) == true)
+	if (input.isKeyHeld(SDL_SCANCODE_F) || input.isMouseButtonHeld(SDL_BUTTON_LEFT))
 	{
 		this->_player.attack();
 	}
-	else if (input.isKeyHeld(SDL_SCANCODE_A) == true)
+	else if (input.isKeyHeld(SDL_SCANCODE_A))
 	{
 		this->_player.moveLeft();
 	}
-	else if (input.isKeyHeld(SDL_SCANCODE_D) == true)
+	else if (input.isKeyHeld(SDL_SCANCODE_D))
 	{
 		this->_player.moveRight();
 	}
-	else if (input.isKeyHeld(SDL_SCANCODE_W) == true && !this->_player.isGravityEnabled())
+	else if (input.isKeyHeld(SDL_SCANCODE_W) && !this->_player.isGravityEnabled())
 	{
 		this->_player.moveUp();
 	}
-	else if (input.isKeyHeld(SDL_SCANCODE_S) == true && !this->_player.isGravityEnabled())
+	else if (input.isKeyHeld(SDL_SCANCODE_S) && !this->_player.isGravityEnabled())
 	{
 		this->_player.moveDown();
 	}
 
-	if (input.isKeyHeld(SDL_SCANCODE_W) == true && this->_player.isGravityEnabled())
+	if (input.isKeyHeld(SDL_SCANCODE_W) && this->_player.isGravityEnabled())
 	{
 		this->_player.lookUp();
 	}
-	else if (input.isKeyHeld(SDL_SCANCODE_S) == true && this->_player.isGravityEnabled())
+	else if (input.isKeyHeld(SDL_SCANCODE_S) && this->_player.isGravityEnabled())
 	{
 		this->_player.lookDown();
 	}
 
-	if (input.wasKeyReleased(SDL_SCANCODE_W) == true)
+	if (input.wasKeyReleased(SDL_SCANCODE_W))
 	{
 		this->_player.stopLookingUp();
 	}
-	if (input.wasKeyReleased(SDL_SCANCODE_S) == true)
+	if (input.wasKeyReleased(SDL_SCANCODE_S))
 	{
 		this->_player.stopLookingDown();
 	}
-	if (input.wasKeyReleased(SDL_SCANCODE_F) == true)
+	if (input.wasKeyReleased(SDL_SCANCODE_F) || input.wasMouseButtonReleased(SDL_BUTTON_LEFT))
 	{
 		this->_player.stopAttack();
 	}
 
-	if (input.wasKeyPressed(SDL_SCANCODE_SPACE) == true)
+	if (input.wasKeyPressed(SDL_SCANCODE_SPACE))
 	{
 		this->_player.jump();
 	}
 
-	if ((!input.isKeyHeld(SDL_SCANCODE_A) &&
-			 !input.isKeyHeld(SDL_SCANCODE_D) &&
-			 !input.isKeyHeld(SDL_SCANCODE_S) &&
-			 !input.isKeyHeld(SDL_SCANCODE_W)))
+	if (!input.isKeyHeld(SDL_SCANCODE_A) &&
+			!input.isKeyHeld(SDL_SCANCODE_D) &&
+			!input.isKeyHeld(SDL_SCANCODE_S) &&
+			!input.isKeyHeld(SDL_SCANCODE_W))
 	{
 		this->_player.stopMoving();
 	}
