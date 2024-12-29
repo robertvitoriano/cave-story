@@ -305,6 +305,20 @@ void Player::handle3DimensionalLevel()
 	std::cout << "Handle 3d Level" << std::endl;
 }
 
+void Player::handleGravityChange(std::vector<GravityChange> &gravityChangers)
+{
+	for (int i = 0; i < gravityChangers.size(); i++)
+	{
+		if (gravityChangers.at(i).shouldEnableGravity())
+		{
+			this->enableGravity();
+		}
+		else
+		{
+			this->disableGravity();
+		}
+	}
+}
 void Player::handleLevelPassage(std::vector<LevelPassage> &levelPassages, Level &level, Graphics &graphics)
 {
 	for (int i = 0; i < levelPassages.size(); i++)

@@ -11,6 +11,8 @@
 #include "input.h"
 #include <SDL2/SDL.h>
 #include "sword.h"
+#include "GravityChange.h"
+
 class Game
 {
 public:

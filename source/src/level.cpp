@@ -51,20 +51,11 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 	inputFile.close();
 	int tileWidth = levelData["tilewidth"];
 	int tileHeight = levelData["tileheight"];
-	this->_enableGravity = true;
 
 	int width = levelData["width"];
 	int height = levelData["height"];
 	this->_size = Vector2(width, height);
 	this->_tileSize = Vector2(tileWidth, tileHeight);
-
-	for (nlohmann::json property : levelData["properties"])
-	{
-		if (property["enable_gravity"] != NULL)
-		{
-			this->_enableGravity = property["value"];
-		}
-	}
 
 	for (nlohmann::json tileSet : levelData["tilesets"])
 	{
@@ -338,15 +329,6 @@ void Level::update(int elapsedTime, Player &player)
 	for (auto it = enemiesToRemove.rbegin(); it != enemiesToRemove.rend(); ++it)
 	{
 		this->_enemies.erase(this->_enemies.begin() + *it);
-	}
-
-	if (!this->_enableGravity)
-	{
-		player.disableGravity();
-	}
-	else
-	{
-		player.enableGravity();
 	}
 }
 

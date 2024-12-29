@@ -7,7 +7,7 @@
 #include "level.h"
 #include "enemy.h"
 #include "sword.h"
-
+#include "GravityChange.h"
 class Graphics;
 
 class Player : public AnimatedSprite
@@ -77,7 +77,7 @@ public:
 	void handleDoorCollision(std::vector<Door> &others, Level &level, Graphics &graphics);
 	void handleLevelPassage(std::vector<LevelPassage> &others, Level &level, Graphics &graphics);
 	void handleEnemyCollisions(std::vector<Enemy *> &others);
-
+	void handleGravityChange(std::vector<GravityChange> &others);
 	const float getX() const;
 	const float getY() const;
 

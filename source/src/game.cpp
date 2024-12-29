@@ -197,6 +197,11 @@ void Game::update(float elapsedTime, Graphics &graphics)
 	{
 		this->_player.handleLevelPassage(levelPassages, this->_level, graphics);
 	}
+	std::vector<GravityChange> gravityChangers;
+	if ((gravityChangers = this->_level.checkGravityChange(this->_player.getBoundingBox())).size() > 0)
+	{
+		this->_player.handleGravityChange(gravityChangers);
+	}
 	std::vector<Enemy *> otherEnemies;
 	if ((otherEnemies = this->_level.checkEnemyCollisions(this->_player.getBoundingBox())).size() > 0)
 	{
