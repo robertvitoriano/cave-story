@@ -239,9 +239,9 @@
  "orientation":"orthogonal",
  "properties":[
         {
-         "name":"is_3d",
+         "name":"enable_gravity",
          "type":"bool",
-         "value":true
+         "value":false
         }],
  "renderorder":"right-down",
  "tiledversion":"1.11.0",

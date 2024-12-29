@@ -51,7 +51,8 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 	inputFile.close();
 	int tileWidth = levelData["tilewidth"];
 	int tileHeight = levelData["tileheight"];
-	this->_isLevel3D = false;
+	this->_enable_gravity = true;
+
 	int width = levelData["width"];
 	int height = levelData["height"];
 	this->_size = Vector2(width, height);
@@ -59,9 +60,9 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 
 	for (nlohmann::json property : levelData["properties"])
 	{
-		if (property["is_3d"] != NULL)
+		if (property["enable_gravity"] != NULL)
 		{
-			this->_isLevel3D = property["value"];
+			this->_enable_gravity = property["value"];
 		}
 	}
 
@@ -270,6 +271,32 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 					}
 				}
 			}
+			else if (layer["name"] == "gravity change")
+			{
+
+				for (nlohmann::json object : layer["objects"])
+				{
+					std::string destination;
+
+					Vector2 spawnPosition = {0, 0};
+
+					float x = object["x"];
+					float y = object["y"];
+
+					float w = object["width"];
+					float h = object["height"];
+
+					Rectangle rect = Rectangle(x, y, w, h);
+
+					for (nlohmann::json property : object["properties"])
+					{
+						if (property["name"] == "enable_gravity")
+						{
+							this->_enable_gravity = property["value"];
+						}
+					}
+				}
+			}
 			else if (layer["name"] == "enemies")
 			{
 
@@ -312,7 +339,7 @@ void Level::update(int elapsedTime, Player &player)
 		this->_enemies.erase(this->_enemies.begin() + *it);
 	}
 
-	if (this->_isLevel3D)
+	if (!this->_enable_gravity)
 	{
 		player.disableGravity();
 	}

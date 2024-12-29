@@ -59,7 +59,7 @@ private:
 	std::vector<Door> _doorList;
 	std::vector<LevelPassage> _levelPassagesList;
 	std::vector<Enemy *> _enemies;
-	bool _isLevel3D;
+	bool _enable_gravity;
 
 	/* void loadMap
 	 * Loads a map
