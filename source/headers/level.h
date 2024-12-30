@@ -32,7 +32,7 @@ public:
 	void update(int elapsedTime, Player &player);
 	void draw(Graphics &graphics, Player &player);
 
-	std::vector<Rectangle> checkTileCollisions(const Rectangle &other);
+	std::vector<Rectangle> checkTileCollisions(Rectangle other);
 	std::vector<Slope> checkSlopeCollisions(const Rectangle &other);
 	std::vector<Door> checkDoorCollisions(const Rectangle &other);
 	std::vector<LevelPassage> checkLevelPassage(const Rectangle &otherRectangle);

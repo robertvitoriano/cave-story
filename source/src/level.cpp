@@ -421,14 +421,30 @@ std::string Level::parseString(const char *stringValue)
 	return stringStream.str();
 }
 
-std::vector<Rectangle> Level::checkTileCollisions(const Rectangle &other)
+std::vector<Rectangle> Level::checkTileCollisions(Rectangle other)
 {
+	Camera &camera = Camera::getInstance();
+
 	std::vector<Rectangle> others;
 	for (int i = 0; i < this->_collisionRects.size(); i++)
 	{
-		if (this->_collisionRects.at(i).collidesWith(other))
+		Vector2 collisionRectOriginalPosition = this->_collisionRects.at(i).getPosition();
+
+		if (other.getPosition().x <= camera.getCenter().x)
 		{
-			others.push_back(this->_collisionRects.at(i));
+			if (this->_collisionRects.at(i).collidesWith(other))
+			{
+				others.push_back(this->_collisionRects.at(i));
+			}
+		}
+		else if (other.getPosition().x >= camera.getCenter().x)
+		{
+			this->_collisionRects.at(i).setPosition({collisionRectOriginalPosition.x - (other.getPosition().x - camera.getCenter().x), collisionRectOriginalPosition.y});
+			if (this->_collisionRects.at(i).collidesWith(other))
+			{
+				others.push_back(this->_collisionRects.at(i));
+			}
+			this->_collisionRects.at(i).setPosition(collisionRectOriginalPosition);
 		}
 	}
 	return others;
