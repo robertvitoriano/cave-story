@@ -30,6 +30,10 @@ public:
 		this->_x = position.x;
 		this->_y = position.y;
 	}
+	Vector2 getPosition() const
+	{
+		return {this->_x, this->_y};
+	}
 
 	const int getSide(const sides::Side side) const
 	{
