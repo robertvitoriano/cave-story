@@ -173,6 +173,11 @@ void Game::update(float elapsedTime, Graphics &graphics)
 		gameIsLost = true;
 	}
 
+	if (this->_player.getY() >= globals::SCREEN_HEIGHT)
+	{
+		gameIsLost = true;
+	}
+
 	// Check collisions
 	std::vector<Rectangle> others;
 	if ((others = this->_level.checkTileCollisions(this->_player.getBoundingBox())).size() > 0)
