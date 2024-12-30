@@ -453,11 +453,31 @@ std::vector<Rectangle> Level::checkTileCollisions(Rectangle other)
 std::vector<Slope> Level::checkSlopeCollisions(const Rectangle &other)
 {
 	std::vector<Slope> others;
+	Camera &camera = Camera::getInstance();
+
 	for (int i = 0; i < this->_slopes.size(); i++)
 	{
-		if (this->_slopes.at(i).collidesWith(other))
+		Vector2 firstPointOriginalPosition = this->_slopes.at(i).getP1();
+		Vector2 secondPointOriginalPosition = this->_slopes.at(i).getP2();
+
+		if (other.getPosition().x <= camera.getCenter().x)
 		{
-			others.push_back(this->_slopes.at(i));
+			if (this->_slopes.at(i).collidesWith(other))
+			{
+				others.push_back(this->_slopes.at(i));
+			}
+		}
+		else if (other.getPosition().x >= camera.getCenter().x)
+		{
+
+			this->_slopes.at(i).setFirstPointPosition({firstPointOriginalPosition.x - (other.getPosition().x - camera.getCenter().x), firstPointOriginalPosition.y});
+			this->_slopes.at(i).setSecondPointPosition({secondPointOriginalPosition.x - (other.getPosition().x - camera.getCenter().x), secondPointOriginalPosition.y});
+			if (this->_slopes.at(i).collidesWith(other))
+			{
+				others.push_back(this->_slopes.at(i));
+			}
+			this->_slopes.at(i).setFirstPointPosition(firstPointOriginalPosition);
+			this->_slopes.at(i).setSecondPointPosition(secondPointOriginalPosition);
 		}
 	}
 	return others;
@@ -466,6 +486,8 @@ std::vector<Slope> Level::checkSlopeCollisions(const Rectangle &other)
 std::vector<Door> Level::checkDoorCollisions(const Rectangle &other)
 {
 	std::vector<Door> others;
+	Camera &camera = Camera::getInstance();
+
 	for (int i = 0; i < this->_doorList.size(); i++)
 	{
 		if (this->_doorList.at(i).collidesWith(other))
@@ -479,8 +501,29 @@ std::vector<Door> Level::checkDoorCollisions(const Rectangle &other)
 std::vector<LevelPassage> Level::checkLevelPassage(const Rectangle &rectangle)
 {
 	std::vector<LevelPassage> levelPassages;
+	Camera &camera = Camera::getInstance();
+
 	for (int i = 0; i < this->_levelPassagesList.size(); i++)
 	{
+
+		Vector2 levelPassageOriginalPosition = this->_collisionRects.at(i).getPosition();
+
+		if (rectangle.getPosition().x <= camera.getCenter().x)
+		{
+			if (this->_levelPassagesList.at(i).collidesWith(rectangle))
+			{
+				levelPassages.push_back(this->_levelPassagesList.at(i));
+			}
+		}
+		else if (rectangle.getPosition().x >= camera.getCenter().x)
+		{
+			this->_levelPassagesList.at(i).setPosition({levelPassageOriginalPosition.x - (rectangle.getPosition().x - camera.getCenter().x), levelPassageOriginalPosition.y});
+			if (this->_levelPassagesList.at(i).collidesWith(rectangle))
+			{
+				levelPassages.push_back(this->_levelPassagesList.at(i));
+			}
+			this->_levelPassagesList.at(i).setPosition(levelPassageOriginalPosition);
+		}
 
 		if (this->_levelPassagesList.at(i).collidesWith(rectangle))
 		{
