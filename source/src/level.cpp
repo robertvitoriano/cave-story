@@ -349,19 +349,10 @@ void Level::draw(Graphics &graphics, Player &player)
 	for (int i = 0; i < this->_tileList.size(); i++)
 	{
 		Vector2 tileOriginalPosition = this->_tileList.at(i).getPosition();
-
+		int initialPosition = 0;
 		if (player.getX() <= camera.getCenter().x)
 		{
-			if (tileOriginalPosition.x <= 0)
-			{
-				this->_tileList.at(i).draw(graphics);
-			}
-			else
-			{
-				this->_tileList.at(i).setPosition({tileOriginalPosition.x + (camera.getCenter().x - player.getX()), tileOriginalPosition.y});
-				this->_tileList.at(i).draw(graphics);
-				this->_tileList.at(i).setPosition(tileOriginalPosition);
-			}
+			this->_tileList.at(i).draw(graphics);
 		}
 		else if (player.getX() >= camera.getCenter().x)
 		{
@@ -377,10 +368,7 @@ void Level::draw(Graphics &graphics, Player &player)
 
 		if (player.getX() <= camera.getCenter().x)
 		{
-
-			this->_animatedTileList.at(i).setPosition({tileOriginalPosition.x + (camera.getCenter().x - player.getX()), tileOriginalPosition.y});
 			this->_animatedTileList.at(i).draw(graphics);
-			this->_animatedTileList.at(i).setPosition(tileOriginalPosition);
 		}
 		else if (player.getX() >= camera.getCenter().x)
 		{
@@ -391,9 +379,24 @@ void Level::draw(Graphics &graphics, Player &player)
 	}
 	for (int i = 0; i < this->_enemies.size(); i++)
 	{
-		if (!this->_enemies.at(i)->shouldBeDestroyed())
+
+		int enemyOriginalX = this->_enemies.at(i)->getX();
+
+		if (player.getX() <= camera.getCenter().x)
 		{
-			this->_enemies.at(i)->draw(graphics);
+			if (!this->_enemies.at(i)->shouldBeDestroyed())
+			{
+				this->_enemies.at(i)->draw(graphics);
+			}
+		}
+		else if (player.getX() >= camera.getCenter().x)
+		{
+			this->_enemies.at(i)->setX(enemyOriginalX - (player.getX() - camera.getCenter().x));
+			if (!this->_enemies.at(i)->shouldBeDestroyed())
+			{
+				this->_enemies.at(i)->draw(graphics);
+			}
+			this->_enemies.at(i)->setX(enemyOriginalX);
 		}
 	}
 }

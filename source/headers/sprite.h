@@ -14,11 +14,12 @@ class Graphics;
  * Holds all information for individual sprites
  */
 
-class Sprite {
+class Sprite
+{
 public:
 	Sprite();
 	Sprite(Graphics &graphics, const std::string &filePath, int sourceX, int sourceY, int width, int height,
-			float posX, float posY);
+				 float posX, float posY);
 	virtual ~Sprite();
 	virtual void update();
 	void draw(Graphics &graphics, int x, int y);
@@ -28,6 +29,9 @@ public:
 
 	const inline float getX() const { return this->_x; }
 	const inline float getY() const { return this->_y; }
+	void setX(int x) { this->_x = x; }
+	void setY(int y) { this->_y = y; }
+	void setPosition(Vector2 position);
 
 	void setSourceRectX(int value);
 	void setSourceRectY(int value);
@@ -36,13 +40,13 @@ public:
 
 protected:
 	SDL_Rect _sourceRect;
-	SDL_Texture* _spriteSheet;
+	SDL_Texture *_spriteSheet;
 
 	Rectangle _boundingBox;
 
 	float _x, _y;
+
 private:
 };
-
 
 #endif
