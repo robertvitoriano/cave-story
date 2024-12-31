@@ -399,11 +399,6 @@ void Level::draw(Graphics &graphics, Player &player)
 			this->_enemies.at(i)->setX(enemyOriginalX);
 		}
 	}
-
-	for (int i = 0; i < this->_levelPassagesList.size(); i++)
-	{
-		this->_levelPassagesList.at(i).draw(graphics);
-	}
 }
 
 Vector2 Level::parsePosition(std::string positionString)
@@ -495,9 +490,23 @@ std::vector<Door> Level::checkDoorCollisions(const Rectangle &other)
 
 	for (int i = 0; i < this->_doorList.size(); i++)
 	{
-		if (this->_doorList.at(i).collidesWith(other))
+		Vector2 doorRectOriginalPosition = this->_doorList.at(i).getPosition();
+
+		if (other.getPosition().x <= camera.getCenter().x)
 		{
-			others.push_back(this->_doorList.at(i));
+			if (this->_doorList.at(i).collidesWith(other))
+			{
+				others.push_back(this->_doorList.at(i));
+			}
+		}
+		else if (other.getPosition().x >= camera.getCenter().x)
+		{
+			this->_doorList.at(i).setPosition({doorRectOriginalPosition.x - (other.getPosition().x - camera.getCenter().x), doorRectOriginalPosition.y});
+			if (this->_doorList.at(i).collidesWith(other))
+			{
+				others.push_back(this->_doorList.at(i));
+			}
+			this->_doorList.at(i).setPosition(doorRectOriginalPosition);
 		}
 	}
 	return others;
