@@ -320,6 +320,8 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 
 void Level::update(int elapsedTime, Player &player)
 {
+	// this->handleLevelScrolling(player, elapsedTime);
+
 	for (int i = 0; i < this->_animatedTileList.size(); i++)
 	{
 		this->_animatedTileList.at(i).update(elapsedTime);
@@ -344,7 +346,6 @@ void Level::update(int elapsedTime, Player &player)
 
 void Level::draw(Graphics &graphics, Player &player)
 {
-
 	Camera &camera = Camera::getInstance();
 
 	for (int i = 0; i < this->_tileList.size(); i++)
@@ -603,4 +604,21 @@ Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int t
 	int tileYPosition = tileHeight * rowPosition;
 
 	return Vector2(tileXPosition, tileYPosition);
+}
+void Level::handleLevelScrolling(Player &player, int elapsedTime)
+{
+	static float levelScrollX = 0.0f;
+	float playerSpeed = player.getVelocity().x;
+	float playerPositionX = player.getPosition().x;
+
+	if (playerSpeed > 0)
+	{
+		levelScrollX += playerSpeed * elapsedTime / 1000.0f;
+		float maxScroll = (this->_size.x * this->_tileSize.x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH;
+		levelScrollX = std::min(levelScrollX, maxScroll);
+	}
+
+	player.setPosition(Vector2(globals::SCREEN_WIDTH - player.getBoundingBox().getWidth(), player.getPosition().y));
+
+	this->_offset = Vector2(-levelScrollX, 0);
 }

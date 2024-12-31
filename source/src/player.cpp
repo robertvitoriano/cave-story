@@ -445,3 +445,7 @@ bool Player::isAttacking()
 {
 	return this->_isPerformingAttack;
 }
+Vector2 Player::getVelocity()
+{
+	return Vector2(this->_dx, this->_dy);
+}

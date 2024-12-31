@@ -63,6 +63,7 @@ private:
 	std::vector<GravityChange> _gravityChangersList;
 	std::vector<Enemy *> _enemies;
 	bool _levelIsWiderThanScreen;
+	Vector2 _offset;
 
 	/* void loadMap
 	 * Loads a map
@@ -73,6 +74,7 @@ private:
 	Vector2 parsePosition(std::string positionString);
 	void parseTileLayer(nlohmann::json layer);
 	std::string parseString(const char *stringValue);
+	void handleLevelScrolling(Player &player, int elapsedTime);
 };
 
 // Tileset structure

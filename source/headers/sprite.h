@@ -32,7 +32,7 @@ public:
 	void setX(int x) { this->_x = x; }
 	void setY(int y) { this->_y = y; }
 	void setPosition(Vector2 position);
-
+	Vector2 getPosition() { return {this->_x, this->_y}; }
 	void setSourceRectX(int value);
 	void setSourceRectY(int value);
 	void setSourceRectW(int value);

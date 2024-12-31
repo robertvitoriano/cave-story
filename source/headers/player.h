@@ -84,7 +84,7 @@ public:
 
 	const inline int getMaxHealth() const { return this->_maxHealth; }
 	const inline int getCurrentHealth() const { return this->_currentHealth; }
-
+	Vector2 getVelocity();
 	void gainHealth(int amount);
 	void disableGravity();
 	void enableGravity();
