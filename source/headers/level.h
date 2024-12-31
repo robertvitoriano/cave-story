@@ -62,6 +62,7 @@ private:
 	std::vector<LevelPassage> _levelPassagesList;
 	std::vector<GravityChange> _gravityChangersList;
 	std::vector<Enemy *> _enemies;
+	bool _levelIsWiderThanScreen;
 
 	/* void loadMap
 	 * Loads a map
