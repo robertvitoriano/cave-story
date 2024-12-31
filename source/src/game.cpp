@@ -25,7 +25,6 @@ void Game::gameLoop()
 	Graphics graphics;
 	Input input;
 	SDL_Event event;
-
 	this->_level = Level("Map_1", graphics);
 	this->_player = Player(graphics, this->_level.getPlayerSpawnPoint());
 	this->_hud = HUD(graphics, this->_player);
@@ -170,6 +169,11 @@ void Game::update(float elapsedTime, Graphics &graphics)
 	this->_hud.update(elapsedTime, this->_player);
 
 	if (this->_player.getCurrentHealth() == 0)
+	{
+		gameIsLost = true;
+	}
+
+	if (this->_player.getY() >= globals::SCREEN_HEIGHT)
 	{
 		gameIsLost = true;
 	}

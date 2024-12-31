@@ -22,6 +22,17 @@ public:
 	{
 		return this->_slope;
 	}
+	void setFirstPointPosition(Vector2 position)
+	{
+		this->_p1.x = position.x;
+		this->_p1.y = position.y;
+	}
+
+	void setSecondPointPosition(Vector2 position)
+	{
+		this->_p1.x = position.x;
+		this->_p1.y = position.y;
+	}
 
 	const bool collidesWith(const Rectangle &other) const
 	{

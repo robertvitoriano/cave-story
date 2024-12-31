@@ -8,6 +8,7 @@
 #include "enemy.h"
 #include "sword.h"
 #include "GravityChange.h"
+#include "Camera.h"
 class Graphics;
 
 class Player : public AnimatedSprite
@@ -83,7 +84,7 @@ public:
 
 	const inline int getMaxHealth() const { return this->_maxHealth; }
 	const inline int getCurrentHealth() const { return this->_currentHealth; }
-
+	Vector2 getVelocity();
 	void gainHealth(int amount);
 	void disableGravity();
 	void enableGravity();
