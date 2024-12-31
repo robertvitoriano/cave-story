@@ -8,6 +8,7 @@
 #include "enemy.h"
 #include "sword.h"
 #include "GravityChange.h"
+#include "Camera.h"
 class Graphics;
 
 class Player : public AnimatedSprite
