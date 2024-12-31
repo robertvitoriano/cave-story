@@ -12,7 +12,7 @@ public:
 	Tile();
 	Tile(SDL_Texture *tileset, Vector2 size, Vector2 tilesetPosition, Vector2 position);
 	void update(int elapsedTime);
-	void draw(Graphics &graphics);
+	void draw(Graphics &graphics, Vector2 offset);
 	Vector2 getPosition();
 	Vector2 getSize();
 	void setPosition(Vector2 position);

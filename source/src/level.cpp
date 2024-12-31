@@ -320,7 +320,7 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 
 void Level::update(int elapsedTime, Player &player)
 {
-	// this->handleLevelScrolling(player, elapsedTime);
+	this->handleLevelScrolling(player, elapsedTime);
 
 	for (int i = 0; i < this->_animatedTileList.size(); i++)
 	{
@@ -350,36 +350,11 @@ void Level::draw(Graphics &graphics, Player &player)
 
 	for (int i = 0; i < this->_tileList.size(); i++)
 	{
-		Vector2 tileOriginalPosition = this->_tileList.at(i).getPosition();
-		int initialPosition = 0;
-		int cameraOffset = player.getX() - camera.getCenter().x;
-
-		if (player.getX() <= camera.getCenter().x || !this->_levelIsWiderThanScreen)
-		{
-			this->_tileList.at(i).draw(graphics);
-		}
-		else if (player.getX() >= camera.getCenter().x)
-		{
-			this->_tileList.at(i).setPosition({tileOriginalPosition.x - cameraOffset, tileOriginalPosition.y});
-			this->_tileList.at(i).draw(graphics);
-			this->_tileList.at(i).setPosition(tileOriginalPosition);
-		}
+		this->_tileList.at(i).draw(graphics, this->_offset);
 	}
 	for (int i = 0; i < this->_animatedTileList.size(); i++)
 	{
-
-		Vector2 tileOriginalPosition = this->_animatedTileList.at(i).getPosition();
-
-		if (player.getX() <= camera.getCenter().x || !this->_levelIsWiderThanScreen)
-		{
-			this->_animatedTileList.at(i).draw(graphics);
-		}
-		else if (player.getX() >= camera.getCenter().x)
-		{
-			this->_animatedTileList.at(i).setPosition({tileOriginalPosition.x - (player.getX() - camera.getCenter().x), tileOriginalPosition.y});
-			this->_animatedTileList.at(i).draw(graphics);
-			this->_animatedTileList.at(i).setPosition(tileOriginalPosition);
-		}
+		this->_animatedTileList.at(i).draw(graphics, this->_offset);
 	}
 	for (int i = 0; i < this->_enemies.size(); i++)
 	{
@@ -443,11 +418,7 @@ std::vector<Rectangle> Level::checkTileCollisions(Rectangle other)
 		}
 		else if (other.getPosition().x >= camera.getCenter().x)
 		{
-			this->_collisionRects.at(i).setPosition({collisionRectOriginalPosition.x - (other.getPosition().x - camera.getCenter().x), collisionRectOriginalPosition.y});
-			if (this->_collisionRects.at(i).collidesWith(other))
-			{
-				others.push_back(this->_collisionRects.at(i));
-			}
+
 			this->_collisionRects.at(i).setPosition(collisionRectOriginalPosition);
 		}
 	}
@@ -608,17 +579,16 @@ Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int t
 void Level::handleLevelScrolling(Player &player, int elapsedTime)
 {
 	static float levelScrollX = 0.0f;
-	float playerSpeed = player.getVelocity().x;
+	float playerSpeed = player.getVelocity();
 	float playerPositionX = player.getPosition().x;
 
 	if (playerSpeed > 0)
 	{
-		levelScrollX += playerSpeed * elapsedTime / 1000.0f;
+		std::cout << "DX " << playerSpeed << std::endl;
+
+		levelScrollX += playerSpeed * elapsedTime;
 		float maxScroll = (this->_size.x * this->_tileSize.x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH;
 		levelScrollX = std::min(levelScrollX, maxScroll);
 	}
-
-	player.setPosition(Vector2(globals::SCREEN_WIDTH - player.getBoundingBox().getWidth(), player.getPosition().y));
-
 	this->_offset = Vector2(-levelScrollX, 0);
 }
