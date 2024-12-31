@@ -399,6 +399,11 @@ void Level::draw(Graphics &graphics, Player &player)
 			this->_enemies.at(i)->setX(enemyOriginalX);
 		}
 	}
+
+	for (int i = 0; i < this->_levelPassagesList.size(); i++)
+	{
+		this->_levelPassagesList.at(i).draw(graphics);
+	}
 }
 
 Vector2 Level::parsePosition(std::string positionString)
@@ -506,7 +511,7 @@ std::vector<LevelPassage> Level::checkLevelPassage(const Rectangle &rectangle)
 	for (int i = 0; i < this->_levelPassagesList.size(); i++)
 	{
 
-		Vector2 levelPassageOriginalPosition = this->_collisionRects.at(i).getPosition();
+		Vector2 levelPassageOriginalPosition = this->_levelPassagesList.at(i).getPosition();
 
 		if (rectangle.getPosition().x <= camera.getCenter().x)
 		{
@@ -517,17 +522,14 @@ std::vector<LevelPassage> Level::checkLevelPassage(const Rectangle &rectangle)
 		}
 		else if (rectangle.getPosition().x >= camera.getCenter().x)
 		{
-			this->_levelPassagesList.at(i).setPosition({levelPassageOriginalPosition.x - (rectangle.getPosition().x - camera.getCenter().x), levelPassageOriginalPosition.y});
+			this->_levelPassagesList.at(i).setPosition({(levelPassageOriginalPosition.x) - (rectangle.getPosition().x - camera.getCenter().x),
+																									levelPassageOriginalPosition.y});
+
 			if (this->_levelPassagesList.at(i).collidesWith(rectangle))
 			{
 				levelPassages.push_back(this->_levelPassagesList.at(i));
 			}
 			this->_levelPassagesList.at(i).setPosition(levelPassageOriginalPosition);
-		}
-
-		if (this->_levelPassagesList.at(i).collidesWith(rectangle))
-		{
-			levelPassages.push_back(this->_levelPassagesList.at(i));
 		}
 	}
 	return levelPassages;

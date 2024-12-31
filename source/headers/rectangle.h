@@ -2,7 +2,7 @@
 #define RECTANGLE_H
 
 #include "globals.h"
-
+#include "graphics.h"
 class Rectangle
 {
 public:
@@ -57,6 +57,13 @@ public:
 	}
 
 	const inline Rectangle getRect() const { return *this; }
+
+	void draw(Graphics &graphics)
+	{
+		SDL_Rect rect = {this->_x, this->_y, this->_width, this->_height};
+		SDL_SetRenderDrawColor(graphics.getRenderer(), 255, 255, 255, 255);
+		SDL_RenderDrawRect(graphics.getRenderer(), &rect);
+	}
 
 private:
 	int _x, _y, _width, _height;

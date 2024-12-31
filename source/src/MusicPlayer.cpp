@@ -8,7 +8,7 @@ MusicPlayer &MusicPlayer::getInstance()
   return instance;
 }
 
-MusicPlayer::MusicPlayer() : globalVolume(30)
+MusicPlayer::MusicPlayer() : globalVolume(0)
 {
   if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
   {
