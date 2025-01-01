@@ -360,7 +360,7 @@ void Level::draw(Graphics &graphics, Player &player)
 	{
 		this->_enemies.at(i)->draw(graphics, this->_offset);
 	}
-	this->drawDebug(graphics);
+	// this->drawDebug(graphics);
 }
 
 void Level::drawDebug(Graphics &graphics)
@@ -537,7 +537,6 @@ Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int t
 }
 void Level::handleLevelScrolling(Player &player, int elapsedTime)
 {
-	// Calculate the player position relative to the screen
 	float playerX = player.getX();
 	float screenCenterX = globals::SCREEN_WIDTH / 2;
 
@@ -545,10 +544,8 @@ void Level::handleLevelScrolling(Player &player, int elapsedTime)
 	{
 		float cameraX = playerX - screenCenterX;
 
-		// Clamp the camera position to stay within level bounds
 		cameraX = std::max(0.0f, std::min(cameraX, (this->_size.x * this->_tileSize.x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH));
 
-		// Offset all tiles by the camera position
 		for (Tile &tile : this->_tileList)
 		{
 			tile.setOffset(Vector2(-cameraX, 0));
@@ -558,9 +555,18 @@ void Level::handleLevelScrolling(Player &player, int elapsedTime)
 		{
 			animatedTile.setOffset(Vector2(-cameraX, 0));
 		}
+
 		for (Rectangle &collisionRectangle : this->_collisionRects)
 		{
 			collisionRectangle.setOffset(Vector2(-cameraX, 0));
+		}
+		for (Rectangle &door : this->_doorList)
+		{
+			door.setOffset(Vector2(-cameraX, 0));
+		}
+		for (Rectangle &levelPassage : this->_levelPassagesList)
+		{
+			levelPassage.setOffset(Vector2(-cameraX, 0));
 		}
 	}
 }
