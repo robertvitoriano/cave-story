@@ -75,6 +75,7 @@ private:
 	void parseTileLayer(nlohmann::json layer);
 	std::string parseString(const char *stringValue);
 	void handleLevelScrolling(Player &player, int elapsedTime);
+	void drawDebug(Graphics &graphics);
 };
 
 // Tileset structure

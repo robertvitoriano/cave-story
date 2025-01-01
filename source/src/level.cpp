@@ -360,9 +360,18 @@ void Level::draw(Graphics &graphics, Player &player)
 	{
 		this->_enemies.at(i)->draw(graphics, this->_offset);
 	}
+	this->drawDebug(graphics);
+}
+
+void Level::drawDebug(Graphics &graphics)
+{
 	for (int i = 0; i < this->_collisionRects.size(); i++)
 	{
 		this->_collisionRects.at(i).draw(graphics);
+	}
+	for (int i = 0; i < this->_levelPassagesList.size(); i++)
+	{
+		this->_levelPassagesList.at(i).draw(graphics);
 	}
 }
 
@@ -416,7 +425,7 @@ std::vector<Slope> Level::checkSlopeCollisions(const Rectangle &other)
 		this->_slopes.at(i).setFirstPointPosition({firstPointOriginalPosition.x + this->_offset.x, firstPointOriginalPosition.y});
 		this->_slopes.at(i).setSecondPointPosition({secondPointOriginalPosition.x + this->_offset.x, secondPointOriginalPosition.y});
 
-		if (other.getPosition().x <= camera.getCenter().x || !this->_levelIsWiderThanScreen)
+		if (other.getPosition().x <= camera.getCenter().x)
 		{
 			if (this->_slopes.at(i).collidesWith(other))
 			{
@@ -528,19 +537,21 @@ Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int t
 }
 void Level::handleLevelScrolling(Player &player, int elapsedTime)
 {
-	static float levelScrollX = 0.0f;
-	static float levelScrollY = 0.0f;
+	Vector2 playerPosition = player.getPosition();
+
+	int screenMiddle = globals::SCREEN_WIDTH / 2;
+
+	int newOffsetX = 0;
 
 	float playerXSpeed = player.getXVelocity();
-	float playerYSpeed = player.getYVelocity();
-	float maxXScroll = (this->_size.x * this->_tileSize.x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH;
-	if (playerXSpeed > 0.)
+
+	if (playerXSpeed > 0.0f)
 	{
-		std::cout << "PLAYER X SPEED " << playerXSpeed << std::endl;
-		std::cout << "PLAYER Y SPEED " << playerYSpeed << std::endl;
-		levelScrollX += playerXSpeed * elapsedTime;
-		std::cout << "LEVEL SCROLL X " << levelScrollX << std::endl;
+		newOffsetX += playerXSpeed;
+
+		newOffsetX = std::max(0, std::min(newOffsetX,
+																			static_cast<int>(this->_size.x * this->_tileSize.x * globals::SPRITE_SCALE - globals::SCREEN_WIDTH)));
 	}
-	levelScrollX = std::min(levelScrollX, maxXScroll);
-	this->_offset = Vector2(-levelScrollX, 0);
+
+	this->_offset.x = -newOffsetX;
 }
