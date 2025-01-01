@@ -24,7 +24,7 @@ public:
 	virtual void update();
 	void draw(Graphics &graphics, int x, int y);
 
-	Rectangle getBoundingBox();
+	Rectangle &getBoundingBox();
 	sides::Side getCollisionSide(Rectangle &other);
 
 	const inline float getX() const { return this->_x; }

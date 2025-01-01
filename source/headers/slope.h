@@ -18,7 +18,7 @@ public:
 		}
 	}
 
-	const inline float getSlope() const
+	float getSlope()
 	{
 		return this->_slope;
 	}
@@ -34,7 +34,7 @@ public:
 		this->_p1.y = position.y;
 	}
 
-	const bool collidesWith(const Rectangle &other) const
+	bool collidesWith(Rectangle &other)
 	{
 		return (other.getRight() >= this->_p2.x &&
 						other.getLeft() <= this->_p1.x &&
@@ -54,8 +54,8 @@ public:
 						other.getBottom() >= this->_p1.y);
 	}
 
-	const inline Vector2 getP1() const { return this->_p1; }
-	const inline Vector2 getP2() const { return this->_p2; }
+	Vector2 getP1() { return this->_p1; }
+	Vector2 getP2() { return this->_p2; }
 
 private:
 	Vector2 _p1, _p2;

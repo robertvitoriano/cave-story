@@ -16,7 +16,7 @@ void Tile::update(int elapsedTime) {}
 
 void Tile::draw(Graphics &graphics, Vector2 offset)
 {
-	SDL_Rect destRect = {this->_position.x + offset.x, this->_position.y,
+	SDL_Rect destRect = {this->_position.x + _offset.x, this->_position.y,
 											 this->_size.x * globals::SPRITE_SCALE, this->_size.y * globals::SPRITE_SCALE};
 	SDL_Rect sourceRect = {this->_tilesetPosition.x, this->_tilesetPosition.y, this->_size.x, this->_size.y};
 
@@ -35,4 +35,9 @@ void Tile::setPosition(Vector2 position)
 Vector2 Tile::getSize()
 {
 	return this->_size;
+}
+
+void Tile::setOffset(Vector2 offset)
+{
+	this->_offset = offset;
 }

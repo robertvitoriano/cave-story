@@ -11,31 +11,32 @@ public:
 	Rectangle(int x, int y, int width, int height) : _x(x),
 																									 _y(y),
 																									 _width(width),
-																									 _height(height)
+																									 _height(height),
+																									 _offset(Vector2(0, 0))
 	{
 	}
 
-	const int getCenterX() const { return this->_x + this->_width / 2; }
-	const int getCenterY() const { return this->_y + this->_height / 2; }
+	int getCenterX() { return this->getX() + this->_width / 2; }
+	int getCenterY() { return this->getY() + this->_height / 2; }
 
-	const int getLeft() const { return this->_x; }
-	const int getRight() const { return this->_x + this->_width; }
-	const int getTop() const { return this->_y; }
-	const int getBottom() const { return this->_y + this->_height; }
+	int getLeft() { return this->getX(); }
+	int getRight() { return this->getX() + this->_width; }
+	int getTop() { return this->getY(); }
+	int getBottom() { return this->getY() + this->_height; }
 
-	const int getWidth() const { return this->_width; }
-	const int getHeight() const { return this->_height; }
+	int getWidth() { return this->_width; }
+	int getHeight() { return this->_height; }
 	void setPosition(Vector2 position)
 	{
 		this->_x = position.x;
 		this->_y = position.y;
 	}
-	Vector2 getPosition() const
+	Vector2 getPosition()
 	{
 		return {this->_x, this->_y};
 	}
 
-	const int getSide(const sides::Side side) const
+	int getSide(sides::Side side)
 	{
 		return side == sides::LEFT ? this->getLeft() : side == sides::RIGHT ? this->getRight()
 																							 : side == sides::TOP			? this->getTop()
@@ -43,7 +44,7 @@ public:
 																																				: sides::NONE;
 	}
 
-	const bool collidesWith(const Rectangle &other) const
+	bool collidesWith(Rectangle &other)
 	{
 		return this->getRight() >= other.getLeft() && // COLLISION BY THE LEFT
 					 this->getLeft() <= other.getRight() && // COLLISION BY THE RIGHT
@@ -51,23 +52,41 @@ public:
 					 this->getBottom() >= other.getTop();		// TOP COLLISION
 	}
 
-	const bool isValidRectangle() const
+	bool isValidRectangle()
 	{
 		return (this->_x >= 0 && this->_y >= 0 && this->_width >= 0 && this->_height >= 0);
 	}
 
-	const inline Rectangle getRect() const { return *this; }
+	inline Rectangle getRect() { return *this; }
 
 	void draw(Graphics &graphics)
 	{
-		SDL_Rect rect = {this->_x, this->_y, this->_width, this->_height};
+		SDL_Rect rect = {this->getX(), this->getY(), this->_width, this->_height};
 		SDL_SetRenderDrawColor(graphics.getRenderer(), 255, 255, 255, 255);
 		SDL_RenderDrawRect(graphics.getRenderer(), &rect);
 		SDL_SetRenderDrawColor(graphics.getRenderer(), 0, 0, 0, 0);
 	}
+	void setOffset(Vector2 offset)
+	{
+		this->_offset = offset;
+	}
+
+	int getX()
+	{
+		return this->_x + this->_offset.x;
+	}
+	int getY()
+	{
+		return this->_y + this->_offset.y;
+	}
 
 private:
-	int _x, _y, _width, _height;
+	int _x,
+			_y,
+			_width,
+			_height;
+
+	Vector2 _offset;
 };
 
 #endif

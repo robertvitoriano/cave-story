@@ -37,7 +37,7 @@ void Sprite::update()
 																 this->_sourceRect.w * globals::SPRITE_SCALE, this->_sourceRect.h * globals::SPRITE_SCALE);
 }
 
-Rectangle Sprite::getBoundingBox()
+Rectangle &Sprite::getBoundingBox()
 {
 	return this->_boundingBox;
 }

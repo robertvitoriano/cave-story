@@ -16,10 +16,10 @@ public:
   {
   }
 
-  const inline Rectangle getRectangle() const { return this->getRect(); }
-  const inline std::string getDestination() const { return this->_destination; }
-  const Vector2 getSpawnPosition() const { return this->_spawnPosition; }
-  const bool shouldEnableGravity() const { return this->_enableGravity; }
+  Rectangle getRectangle() { return this->getRect(); }
+  std::string getDestination() { return this->_destination; }
+  Vector2 getSpawnPosition() { return this->_spawnPosition; }
+  bool shouldEnableGravity() { return this->_enableGravity; }
 
 private:
   std::string _destination;

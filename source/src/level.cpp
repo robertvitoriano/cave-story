@@ -412,7 +412,7 @@ std::vector<Rectangle> Level::checkTileCollisions(Rectangle other)
 	return others;
 }
 
-std::vector<Slope> Level::checkSlopeCollisions(const Rectangle &other)
+std::vector<Slope> Level::checkSlopeCollisions(Rectangle &other)
 {
 	std::vector<Slope> others;
 	Camera &camera = Camera::getInstance();
@@ -436,7 +436,7 @@ std::vector<Slope> Level::checkSlopeCollisions(const Rectangle &other)
 	return others;
 }
 
-std::vector<Door> Level::checkDoorCollisions(const Rectangle &other)
+std::vector<Door> Level::checkDoorCollisions(Rectangle &other)
 {
 	std::vector<Door> others;
 	Camera &camera = Camera::getInstance();
@@ -455,7 +455,7 @@ std::vector<Door> Level::checkDoorCollisions(const Rectangle &other)
 	return others;
 }
 
-std::vector<LevelPassage> Level::checkLevelPassage(const Rectangle &rectangle)
+std::vector<LevelPassage> Level::checkLevelPassage(Rectangle &rectangle)
 {
 	std::vector<LevelPassage> levelPassages;
 	Camera &camera = Camera::getInstance();
@@ -474,7 +474,7 @@ std::vector<LevelPassage> Level::checkLevelPassage(const Rectangle &rectangle)
 	return levelPassages;
 }
 
-std::vector<GravityChange> Level::checkGravityChange(const Rectangle &rectangle)
+std::vector<GravityChange> Level::checkGravityChange(Rectangle &rectangle)
 {
 	std::vector<GravityChange> gravityChangersCollided;
 	for (int i = 0; i < this->_gravityChangersList.size(); i++)
@@ -489,7 +489,7 @@ std::vector<GravityChange> Level::checkGravityChange(const Rectangle &rectangle)
 	return gravityChangersCollided;
 }
 
-std::vector<Enemy *> Level::checkEnemyCollisions(const Rectangle &other)
+std::vector<Enemy *> Level::checkEnemyCollisions(Rectangle &other)
 {
 	std::vector<Enemy *> others;
 
@@ -537,21 +537,30 @@ Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int t
 }
 void Level::handleLevelScrolling(Player &player, int elapsedTime)
 {
-	Vector2 playerPosition = player.getPosition();
+	// Calculate the player position relative to the screen
+	float playerX = player.getX();
+	float screenCenterX = globals::SCREEN_WIDTH / 2;
 
-	int screenMiddle = globals::SCREEN_WIDTH / 2;
-
-	int newOffsetX = 0;
-
-	float playerXSpeed = player.getXVelocity();
-
-	if (playerXSpeed > 0.0f)
+	if (this->_levelIsWiderThanScreen)
 	{
-		newOffsetX += playerXSpeed;
+		float cameraX = playerX - screenCenterX;
 
-		newOffsetX = std::max(0, std::min(newOffsetX,
-																			static_cast<int>(this->_size.x * this->_tileSize.x * globals::SPRITE_SCALE - globals::SCREEN_WIDTH)));
+		// Clamp the camera position to stay within level bounds
+		cameraX = std::max(0.0f, std::min(cameraX, (this->_size.x * this->_tileSize.x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH));
+
+		// Offset all tiles by the camera position
+		for (Tile &tile : this->_tileList)
+		{
+			tile.setOffset(Vector2(-cameraX, 0));
+		}
+
+		for (AnimatedTile &animatedTile : this->_animatedTileList)
+		{
+			animatedTile.setOffset(Vector2(-cameraX, 0));
+		}
+		for (Rectangle &collisionRectangle : this->_collisionRects)
+		{
+			collisionRectangle.setOffset(Vector2(-cameraX, 0));
+		}
 	}
-
-	this->_offset.x = -newOffsetX;
 }
