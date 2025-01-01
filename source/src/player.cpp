@@ -70,6 +70,10 @@ const float Player::getY() const
 
 void Player::moveLeft()
 {
+	if (this->_lookingDown == true && this->_grounded == true && this->_shouldApplyGravity)
+	{
+		return;
+	}
 	this->_dx = -player_constants::WALK_SPEED;
 	if (this->_lookingUp == false)
 	{
@@ -82,6 +86,10 @@ void Player::moveLeft()
 
 void Player::moveRight()
 {
+	if (this->_lookingDown == true && this->_grounded == true && this->_shouldApplyGravity)
+	{
+		return;
+	}
 	this->_dx = player_constants::WALK_SPEED;
 	if (this->_lookingUp == false)
 	{

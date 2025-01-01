@@ -533,29 +533,14 @@ void Level::handleLevelScrolling(Player &player, int elapsedTime)
 
 	float playerXSpeed = player.getXVelocity();
 	float playerYSpeed = player.getYVelocity();
-
-	float playerPositionX = player.getPosition().x;
-	float playerPositionY = player.getPosition().y;
-	player.disableGravity();
-	if (playerXSpeed > 0)
+	float maxXScroll = (this->_size.x * this->_tileSize.x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH;
+	if (playerXSpeed > 0.)
 	{
+		std::cout << "PLAYER X SPEED " << playerXSpeed << std::endl;
+		std::cout << "PLAYER Y SPEED " << playerYSpeed << std::endl;
 		levelScrollX += playerXSpeed * elapsedTime;
-
-		float maxXScroll = (this->_size.x * this->_tileSize.x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH;
-
-		levelScrollX = std::min(levelScrollX, maxXScroll);
-
-		return;
+		std::cout << "LEVEL SCROLL X " << levelScrollX << std::endl;
 	}
-	if (playerYSpeed > 0)
-	{
-		levelScrollY += playerYSpeed * elapsedTime;
-
-		float maxYScroll = (this->_size.y * this->_tileSize.y * globals::SPRITE_SCALE) - globals::SCREEN_HEIGHT;
-
-		levelScrollY = std::min(levelScrollY, maxYScroll);
-		this->_offset = Vector2(-levelScrollX, -levelScrollY);
-		return;
-	}
-	this->_offset = Vector2(0, 0);
+	levelScrollX = std::min(levelScrollX, maxXScroll);
+	this->_offset = Vector2(-levelScrollX, 0);
 }
