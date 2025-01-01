@@ -399,12 +399,12 @@ void Player::renderBlinkingPlayer(Graphics &graphics)
 	Uint32 currentTime = SDL_GetTicks();
 	if ((currentTime - this->_blinkStartTime) / this->_blinkInterval % 2 == 0)
 	{
-		AnimatedSprite::draw(graphics, this->_x, this->_y);
+		AnimatedSprite::draw(graphics, 300, this->_y);
 	}
 	else
 	{
 		SDL_SetTextureColorMod(this->_spriteSheet, 255, 0, 0);
-		AnimatedSprite::draw(graphics, this->_x, this->_y);
+		AnimatedSprite::draw(graphics, 300, this->_y);
 		SDL_SetTextureColorMod(this->_spriteSheet, 255, 255, 255);
 	}
 
@@ -421,8 +421,8 @@ void Player::draw(Graphics &graphics)
 		this->renderBlinkingPlayer(graphics);
 		return;
 	}
-	AnimatedSprite::draw(graphics, this->_x, this->_y);
-	this->_currentWeapon.draw(graphics, this->_x, this->_y, this->_facing);
+	AnimatedSprite::draw(graphics, 300, this->_y);
+	this->_currentWeapon.draw(graphics, 300, this->_y, this->_facing);
 }
 
 void Player::setWeapon(Sword &weapon)

@@ -360,6 +360,10 @@ void Level::draw(Graphics &graphics, Player &player)
 	{
 		this->_enemies.at(i)->draw(graphics, this->_offset);
 	}
+	for (int i = 0; i < this->_collisionRects.size(); i++)
+	{
+		this->_collisionRects.at(i).draw(graphics, this->_offset);
+	}
 }
 
 Vector2 Level::parsePosition(std::string positionString)
