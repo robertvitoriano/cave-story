@@ -362,7 +362,7 @@ void Level::draw(Graphics &graphics, Player &player)
 	}
 	for (int i = 0; i < this->_collisionRects.size(); i++)
 	{
-		this->_collisionRects.at(i).draw(graphics, this->_offset);
+		this->_collisionRects.at(i).draw(graphics);
 	}
 }
 
@@ -399,6 +399,7 @@ std::vector<Rectangle> Level::checkTileCollisions(Rectangle other)
 		{
 			others.push_back(this->_collisionRects.at(i));
 		}
+		this->_collisionRects.at(i).setPosition(collisionRectOriginalPosition);
 	}
 	return others;
 }
