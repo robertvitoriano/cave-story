@@ -284,6 +284,8 @@ void Player::handleDoorCollision(std::vector<Door> &doors, Level &level, Graphic
 		if (this->_grounded == true && this->_lookingDown == true)
 		{
 			level = Level(doors.at(i).getDestination(), graphics);
+			Camera &camera = Camera::getInstance();
+			camera.follow(this, level);
 			bool positionIsValid = doors.at(i).getSpawnPosition().x != 0 && doors.at(i).getSpawnPosition().y != 0;
 			if (positionIsValid)
 			{
@@ -333,6 +335,8 @@ void Player::handleLevelPassage(std::vector<LevelPassage> &levelPassages, Level 
 	for (int i = 0; i < levelPassages.size(); i++)
 	{
 		level = Level(levelPassages.at(i).getDestination(), graphics);
+		Camera &camera = Camera::getInstance();
+		camera.follow(this, level);
 		if (levelPassages.at(i).getSpawnPosition().x != 0 && levelPassages.at(i).getSpawnPosition().y != 0)
 		{
 

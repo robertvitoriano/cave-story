@@ -14,7 +14,6 @@
 #include "GravityChange.h"
 #include <iostream>
 #include <nlohmann/json.hpp>
-#include "Camera.h"
 class Graphics;
 class Enemy;
 class Bat;
@@ -38,8 +37,17 @@ public:
 	std::vector<LevelPassage> checkLevelPassage(Rectangle &otherRectangle);
 	std::vector<GravityChange> checkGravityChange(Rectangle &other);
 	std::vector<Enemy *> checkEnemyCollisions(Rectangle &other);
-
 	const Vector2 getPlayerSpawnPoint() const;
+	std::vector<AnimatedTile> getAnimatedTileList();
+	std::vector<Tile> getTileList();
+	std::vector<Door> getDoorsList();
+	std::vector<GravityChange> getGravityChangersList();
+	std::vector<LevelPassage> getLevelPassagesList();
+	std::vector<Enemy *> getEnemiesList();
+	std::vector<Rectangle> getCollisionRects();
+	Vector2 getTileSize();
+	Vector2 getSize();
+	bool isLevelWiderThanScreen();
 
 private:
 	std::string _mapName;
@@ -74,7 +82,6 @@ private:
 	Vector2 parsePosition(std::string positionString);
 	void parseTileLayer(nlohmann::json layer);
 	std::string parseString(const char *stringValue);
-	void handleLevelScrolling(Player &player, int elapsedTime);
 	void drawDebug(Graphics &graphics);
 };
 

@@ -28,6 +28,8 @@ void Game::gameLoop()
 	this->_level = Level("Map_1", graphics);
 	this->_player = Player(graphics, this->_level.getPlayerSpawnPoint());
 	this->_hud = HUD(graphics, this->_player);
+	Camera &camera = Camera::getInstance();
+	camera.follow(&this->_player, this->_level);
 	Sword sword = Sword(graphics, this->_level.getPlayerSpawnPoint());
 
 	this->_player.setWeapon(sword);
@@ -71,6 +73,7 @@ void Game::gameLoop()
 		int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
 
 		this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME), graphics);
+		camera.update();
 		LAST_UPDATE_TIME = CURRENT_TIME_MS;
 
 		this->draw(graphics);

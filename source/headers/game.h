@@ -29,7 +29,6 @@ private:
 	Level _level;
 
 	HUD _hud;
-
 	bool gameIsLost;
 };
 
