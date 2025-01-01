@@ -52,7 +52,7 @@ void Camera::drawDebug(SDL_Renderer *renderer)
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 }
 
-void Camera::follow(Player *player, Level &level)
+void Camera::follow(Player *player, Level *level)
 {
   this->_player = player;
   this->_level = level;
@@ -66,35 +66,35 @@ void Camera::update()
   float playerX = this->_player->getX();
   float screenCenterX = globals::SCREEN_WIDTH / 2;
 
-  if (this->_level.isLevelWiderThanScreen())
+  if (this->_level->isLevelWiderThanScreen())
   {
     float cameraX = playerX - screenCenterX;
 
-    cameraX = std::max(0.0f, std::min(cameraX, (this->_level.getSize().x * this->_level.getTileSize().x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH));
+    cameraX = std::max(0.0f, std::min(cameraX, (this->_level->getSize().x * this->_level->getTileSize().x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH));
     std::cout << "CAMERA X" << cameraX << std::endl;
-    for (Tile &tile : this->_level.getTileList())
+    for (Tile &tile : this->_level->getTileList())
     {
       tile.setOffset(Vector2(-cameraX, 0));
     }
 
-    for (AnimatedTile &animatedTile : this->_level.getAnimatedTileList())
+    for (AnimatedTile &animatedTile : this->_level->getAnimatedTileList())
     {
       animatedTile.setOffset(Vector2(-cameraX, 0));
     }
 
-    for (Rectangle &collisionRectangle : this->_level.getCollisionRects())
+    for (Rectangle &collisionRectangle : this->_level->getCollisionRects())
     {
       collisionRectangle.setOffset(Vector2(-cameraX, 0));
     }
-    for (Rectangle &door : this->_level.getDoorsList())
+    for (Rectangle &door : this->_level->getDoorsList())
     {
       door.setOffset(Vector2(-cameraX, 0));
     }
-    for (Rectangle &levelPassage : this->_level.getLevelPassagesList())
+    for (Rectangle &levelPassage : this->_level->getLevelPassagesList())
     {
       levelPassage.setOffset(Vector2(-cameraX, 0));
     }
-    // for (Enemy *enemy : this->_level.getEnemiesList())
+    // for (Enemy *enemy : this->_level->getEnemiesList())
     // {
     //   enemy.setOffset(Vector2(-cameraX, 0));
     // }

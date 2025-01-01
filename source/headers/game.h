@@ -24,6 +24,7 @@ private:
 	void draw(Graphics &graphics);
 	void update(float elapsedTime, Graphics &graphics);
 	void handleInput(Input &input);
+	void handleScrolling();
 	Player _player;
 
 	Level _level;

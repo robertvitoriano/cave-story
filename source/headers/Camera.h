@@ -24,7 +24,7 @@ public:
   int getRightLimit();
   void drawDebug(SDL_Renderer *renderer);
   void update();
-  void follow(Player *player, Level &level);
+  void follow(Player *player, Level *level);
 
 private:
   Camera();
@@ -34,7 +34,7 @@ private:
   int _height;
   int _rightLimit;
   Vector2 _center;
-  Level _level;
+  Level *_level;
   Player *_player;
 };
 
