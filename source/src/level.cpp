@@ -399,7 +399,6 @@ std::vector<Rectangle> Level::checkTileCollisions(Rectangle other)
 		{
 			others.push_back(this->_collisionRects.at(i));
 		}
-		this->_collisionRects.at(i).setPosition(collisionRectOriginalPosition);
 	}
 	return others;
 }
@@ -537,7 +536,7 @@ void Level::handleLevelScrolling(Player &player, int elapsedTime)
 
 	float playerPositionX = player.getPosition().x;
 	float playerPositionY = player.getPosition().y;
-
+	player.disableGravity();
 	if (playerXSpeed > 0)
 	{
 		levelScrollX += playerXSpeed * elapsedTime;
@@ -545,6 +544,8 @@ void Level::handleLevelScrolling(Player &player, int elapsedTime)
 		float maxXScroll = (this->_size.x * this->_tileSize.x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH;
 
 		levelScrollX = std::min(levelScrollX, maxXScroll);
+
+		return;
 	}
 	if (playerYSpeed > 0)
 	{
@@ -553,6 +554,8 @@ void Level::handleLevelScrolling(Player &player, int elapsedTime)
 		float maxYScroll = (this->_size.y * this->_tileSize.y * globals::SPRITE_SCALE) - globals::SCREEN_HEIGHT;
 
 		levelScrollY = std::min(levelScrollY, maxYScroll);
+		this->_offset = Vector2(-levelScrollX, -levelScrollY);
+		return;
 	}
-	this->_offset = Vector2(-levelScrollX, -levelScrollY);
+	this->_offset = Vector2(0, 0);
 }
