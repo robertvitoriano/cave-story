@@ -38,15 +38,15 @@ public:
 	std::vector<GravityChange> checkGravityChange(Rectangle &other);
 	std::vector<Enemy *> checkEnemyCollisions(Rectangle &other);
 	const Vector2 getPlayerSpawnPoint() const;
-	std::vector<AnimatedTile> getAnimatedTileList();
-	std::vector<Tile> getTileList();
-	std::vector<Door> getDoorsList();
-	std::vector<GravityChange> getGravityChangersList();
-	std::vector<LevelPassage> getLevelPassagesList();
-	std::vector<Enemy *> getEnemiesList();
-	std::vector<Rectangle> getCollisionRects();
-	Vector2 getTileSize();
-	Vector2 getSize();
+	std::vector<AnimatedTile> &getAnimatedTileList();
+	std::vector<Tile> &getTileList();
+	std::vector<Door> &getDoorsList();
+	std::vector<GravityChange> &getGravityChangersList();
+	std::vector<LevelPassage> &getLevelPassagesList();
+	std::vector<Enemy *> &getEnemiesList();
+	std::vector<Rectangle> &getCollisionRects();
+	Vector2 &getTileSize();
+	Vector2 &getSize();
 	bool isLevelWiderThanScreen();
 
 private:

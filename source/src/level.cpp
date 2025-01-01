@@ -507,36 +507,36 @@ Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int t
 	return Vector2(tileXPosition, tileYPosition);
 }
 
-std::vector<AnimatedTile> Level::getAnimatedTileList()
+std::vector<AnimatedTile> &Level::getAnimatedTileList()
 {
 	return this->_animatedTileList;
 }
 
-std::vector<Tile> Level::getTileList()
+std::vector<Tile> &Level::getTileList()
 {
 	return this->_tileList;
 }
 
-std::vector<Door> Level::getDoorsList()
+std::vector<Door> &Level::getDoorsList()
 {
 	return this->_doorList;
 }
 
-std::vector<GravityChange> Level::getGravityChangersList()
+std::vector<GravityChange> &Level::getGravityChangersList()
 {
 	return this->_gravityChangersList;
 }
 
-std::vector<LevelPassage> Level::getLevelPassagesList()
+std::vector<LevelPassage> &Level::getLevelPassagesList()
 {
 	return this->_levelPassagesList;
 }
 
-std::vector<Enemy *> Level::getEnemiesList()
+std::vector<Enemy *> &Level::getEnemiesList()
 {
 	return this->_enemies;
 }
-std::vector<Rectangle> Level::getCollisionRects()
+std::vector<Rectangle> &Level::getCollisionRects()
 {
 	return this->_collisionRects;
 }
@@ -544,12 +544,12 @@ bool Level::isLevelWiderThanScreen()
 {
 	return this->_levelIsWiderThanScreen;
 }
-Vector2 Level::getTileSize()
+Vector2 &Level::getTileSize()
 {
 	return this->_tileSize;
 }
 
-Vector2 Level::getSize()
+Vector2 &Level::getSize()
 {
 	return this->_size;
 }
