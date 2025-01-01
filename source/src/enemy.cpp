@@ -15,7 +15,7 @@ void Enemy::update(int elapsedTime, Player &player)
 	AnimatedSprite::update(elapsedTime);
 }
 
-void Enemy::draw(Graphics &graphics)
+void Enemy::draw(Graphics &graphics, Vector2 offset)
 {
-	AnimatedSprite::draw(graphics, this->_x, this->_y);
+	AnimatedSprite::draw(graphics, this->_x + offset.x, this->_y + offset.y);
 }

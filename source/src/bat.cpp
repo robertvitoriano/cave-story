@@ -28,9 +28,9 @@ void Bat::update(int elapsedTime, Player &player)
   Enemy::update(elapsedTime, player);
 }
 
-void Bat::draw(Graphics &graphics)
+void Bat::draw(Graphics &graphics, Vector2 offset)
 {
-  Enemy::draw(graphics);
+  Enemy::draw(graphics, offset);
 }
 
 void Bat::animationDone(std::string currentAnimation)

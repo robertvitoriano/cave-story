@@ -11,7 +11,7 @@ public:
   Bat(Graphics &graphics, Vector2 spawnPoint);
 
   void update(int elapsedTime, Player &player) override;
-  void draw(Graphics &graphics) override;
+  void draw(Graphics &graphics, Vector2 offset) override;
   void animationDone(std::string currentAnimation);
   void setupAnimations();
   void touchPlayer(Player *player) override;

@@ -34,7 +34,7 @@ void AnimatedTile::update(int elapsedTime)
 
 void AnimatedTile::draw(Graphics &graphics, Vector2 offset)
 {
-	SDL_Rect destRect = {this->_position.x + offset.x, this->_position.y,
+	SDL_Rect destRect = {this->_position.x + offset.x, this->_position.y + offset.y,
 											 this->_size.x * globals::SPRITE_SCALE, this->_size.y * globals::SPRITE_SCALE};
 	SDL_Rect sourceRect = {this->_tilesetPositions.at(this->_tileToDraw).x, this->_tilesetPositions.at(this->_tileToDraw).y,
 												 this->_size.x, this->_size.y};

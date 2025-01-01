@@ -37,14 +37,14 @@ void Sprite::update()
 																 this->_sourceRect.w * globals::SPRITE_SCALE, this->_sourceRect.h * globals::SPRITE_SCALE);
 }
 
-const Rectangle Sprite::getBoundingBox() const
+Rectangle Sprite::getBoundingBox()
 {
 	return this->_boundingBox;
 }
 
 // Side getCollisionSide
 // Determine which side the collision happened on
-const sides::Side Sprite::getCollisionSide(Rectangle &other) const
+sides::Side Sprite::getCollisionSide(Rectangle &other)
 {
 	int amtRight, amtLeft, amtTop, amtBottom;
 	amtRight = this->getBoundingBox().getRight() - other.getLeft();

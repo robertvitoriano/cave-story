@@ -445,7 +445,12 @@ bool Player::isAttacking()
 {
 	return this->_isPerformingAttack;
 }
-float Player::getVelocity()
+float Player::getXVelocity()
 {
 	return this->_dx;
+}
+
+float Player::getYVelocity()
+{
+	return this->_dy;
 }

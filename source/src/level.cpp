@@ -358,25 +358,7 @@ void Level::draw(Graphics &graphics, Player &player)
 	}
 	for (int i = 0; i < this->_enemies.size(); i++)
 	{
-
-		int enemyOriginalX = this->_enemies.at(i)->getX();
-
-		if (player.getX() <= camera.getCenter().x || !this->_levelIsWiderThanScreen)
-		{
-			if (!this->_enemies.at(i)->shouldBeDestroyed())
-			{
-				this->_enemies.at(i)->draw(graphics);
-			}
-		}
-		else if (player.getX() >= camera.getCenter().x)
-		{
-			this->_enemies.at(i)->setX(enemyOriginalX - (player.getX() - camera.getCenter().x));
-			if (!this->_enemies.at(i)->shouldBeDestroyed())
-			{
-				this->_enemies.at(i)->draw(graphics);
-			}
-			this->_enemies.at(i)->setX(enemyOriginalX);
-		}
+		this->_enemies.at(i)->draw(graphics, this->_offset);
 	}
 }
 
@@ -408,18 +390,10 @@ std::vector<Rectangle> Level::checkTileCollisions(Rectangle other)
 	for (int i = 0; i < this->_collisionRects.size(); i++)
 	{
 		Vector2 collisionRectOriginalPosition = this->_collisionRects.at(i).getPosition();
-
-		if (other.getPosition().x <= camera.getCenter().x || !this->_levelIsWiderThanScreen)
+		this->_collisionRects.at(i).setPosition({collisionRectOriginalPosition.x + this->_offset.x, collisionRectOriginalPosition.y + this->_offset.y});
+		if (this->_collisionRects.at(i).collidesWith(other))
 		{
-			if (this->_collisionRects.at(i).collidesWith(other))
-			{
-				others.push_back(this->_collisionRects.at(i));
-			}
-		}
-		else if (other.getPosition().x >= camera.getCenter().x)
-		{
-
-			this->_collisionRects.at(i).setPosition(collisionRectOriginalPosition);
+			others.push_back(this->_collisionRects.at(i));
 		}
 	}
 	return others;
@@ -435,24 +409,15 @@ std::vector<Slope> Level::checkSlopeCollisions(const Rectangle &other)
 		Vector2 firstPointOriginalPosition = this->_slopes.at(i).getP1();
 		Vector2 secondPointOriginalPosition = this->_slopes.at(i).getP2();
 
+		this->_slopes.at(i).setFirstPointPosition({firstPointOriginalPosition.x + this->_offset.x, firstPointOriginalPosition.y});
+		this->_slopes.at(i).setSecondPointPosition({secondPointOriginalPosition.x + this->_offset.x, secondPointOriginalPosition.y});
+
 		if (other.getPosition().x <= camera.getCenter().x || !this->_levelIsWiderThanScreen)
 		{
 			if (this->_slopes.at(i).collidesWith(other))
 			{
 				others.push_back(this->_slopes.at(i));
 			}
-		}
-		else if (other.getPosition().x >= camera.getCenter().x)
-		{
-
-			this->_slopes.at(i).setFirstPointPosition({firstPointOriginalPosition.x - (other.getPosition().x - camera.getCenter().x), firstPointOriginalPosition.y});
-			this->_slopes.at(i).setSecondPointPosition({secondPointOriginalPosition.x - (other.getPosition().x - camera.getCenter().x), secondPointOriginalPosition.y});
-			if (this->_slopes.at(i).collidesWith(other))
-			{
-				others.push_back(this->_slopes.at(i));
-			}
-			this->_slopes.at(i).setFirstPointPosition(firstPointOriginalPosition);
-			this->_slopes.at(i).setSecondPointPosition(secondPointOriginalPosition);
 		}
 	}
 	return others;
@@ -467,21 +432,11 @@ std::vector<Door> Level::checkDoorCollisions(const Rectangle &other)
 	{
 		Vector2 doorRectOriginalPosition = this->_doorList.at(i).getPosition();
 
-		if (other.getPosition().x <= camera.getCenter().x || !this->_levelIsWiderThanScreen)
+		this->_doorList.at(i).setPosition({doorRectOriginalPosition.x + this->_offset.x, doorRectOriginalPosition.y});
+
+		if (this->_doorList.at(i).collidesWith(other))
 		{
-			if (this->_doorList.at(i).collidesWith(other))
-			{
-				others.push_back(this->_doorList.at(i));
-			}
-		}
-		else if (other.getPosition().x >= camera.getCenter().x)
-		{
-			this->_doorList.at(i).setPosition({doorRectOriginalPosition.x - (other.getPosition().x - camera.getCenter().x), doorRectOriginalPosition.y});
-			if (this->_doorList.at(i).collidesWith(other))
-			{
-				others.push_back(this->_doorList.at(i));
-			}
-			this->_doorList.at(i).setPosition(doorRectOriginalPosition);
+			others.push_back(this->_doorList.at(i));
 		}
 	}
 	return others;
@@ -496,24 +451,11 @@ std::vector<LevelPassage> Level::checkLevelPassage(const Rectangle &rectangle)
 	{
 
 		Vector2 levelPassageOriginalPosition = this->_levelPassagesList.at(i).getPosition();
+		this->_levelPassagesList.at(i).setPosition({levelPassageOriginalPosition.x + this->_offset.x, levelPassageOriginalPosition.y});
 
-		if (rectangle.getPosition().x <= camera.getCenter().x || !this->_levelIsWiderThanScreen)
+		if (this->_levelPassagesList.at(i).collidesWith(rectangle))
 		{
-			if (this->_levelPassagesList.at(i).collidesWith(rectangle))
-			{
-				levelPassages.push_back(this->_levelPassagesList.at(i));
-			}
-		}
-		else if (rectangle.getPosition().x >= camera.getCenter().x)
-		{
-			this->_levelPassagesList.at(i).setPosition({(levelPassageOriginalPosition.x) - (rectangle.getPosition().x - camera.getCenter().x),
-																									levelPassageOriginalPosition.y});
-
-			if (this->_levelPassagesList.at(i).collidesWith(rectangle))
-			{
-				levelPassages.push_back(this->_levelPassagesList.at(i));
-			}
-			this->_levelPassagesList.at(i).setPosition(levelPassageOriginalPosition);
+			levelPassages.push_back(this->_levelPassagesList.at(i));
 		}
 	}
 	return levelPassages;
@@ -524,7 +466,8 @@ std::vector<GravityChange> Level::checkGravityChange(const Rectangle &rectangle)
 	std::vector<GravityChange> gravityChangersCollided;
 	for (int i = 0; i < this->_gravityChangersList.size(); i++)
 	{
-
+		Vector2 gravityChangerOriginalPosition = this->_gravityChangersList.at(i).getPosition();
+		this->_gravityChangersList.at(i).setPosition({gravityChangerOriginalPosition.x + this->_offset.x, gravityChangerOriginalPosition.y + this->_offset.y});
 		if (this->_gravityChangersList.at(i).collidesWith(rectangle))
 		{
 			gravityChangersCollided.push_back(this->_gravityChangersList.at(i));
@@ -536,8 +479,11 @@ std::vector<GravityChange> Level::checkGravityChange(const Rectangle &rectangle)
 std::vector<Enemy *> Level::checkEnemyCollisions(const Rectangle &other)
 {
 	std::vector<Enemy *> others;
+
 	for (int i = 0; i < this->_enemies.size(); i++)
 	{
+		Vector2 enemyOriginalPosition = this->_enemies.at(i)->getPosition();
+		this->_enemies.at(i)->getBoundingBox().setPosition({enemyOriginalPosition.x + this->_offset.x, enemyOriginalPosition.y});
 		if (this->_enemies.at(i)->getBoundingBox().collidesWith(other))
 		{
 			others.push_back(this->_enemies.at(i));
@@ -579,16 +525,29 @@ Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int t
 void Level::handleLevelScrolling(Player &player, int elapsedTime)
 {
 	static float levelScrollX = 0.0f;
-	float playerSpeed = player.getVelocity();
+	static float levelScrollY = 0.0f;
+
+	float playerXSpeed = player.getXVelocity();
+	float playerYSpeed = player.getYVelocity();
+
 	float playerPositionX = player.getPosition().x;
+	float playerPositionY = player.getPosition().y;
 
-	if (playerSpeed > 0)
+	if (playerXSpeed > 0)
 	{
-		std::cout << "DX " << playerSpeed << std::endl;
+		levelScrollX += playerXSpeed * elapsedTime;
 
-		levelScrollX += playerSpeed * elapsedTime;
-		float maxScroll = (this->_size.x * this->_tileSize.x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH;
-		levelScrollX = std::min(levelScrollX, maxScroll);
+		float maxXScroll = (this->_size.x * this->_tileSize.x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH;
+
+		levelScrollX = std::min(levelScrollX, maxXScroll);
 	}
-	this->_offset = Vector2(-levelScrollX, 0);
+	if (playerYSpeed > 0)
+	{
+		levelScrollY += playerYSpeed * elapsedTime;
+
+		float maxYScroll = (this->_size.y * this->_tileSize.y * globals::SPRITE_SCALE) - globals::SCREEN_HEIGHT;
+
+		levelScrollY = std::min(levelScrollY, maxYScroll);
+	}
+	this->_offset = Vector2(-levelScrollX, -levelScrollY);
 }
