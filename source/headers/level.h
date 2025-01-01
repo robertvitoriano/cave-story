@@ -33,11 +33,11 @@ public:
 	void draw(Graphics &graphics, Player &player);
 
 	std::vector<Rectangle> checkTileCollisions(Rectangle other);
-	std::vector<Slope> checkSlopeCollisions(const Rectangle &other);
-	std::vector<Door> checkDoorCollisions(const Rectangle &other);
-	std::vector<LevelPassage> checkLevelPassage(const Rectangle &otherRectangle);
-	std::vector<GravityChange> checkGravityChange(const Rectangle &other);
-	std::vector<Enemy *> checkEnemyCollisions(const Rectangle &other);
+	std::vector<Slope> checkSlopeCollisions(Rectangle &other);
+	std::vector<Door> checkDoorCollisions(Rectangle &other);
+	std::vector<LevelPassage> checkLevelPassage(Rectangle &otherRectangle);
+	std::vector<GravityChange> checkGravityChange(Rectangle &other);
+	std::vector<Enemy *> checkEnemyCollisions(Rectangle &other);
 
 	const Vector2 getPlayerSpawnPoint() const;
 
@@ -75,6 +75,7 @@ private:
 	void parseTileLayer(nlohmann::json layer);
 	std::string parseString(const char *stringValue);
 	void handleLevelScrolling(Player &player, int elapsedTime);
+	void drawDebug(Graphics &graphics);
 };
 
 // Tileset structure

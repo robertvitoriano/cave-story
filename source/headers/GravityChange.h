@@ -15,8 +15,8 @@ public:
   {
   }
 
-  const inline Rectangle getRectangle() const { return this->getRect(); }
-  const bool shouldEnableGravity() const { return this->_enableGravity; }
+  Rectangle getRectangle() { return this->getRect(); }
+  bool shouldEnableGravity() { return this->_enableGravity; }
 
 private:
   bool _enableGravity;
