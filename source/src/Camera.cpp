@@ -5,7 +5,7 @@ Camera &Camera::getInstance()
   static Camera instance;
   return instance;
 }
-Camera::Camera() : _width(globals::SCREEN_WIDTH), _height(globals::SCREEN_HEIGHT), _speed(2), _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}), _rightLimit(globals::SCREEN_WIDTH - 100)
+Camera::Camera() : _width(globals::SCREEN_WIDTH), _height(globals::SCREEN_HEIGHT), _speed(2), _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}), _rightLimit(globals::SCREEN_WIDTH - 200)
 {
 }
 
@@ -64,39 +64,42 @@ void Camera::update()
     return;
   }
   float playerX = this->_player->getX();
-  float screenCenterX = globals::SCREEN_WIDTH / 2;
 
   if (this->_level->isLevelWiderThanScreen())
   {
-    float cameraX = playerX - screenCenterX;
+    if (this->_player->getXVelocity() != 0.0f && this->_player->shouldMoveCamera())
+    {
 
-    cameraX = std::max(0.0f, std::min(cameraX, (this->_level->getSize().x * this->_level->getTileSize().x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH));
-    std::cout << "CAMERA X" << cameraX << std::endl;
-    for (Tile &tile : this->_level->getTileList())
-    {
-      tile.setOffset(Vector2(-cameraX, 0));
-    }
+      float cameraX = playerX - this->_rightLimit;
 
-    for (AnimatedTile &animatedTile : this->_level->getAnimatedTileList())
-    {
-      animatedTile.setOffset(Vector2(-cameraX, 0));
-    }
+      cameraX = std::max(0.0f, std::min(cameraX, (this->_level->getSize().x * this->_level->getTileSize().x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH));
 
-    for (Rectangle &collisionRectangle : this->_level->getCollisionRects())
-    {
-      collisionRectangle.setOffset(Vector2(-cameraX, 0));
+      for (Tile &tile : this->_level->getTileList())
+      {
+        tile.setOffset(Vector2(-cameraX, 0));
+      }
+
+      for (AnimatedTile &animatedTile : this->_level->getAnimatedTileList())
+      {
+        animatedTile.setOffset(Vector2(-cameraX, 0));
+      }
+
+      for (Rectangle &collisionRectangle : this->_level->getCollisionRects())
+      {
+        collisionRectangle.setOffset(Vector2(-cameraX, 0));
+      }
+      for (Rectangle &door : this->_level->getDoorsList())
+      {
+        door.setOffset(Vector2(-cameraX, 0));
+      }
+      for (Rectangle &levelPassage : this->_level->getLevelPassagesList())
+      {
+        levelPassage.setOffset(Vector2(-cameraX, 0));
+      }
+      // for (Enemy *enemy : this->_level->getEnemiesList())
+      // {
+      //   enemy.setOffset(Vector2(-cameraX, 0));
+      // }
     }
-    for (Rectangle &door : this->_level->getDoorsList())
-    {
-      door.setOffset(Vector2(-cameraX, 0));
-    }
-    for (Rectangle &levelPassage : this->_level->getLevelPassagesList())
-    {
-      levelPassage.setOffset(Vector2(-cameraX, 0));
-    }
-    // for (Enemy *enemy : this->_level->getEnemiesList())
-    // {
-    //   enemy.setOffset(Vector2(-cameraX, 0));
-    // }
   }
 }

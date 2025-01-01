@@ -28,7 +28,8 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 																												 _blinkStartTime(0),
 																												 _blinkDuration(1000),
 																												 _blinkInterval(100),
-																												 _isPerformingAttack(false)
+																												 _isPerformingAttack(false),
+																												 _moveCamera(true)
 {
 	graphics.loadImage("content/sprites/MyChar-no-bg.png");
 
@@ -90,6 +91,7 @@ void Player::moveRight()
 	{
 		return;
 	}
+
 	this->_dx = player_constants::WALK_SPEED;
 	if (this->_lookingUp == false)
 	{
@@ -388,8 +390,14 @@ void Player::update(float elapsedTime)
 	{
 		this->_dy += player_constants::GRAVITY * elapsedTime;
 	}
+	Camera &camera = Camera::getInstance();
+	if (this->_x <= camera.getRightLimit())
+	{
+		this->_x += this->_dx * elapsedTime;
+		this->_dx = 0;
+		this->_moveCamera = true;
+	}
 
-	this->_x += this->_dx * elapsedTime;
 	this->_y += this->_dy * elapsedTime;
 
 	AnimatedSprite::update(elapsedTime);
@@ -457,4 +465,9 @@ float Player::getXVelocity()
 float Player::getYVelocity()
 {
 	return this->_dy;
+}
+
+bool Player::shouldMoveCamera()
+{
+	return this->_moveCamera;
 }

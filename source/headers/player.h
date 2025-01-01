@@ -96,6 +96,7 @@ public:
 	void attack();
 	void stopAttack();
 	bool isAttacking();
+	bool shouldMoveCamera();
 
 private:
 	float _dx,
@@ -107,6 +108,7 @@ private:
 	bool _shouldApplyGravity;
 	bool _lookingUp;
 	bool _lookingDown;
+	bool _moveCamera;
 
 	int _maxHealth;
 	int _currentHealth;
