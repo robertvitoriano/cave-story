@@ -138,7 +138,7 @@ void Camera::stopMoving()
 
 bool Camera::reachedMaxXScroll()
 {
-  return static_cast<float>(this->_offset.x) >= this->_maxXScroll;
+  return static_cast<float>(this->_offset.x) > this->_maxXScroll;
 }
 
 void Camera::startMoving()
