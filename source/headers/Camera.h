@@ -28,6 +28,7 @@ public:
 
 private:
   Camera();
+  void handleScrollOffset(int playerX);
 
   int _speed;
   int _rightLimit;
