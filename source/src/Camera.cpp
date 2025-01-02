@@ -13,7 +13,7 @@ Camera &Camera::getInstance()
 }
 Camera::Camera() : Rectangle(0, 0, globals ::SCREEN_WIDTH,
                              globals::SCREEN_HEIGHT),
-                   _dx(camera_constants::SPEED), _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}), _rightLimit(globals::SCREEN_WIDTH - 100), _moveTimer(0), _moveSpeedDelay(5), _maxXScroll(0.0f)
+                   _dx(camera_constants::SPEED), _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}), _rightLimit(globals::SCREEN_WIDTH - 100), _moveTimer(0), _moveSpeedDelay(5), _maxXScroll(0.0f), _moveCamera(false)
 {
   this->_offset = {0, 0};
 }
@@ -104,31 +104,27 @@ void Camera::handleScrollOffset(int playerX, float elapsedTime)
   this->_maxXScroll = levelWidth - globals::SCREEN_WIDTH;
 
   int cameraXMiddle = globals::SCREEN_WIDTH / 2;
+  bool playerIsMoving = this->_player->getXVelocity() != 0;
 
-  if (this->_player->getXVelocity() != 0 && !this->_player->shouldMoveCamera())
+  if (playerIsMoving && !this->cameraIsMoving())
   {
-
     float playerDistanceRelativeToCenter = std::min(static_cast<float>(playerX - cameraXMiddle), this->_maxXScroll);
 
     this->_offset.x = std::max(0.0f, playerDistanceRelativeToCenter);
-  }
-  else if (this->_player->shouldMoveCamera())
-  {
-    if (this->_offset.x < this->_maxXScroll)
+    if (playerX >= this->_rightLimit)
     {
-
-      this->_offset.x += this->_dx * elapsedTime;
-        }
-    else
-    {
-      this->_player->disableCameraMovement();
+      this->startMoving();
     }
+  }
+  else if (this->cameraIsMoving() && !this->reachedMaxXScroll())
+  {
+    this->_offset.x += this->_dx * elapsedTime;
   }
 }
 
 void Camera::moveLeft()
 {
-  if (this->_player->shouldMoveCamera())
+  if (this->cameraIsMoving())
   {
     this->_dx = camera_constants::SPEED;
   }
@@ -137,9 +133,19 @@ void Camera::moveLeft()
 void Camera::stopMoving()
 {
   this->_dx = 0;
+  this->_moveCamera = false;
 }
 
 bool Camera::reachedMaxXScroll()
 {
   return static_cast<float>(this->_offset.x) >= this->_maxXScroll;
+}
+
+void Camera::startMoving()
+{
+  this->_moveCamera = true;
+}
+bool Camera::cameraIsMoving()
+{
+  return this->_moveCamera;
 }

@@ -390,21 +390,8 @@ void Player::update(float elapsedTime)
 	{
 		this->_dy += player_constants::GRAVITY * elapsedTime;
 	}
-	Camera &camera = Camera::getInstance();
 
-	bool startCameraMovement = ((this->_x >= camera.getRightLimit() && !this->_moveCamera) || this->_moveCamera) && !camera.reachedMaxXScroll();
-
-	if (startCameraMovement)
-	{
-		this->_dx = 0;
-		this->_moveCamera = true;
-	}
-	else
-	{
-		std::cout << "DX " << this->_dx << std::endl;
-
-		this->_x += this->_dx * elapsedTime;
-	}
+	this->_x += this->_dx * elapsedTime;
 
 	this->_y += this->_dy * elapsedTime;
 
@@ -413,6 +400,10 @@ void Player::update(float elapsedTime)
 	this->_currentWeapon.update(elapsedTime);
 }
 
+void Player::disableVelocity()
+{
+	this->_dx = 0;
+}
 void Player::renderBlinkingPlayer(Graphics &graphics)
 {
 
@@ -473,13 +464,4 @@ float Player::getXVelocity()
 float Player::getYVelocity()
 {
 	return this->_dy;
-}
-
-bool Player::shouldMoveCamera()
-{
-	return this->_moveCamera;
-}
-void Player::disableCameraMovement()
-{
-	this->_moveCamera = false;
 }

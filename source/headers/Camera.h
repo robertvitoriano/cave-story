@@ -28,6 +28,8 @@ public:
   void moveLeft();
   void stopMoving();
   bool reachedMaxXScroll();
+  void startMoving();
+  bool cameraIsMoving();
 
 private:
   Camera();
@@ -43,6 +45,7 @@ private:
 
   Uint32 _moveTimer;
   Uint32 _moveSpeedDelay;
+  bool _moveCamera;
 };
 
 #endif
