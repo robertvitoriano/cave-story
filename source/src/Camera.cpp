@@ -5,18 +5,10 @@ Camera &Camera::getInstance()
   static Camera instance;
   return instance;
 }
-Camera::Camera() : _width(globals::SCREEN_WIDTH), _height(globals::SCREEN_HEIGHT), _speed(2), _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}), _rightLimit(globals::SCREEN_WIDTH - 200)
+Camera::Camera() : Rectangle(0, 0, globals ::SCREEN_WIDTH,
+                             globals::SCREEN_HEIGHT),
+                   _speed(2), _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}), _rightLimit(globals::SCREEN_WIDTH - 100)
 {
-}
-
-int Camera::getWidth()
-{
-  return this->_width;
-}
-
-int Camera::getHeight()
-{
-  return this->_height;
 }
 
 Vector2 Camera::getCenter()
@@ -47,7 +39,7 @@ void Camera::drawDebug(SDL_Renderer *renderer)
                      this->_rightLimit,
                      0,
                      this->_rightLimit,
-                     this->_height);
+                     this->getHeight());
 
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 }
@@ -67,39 +59,64 @@ void Camera::update()
 
   if (this->_level->isLevelWiderThanScreen())
   {
-    if (this->_player->getXVelocity() != 0.0f && this->_player->shouldMoveCamera())
+
+    if (this->_player->getXVelocity() != 0 && !this->_player->shouldMoveCamera())
     {
 
-      float cameraX = playerX - this->_rightLimit;
-
-      cameraX = std::max(0.0f, std::min(cameraX, (this->_level->getSize().x * this->_level->getTileSize().x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH));
-
+      float playerDistanceRelativeToCenter = playerX - globals::SCREEN_WIDTH / 2;
+      playerDistanceRelativeToCenter = std::max(0.0f, std::min(playerDistanceRelativeToCenter, (this->_level->getSize().x * this->_level->getTileSize().x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH));
+      this->_lastOffset = playerDistanceRelativeToCenter;
       for (Tile &tile : this->_level->getTileList())
       {
-        tile.setOffset(Vector2(-cameraX, 0));
+        tile.setOffset(Vector2(-playerDistanceRelativeToCenter, 0));
       }
 
       for (AnimatedTile &animatedTile : this->_level->getAnimatedTileList())
       {
-        animatedTile.setOffset(Vector2(-cameraX, 0));
+        animatedTile.setOffset(Vector2(-playerDistanceRelativeToCenter, 0));
       }
 
       for (Rectangle &collisionRectangle : this->_level->getCollisionRects())
       {
-        collisionRectangle.setOffset(Vector2(-cameraX, 0));
+        collisionRectangle.setOffset(Vector2(-playerDistanceRelativeToCenter, 0));
       }
       for (Rectangle &door : this->_level->getDoorsList())
       {
-        door.setOffset(Vector2(-cameraX, 0));
+        door.setOffset(Vector2(-playerDistanceRelativeToCenter, 0));
       }
       for (Rectangle &levelPassage : this->_level->getLevelPassagesList())
       {
-        levelPassage.setOffset(Vector2(-cameraX, 0));
+        levelPassage.setOffset(Vector2(-playerDistanceRelativeToCenter, 0));
       }
       // for (Enemy *enemy : this->_level->getEnemiesList())
       // {
       //   enemy.setOffset(Vector2(-cameraX, 0));
       // }
+    }
+    else if (this->_player->shouldMoveCamera())
+    {
+      for (Tile &tile : this->_level->getTileList())
+      {
+        tile.setOffset(Vector2(-this->_lastOffset, 0));
+      }
+
+      for (AnimatedTile &animatedTile : this->_level->getAnimatedTileList())
+      {
+        animatedTile.setOffset(Vector2(-this->_lastOffset, 0));
+      }
+
+      for (Rectangle &collisionRectangle : this->_level->getCollisionRects())
+      {
+        collisionRectangle.setOffset(Vector2(-this->_lastOffset, 0));
+      }
+      for (Rectangle &door : this->_level->getDoorsList())
+      {
+        door.setOffset(Vector2(-this->_lastOffset, 0));
+      }
+      for (Rectangle &levelPassage : this->_level->getLevelPassagesList())
+      {
+        levelPassage.setOffset(Vector2(-this->_lastOffset, 0));
+      }
     }
   }
 }

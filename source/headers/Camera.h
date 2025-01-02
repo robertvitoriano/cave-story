@@ -9,7 +9,9 @@
 #include "rectangle.h"
 #include "player.h"
 #include "enemy.h"
-class Camera
+#include "rectangle.h"
+
+class Camera : public Rectangle
 {
 public:
   Camera(const Camera &) = delete;
@@ -17,8 +19,6 @@ public:
 
   static Camera &getInstance();
 
-  int getWidth();
-  int getHeight();
   Vector2 getCenter();
   void setCenter(Vector2 position);
   int getRightLimit();
@@ -30,12 +30,13 @@ private:
   Camera();
 
   int _speed;
-  int _width;
-  int _height;
   int _rightLimit;
   Vector2 _center;
   Level *_level;
   Player *_player;
+  float _lastOffset;
+  float _dx,
+      _dy;
 };
 
 #endif

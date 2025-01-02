@@ -29,7 +29,7 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 																												 _blinkDuration(1000),
 																												 _blinkInterval(100),
 																												 _isPerformingAttack(false),
-																												 _moveCamera(true)
+																												 _moveCamera(false)
 {
 	graphics.loadImage("content/sprites/MyChar-no-bg.png");
 
@@ -391,9 +391,12 @@ void Player::update(float elapsedTime)
 		this->_dy += player_constants::GRAVITY * elapsedTime;
 	}
 	Camera &camera = Camera::getInstance();
-	if (this->_x <= camera.getRightLimit())
+	if (this->_x < camera.getRightLimit())
 	{
 		this->_x += this->_dx * elapsedTime;
+	}
+	else
+	{
 		this->_dx = 0;
 		this->_moveCamera = true;
 	}
