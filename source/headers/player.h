@@ -97,6 +97,7 @@ public:
 	void stopAttack();
 	bool isAttacking();
 	bool shouldMoveCamera();
+	void disableCameraMovement();
 
 private:
 	float _dx,

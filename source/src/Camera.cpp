@@ -13,7 +13,7 @@ Camera &Camera::getInstance()
 }
 Camera::Camera() : Rectangle(0, 0, globals ::SCREEN_WIDTH,
                              globals::SCREEN_HEIGHT),
-                   _dx(camera_constants::SPEED), _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}), _rightLimit(globals::SCREEN_WIDTH - 100)
+                   _dx(camera_constants::SPEED), _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}), _rightLimit(globals::SCREEN_WIDTH - 100), _moveTimer(0), _moveSpeedDelay(5), _maxXScroll(0.0f)
 {
   this->_offset = {0, 0};
 }
@@ -101,21 +101,30 @@ void Camera::update(float elapsedTime)
 void Camera::handleScrollOffset(int playerX, float elapsedTime)
 {
   float levelWidth = this->_level->getSize().x * this->_level->getTileSize().x * globals::SPRITE_SCALE;
-  float maxXScroll = levelWidth - globals::SCREEN_WIDTH;
+  this->_maxXScroll = levelWidth - globals::SCREEN_WIDTH;
 
   int cameraXMiddle = globals::SCREEN_WIDTH / 2;
 
   if (this->_player->getXVelocity() != 0 && !this->_player->shouldMoveCamera())
   {
-    float playerDistanceRelativeToCenter = std::min(static_cast<float>(playerX - cameraXMiddle), maxXScroll);
+    float playerDistanceRelativeToCenter = std::min(static_cast<float>(playerX - cameraXMiddle), this->_maxXScroll);
 
     this->_offset.x = std::max(0.0f, playerDistanceRelativeToCenter);
   }
   else if (this->_player->shouldMoveCamera())
   {
-    this->_x += this->_dx * elapsedTime;
-
-    this->_offset.x = std::min(static_cast<float>(this->_offset.x + this->_x), maxXScroll);
+    if (this->_offset.x < this->_maxXScroll)
+    {
+      if (SDL_GetTicks() >= this->_moveTimer)
+      {
+        this->_offset.x = this->_offset.x + 1;
+        this->_moveTimer = SDL_GetTicks() + this->_moveSpeedDelay;
+      }
+    }
+    else
+    {
+      this->_player->disableCameraMovement();
+    }
   }
 }
 
@@ -130,4 +139,9 @@ void Camera::moveLeft()
 void Camera::stopMoving()
 {
   this->_dx = 0;
+}
+
+bool Camera::reachedMaxXScroll()
+{
+  return static_cast<float>(this->_offset.x) >= this->_maxXScroll;
 }

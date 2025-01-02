@@ -391,14 +391,17 @@ void Player::update(float elapsedTime)
 		this->_dy += player_constants::GRAVITY * elapsedTime;
 	}
 	Camera &camera = Camera::getInstance();
-	if (this->_x < camera.getRightLimit())
-	{
-		this->_x += this->_dx * elapsedTime;
-	}
-	else
+
+	bool startCameraMovement = (this->_x >= camera.getRightLimit() && !this->_moveCamera && !camera.reachedMaxXScroll()) || this->_moveCamera;
+
+	if (startCameraMovement)
 	{
 		this->_dx = 0;
 		this->_moveCamera = true;
+	}
+	else
+	{
+		this->_x += this->_dx * elapsedTime;
 	}
 
 	this->_y += this->_dy * elapsedTime;
@@ -473,4 +476,8 @@ float Player::getYVelocity()
 bool Player::shouldMoveCamera()
 {
 	return this->_moveCamera;
+}
+void Player::disableCameraMovement()
+{
+	this->_moveCamera = false;
 }

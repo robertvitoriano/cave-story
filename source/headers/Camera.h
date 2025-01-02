@@ -27,17 +27,21 @@ public:
   void follow(Player *player, Level *level);
   void moveLeft();
   void stopMoving();
+  bool reachedMaxXScroll();
 
 private:
   Camera();
   void handleScrollOffset(int playerX, float elapsedTime);
 
   int _rightLimit;
+  float _maxXScroll;
   Vector2 _center;
   Level *_level;
   Player *_player;
   float _dx,
       _dy;
+  Uint32 _moveTimer;
+  Uint32 _moveSpeedDelay;
 };
 
 #endif
