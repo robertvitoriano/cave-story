@@ -25,12 +25,14 @@ private:
 	void update(float elapsedTime, Graphics &graphics);
 	void handleInput(Input &input);
 	void handleScrolling();
+	void toggleDebug();
 	Player _player;
 
 	Level _level;
 
 	HUD _hud;
 	bool gameIsLost;
+	bool _displayDebug;
 };
 
 #endif

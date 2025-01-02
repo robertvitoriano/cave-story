@@ -358,7 +358,6 @@ void Level::draw(Graphics &graphics, Player &player)
 	{
 		this->_enemies.at(i)->draw(graphics, this->_offset);
 	}
-	this->drawDebug(graphics);
 }
 
 void Level::drawDebug(Graphics &graphics)
@@ -377,7 +376,6 @@ void Level::drawDebug(Graphics &graphics)
 	}
 
 	Camera &camera = Camera::getInstance();
-	camera.drawDebug(graphics.getRenderer());
 }
 
 Vector2 Level::parsePosition(std::string positionString)

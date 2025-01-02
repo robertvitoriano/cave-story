@@ -23,7 +23,7 @@ public:
   Vector2 getCenter();
   void setCenter(Vector2 position);
   int getRightLimit();
-  void drawDebug(SDL_Renderer *renderer);
+  void drawDebug(Graphics &graphics);
   void update(float elapsedTime);
   void follow(Player *player, Level *level);
   void moveLeft();

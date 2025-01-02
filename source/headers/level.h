@@ -50,6 +50,7 @@ public:
 	Vector2 &getTileSize();
 	Vector2 &getSize();
 	bool isLevelWiderThanScreen();
+	void drawDebug(Graphics &graphics);
 
 private:
 	std::string _mapName;
@@ -84,7 +85,6 @@ private:
 	Vector2 parsePosition(std::string positionString);
 	void parseTileLayer(nlohmann::json layer);
 	std::string parseString(const char *stringValue);
-	void drawDebug(Graphics &graphics);
 };
 
 // Tileset structure

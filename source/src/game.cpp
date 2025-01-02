@@ -8,7 +8,7 @@ namespace
 	const int MAX_FRAME_TIME = 1000 / FPS;
 }
 
-Game::Game() : gameIsLost(false)
+Game::Game() : gameIsLost(false), _displayDebug(false)
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
@@ -143,6 +143,10 @@ void Game::handleInput(Input &input)
 	{
 		this->_player.jump();
 	}
+	if (input.wasKeyPressed(SDL_SCANCODE_J))
+	{
+		this->toggleDebug();
+	}
 
 	if (!input.isKeyHeld(SDL_SCANCODE_A) &&
 			!input.isKeyHeld(SDL_SCANCODE_D) &&
@@ -156,6 +160,8 @@ void Game::handleInput(Input &input)
 
 void Game::draw(Graphics &graphics)
 {
+	Camera &camera = Camera::getInstance();
+
 	graphics.clear();
 
 	if (!gameIsLost)
@@ -166,6 +172,11 @@ void Game::draw(Graphics &graphics)
 		this->_hud.draw(graphics);
 
 		this->_player.draw(graphics);
+		if (this->_displayDebug)
+		{
+			this->_level.drawDebug(graphics);
+			camera.drawDebug(graphics);
+		}
 	}
 	else
 	{
@@ -174,6 +185,10 @@ void Game::draw(Graphics &graphics)
 		graphics.drawText("You Lost", white, position);
 	}
 	graphics.flip();
+}
+void Game::toggleDebug()
+{
+	this->_displayDebug = !this->_displayDebug;
 }
 
 void Game::update(float elapsedTime, Graphics &graphics)

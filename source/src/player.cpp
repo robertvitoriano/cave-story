@@ -465,3 +465,7 @@ float Player::getYVelocity()
 {
 	return this->_dy;
 }
+Direction Player::getFacing()
+{
+	return this->_facing;
+}

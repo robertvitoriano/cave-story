@@ -97,6 +97,7 @@ public:
 	void stopAttack();
 	bool isAttacking();
 	void disableVelocity();
+	Direction getFacing();
 
 private:
 	float _dx,

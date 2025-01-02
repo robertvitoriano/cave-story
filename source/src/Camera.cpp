@@ -31,24 +31,24 @@ int Camera::getRightLimit()
   return this->_rightLimit;
 }
 
-void Camera::drawDebug(SDL_Renderer *renderer)
+void Camera::drawDebug(Graphics &graphics)
 {
-  SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+  SDL_SetRenderDrawColor(graphics.getRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
 
   SDL_Rect centerRect = {
       static_cast<int>(this->_center.x - 2),
       static_cast<int>(this->_center.y - 2),
       4,
       4};
-  SDL_RenderFillRect(renderer, &centerRect);
+  SDL_RenderFillRect(graphics.getRenderer(), &centerRect);
 
-  SDL_RenderDrawLine(renderer,
+  SDL_RenderDrawLine(graphics.getRenderer(),
                      this->_rightLimit,
                      0,
                      this->_rightLimit,
                      this->getHeight());
 
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+  SDL_SetRenderDrawColor(graphics.getRenderer(), 255, 255, 255, SDL_ALPHA_OPAQUE);
 }
 
 void Camera::follow(Player *player, Level *level)
@@ -123,14 +123,20 @@ void Camera::handleScrollOffset(int playerX, float elapsedTime)
         this->startMoving();
       }
     }
-    else
+    else if (this->_player->getFacing() == RIGHT)
+    {
+      this->_offset.x = this->_maxXScroll;
+    }
+    else if (this->_player->getFacing() == LEFT)
     {
       this->_offset.x = this->_maxXScroll;
     }
   }
   else if (this->cameraIsMoving() && !this->reachedMaxXScroll())
   {
-    this->_offset.x += this->_dx * elapsedTime;
+    float playerDistanceRelativeToCenter = std::min(static_cast<float>(playerX - cameraXMiddle), this->_maxXScroll);
+
+    this->_offset.x = std::max(0.0f, playerDistanceRelativeToCenter);
   }
 }
 
