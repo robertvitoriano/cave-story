@@ -392,7 +392,7 @@ void Player::update(float elapsedTime)
 	}
 	Camera &camera = Camera::getInstance();
 
-	bool startCameraMovement = (this->_x >= camera.getRightLimit() && !this->_moveCamera && !camera.reachedMaxXScroll()) || this->_moveCamera;
+	bool startCameraMovement = ((this->_x >= camera.getRightLimit() && !this->_moveCamera) || this->_moveCamera) && !camera.reachedMaxXScroll();
 
 	if (startCameraMovement)
 	{

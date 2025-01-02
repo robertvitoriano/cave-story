@@ -107,6 +107,7 @@ void Camera::handleScrollOffset(int playerX, float elapsedTime)
 
   if (this->_player->getXVelocity() != 0 && !this->_player->shouldMoveCamera())
   {
+
     float playerDistanceRelativeToCenter = std::min(static_cast<float>(playerX - cameraXMiddle), this->_maxXScroll);
 
     this->_offset.x = std::max(0.0f, playerDistanceRelativeToCenter);
