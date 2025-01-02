@@ -82,9 +82,9 @@ public:
 
 protected:
 	Vector2 _offset;
-	int _x,
-			_y,
-			_width,
+	float _x, _y;
+
+	int _width,
 			_height;
 };
 

@@ -401,6 +401,8 @@ void Player::update(float elapsedTime)
 	}
 	else
 	{
+		std::cout << "DX " << this->_dx << std::endl;
+
 		this->_x += this->_dx * elapsedTime;
 	}
 

@@ -40,6 +40,7 @@ private:
   Player *_player;
   float _dx,
       _dy;
+
   Uint32 _moveTimer;
   Uint32 _moveSpeedDelay;
 };

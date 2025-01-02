@@ -116,12 +116,9 @@ void Camera::handleScrollOffset(int playerX, float elapsedTime)
   {
     if (this->_offset.x < this->_maxXScroll)
     {
-      if (SDL_GetTicks() >= this->_moveTimer)
-      {
-        this->_offset.x = this->_offset.x + 1;
-        this->_moveTimer = SDL_GetTicks() + this->_moveSpeedDelay;
-      }
-    }
+
+      this->_offset.x += this->_dx * elapsedTime;
+        }
     else
     {
       this->_player->disableCameraMovement();
