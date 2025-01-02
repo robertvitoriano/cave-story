@@ -45,6 +45,8 @@ public:
 	std::vector<LevelPassage> &getLevelPassagesList();
 	std::vector<Enemy *> &getEnemiesList();
 	std::vector<Rectangle> &getCollisionRects();
+	std::vector<Slope> &getSlopesList();
+
 	Vector2 &getTileSize();
 	Vector2 &getSize();
 	bool isLevelWiderThanScreen();

@@ -10,6 +10,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "rectangle.h"
+#include "slope.h"
 
 class Camera : public Rectangle
 {

@@ -90,6 +90,10 @@ void Camera::update(float elapsedTime)
     {
       levelPassage.setOffset(Vector2(-this->_offset.x, 0));
     }
+    for (Slope &slope : this->_level->getSlopesList())
+    {
+      slope.setOffset(Vector2(-this->_offset.x, 0));
+    }
 
     // for (Enemy *enemy : this->_level->getEnemiesList())
     // {

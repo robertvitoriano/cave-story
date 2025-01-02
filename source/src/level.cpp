@@ -371,6 +371,11 @@ void Level::drawDebug(Graphics &graphics)
 	{
 		this->_levelPassagesList.at(i).draw(graphics);
 	}
+	for (int i = 0; i < this->_slopes.size(); i++)
+	{
+		this->_slopes.at(i).draw(graphics);
+	}
+
 	Camera &camera = Camera::getInstance();
 	camera.drawDebug(graphics.getRenderer());
 }
@@ -512,6 +517,10 @@ Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int t
 std::vector<AnimatedTile> &Level::getAnimatedTileList()
 {
 	return this->_animatedTileList;
+}
+std::vector<Slope> &Level::getSlopesList()
+{
+	return this->_slopes;
 }
 
 std::vector<Tile> &Level::getTileList()
