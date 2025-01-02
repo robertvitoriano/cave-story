@@ -1,5 +1,11 @@
 #include "Camera.h"
 
+namespace camera_constants
+{
+  const float SPEED = 0.2f;
+
+}
+
 Camera &Camera::getInstance()
 {
   static Camera instance;
@@ -7,7 +13,7 @@ Camera &Camera::getInstance()
 }
 Camera::Camera() : Rectangle(0, 0, globals ::SCREEN_WIDTH,
                              globals::SCREEN_HEIGHT),
-                   _speed(2), _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}), _rightLimit(globals::SCREEN_WIDTH - 100)
+                   _dx(camera_constants::SPEED), _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}), _rightLimit(globals::SCREEN_WIDTH - 100)
 {
   this->_offset = {0, 0};
 }
@@ -50,7 +56,7 @@ void Camera::follow(Player *player, Level *level)
   this->_player = player;
   this->_level = level;
 }
-void Camera::update()
+void Camera::update(float elapsedTime)
 {
   if (!_player)
   {
@@ -60,7 +66,7 @@ void Camera::update()
 
   if (this->_level->isLevelWiderThanScreen())
   {
-    this->handleScrollOffset(playerX);
+    this->handleScrollOffset(playerX, elapsedTime);
 
     for (Tile &tile : this->_level->getTileList())
     {
@@ -92,16 +98,36 @@ void Camera::update()
   }
 }
 
-void Camera::handleScrollOffset(int playerX)
+void Camera::handleScrollOffset(int playerX, float elapsedTime)
 {
+  float levelWidth = this->_level->getSize().x * this->_level->getTileSize().x * globals::SPRITE_SCALE;
+  float maxXScroll = levelWidth - globals::SCREEN_WIDTH;
+
+  int cameraXMiddle = globals::SCREEN_WIDTH / 2;
+
   if (this->_player->getXVelocity() != 0 && !this->_player->shouldMoveCamera())
   {
-    float playerDistanceRelativeToCenter = playerX - globals::SCREEN_WIDTH / 2;
-    playerDistanceRelativeToCenter = std::max(0.0f, std::min(playerDistanceRelativeToCenter, (this->_level->getSize().x * this->_level->getTileSize().x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH));
-    this->_offset.x = playerDistanceRelativeToCenter;
+    float playerDistanceRelativeToCenter = std::min(static_cast<float>(playerX - cameraXMiddle), maxXScroll);
+
+    this->_offset.x = std::max(0.0f, playerDistanceRelativeToCenter);
   }
   else if (this->_player->shouldMoveCamera())
   {
-    this->_offset.x += 0.2;
+    this->_x += this->_dx * elapsedTime;
+
+    this->_offset.x = std::min(static_cast<float>(this->_offset.x + this->_x), maxXScroll);
   }
+}
+
+void Camera::moveLeft()
+{
+  if (this->_player->shouldMoveCamera())
+  {
+    this->_dx = camera_constants::SPEED;
+  }
+}
+
+void Camera::stopMoving()
+{
+  this->_dx = 0;
 }

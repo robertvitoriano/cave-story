@@ -23,14 +23,15 @@ public:
   void setCenter(Vector2 position);
   int getRightLimit();
   void drawDebug(SDL_Renderer *renderer);
-  void update();
+  void update(float elapsedTime);
   void follow(Player *player, Level *level);
+  void moveLeft();
+  void stopMoving();
 
 private:
   Camera();
-  void handleScrollOffset(int playerX);
+  void handleScrollOffset(int playerX, float elapsedTime);
 
-  int _speed;
   int _rightLimit;
   Vector2 _center;
   Level *_level;

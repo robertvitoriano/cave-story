@@ -72,7 +72,6 @@ void Game::gameLoop()
 		const int CURRENT_TIME_MS = SDL_GetTicks();
 		int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
 
-		camera.update();
 		this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME), graphics);
 		LAST_UPDATE_TIME = CURRENT_TIME_MS;
 
@@ -82,6 +81,8 @@ void Game::gameLoop()
 
 void Game::handleInput(Input &input)
 {
+	Camera &camera = Camera::getInstance();
+
 	if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE))
 	{
 		return;
@@ -96,6 +97,7 @@ void Game::handleInput(Input &input)
 	}
 	else if (input.isKeyHeld(SDL_SCANCODE_D))
 	{
+		camera.moveLeft();
 		this->_player.moveRight();
 	}
 	else if (input.isKeyHeld(SDL_SCANCODE_W) && !this->_player.isGravityEnabled())
@@ -140,6 +142,7 @@ void Game::handleInput(Input &input)
 			!input.isKeyHeld(SDL_SCANCODE_W))
 	{
 		this->_player.stopMoving();
+		camera.stopMoving();
 	}
 }
 
@@ -170,6 +173,9 @@ void Game::update(float elapsedTime, Graphics &graphics)
 	this->_player.update(elapsedTime);
 	this->_level.update(elapsedTime, this->_player);
 	this->_hud.update(elapsedTime, this->_player);
+	Camera &camera = Camera::getInstance();
+
+	camera.update(elapsedTime);
 
 	if (this->_player.getCurrentHealth() == 0)
 	{
