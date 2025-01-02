@@ -80,13 +80,12 @@ public:
 		return this->_y + this->_offset.y;
 	}
 
-private:
+protected:
+	Vector2 _offset;
 	int _x,
 			_y,
 			_width,
 			_height;
-
-	Vector2 _offset;
 };
 
 #endif

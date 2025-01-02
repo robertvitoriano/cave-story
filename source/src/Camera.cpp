@@ -9,6 +9,7 @@ Camera::Camera() : Rectangle(0, 0, globals ::SCREEN_WIDTH,
                              globals::SCREEN_HEIGHT),
                    _speed(2), _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}), _rightLimit(globals::SCREEN_WIDTH - 100)
 {
+  this->_offset = {0, 0};
 }
 
 Vector2 Camera::getCenter()
@@ -65,7 +66,7 @@ void Camera::update()
 
       float playerDistanceRelativeToCenter = playerX - globals::SCREEN_WIDTH / 2;
       playerDistanceRelativeToCenter = std::max(0.0f, std::min(playerDistanceRelativeToCenter, (this->_level->getSize().x * this->_level->getTileSize().x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH));
-      this->_lastOffset = playerDistanceRelativeToCenter;
+      this->_offset.x = playerDistanceRelativeToCenter;
       for (Tile &tile : this->_level->getTileList())
       {
         tile.setOffset(Vector2(-playerDistanceRelativeToCenter, 0));
@@ -95,27 +96,28 @@ void Camera::update()
     }
     else if (this->_player->shouldMoveCamera())
     {
+      this->_offset.x += 0.2;
       for (Tile &tile : this->_level->getTileList())
       {
-        tile.setOffset(Vector2(-this->_lastOffset, 0));
+        tile.setOffset(Vector2(-this->_offset.x, 0));
       }
 
       for (AnimatedTile &animatedTile : this->_level->getAnimatedTileList())
       {
-        animatedTile.setOffset(Vector2(-this->_lastOffset, 0));
+        animatedTile.setOffset(Vector2(-this->_offset.x, 0));
       }
 
       for (Rectangle &collisionRectangle : this->_level->getCollisionRects())
       {
-        collisionRectangle.setOffset(Vector2(-this->_lastOffset, 0));
+        collisionRectangle.setOffset(Vector2(-this->_offset.x, 0));
       }
       for (Rectangle &door : this->_level->getDoorsList())
       {
-        door.setOffset(Vector2(-this->_lastOffset, 0));
+        door.setOffset(Vector2(-this->_offset.x, 0));
       }
       for (Rectangle &levelPassage : this->_level->getLevelPassagesList())
       {
-        levelPassage.setOffset(Vector2(-this->_lastOffset, 0));
+        levelPassage.setOffset(Vector2(-this->_offset.x, 0));
       }
     }
   }

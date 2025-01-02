@@ -34,7 +34,6 @@ private:
   Vector2 _center;
   Level *_level;
   Player *_player;
-  float _lastOffset;
   float _dx,
       _dy;
 };
