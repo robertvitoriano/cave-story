@@ -358,7 +358,7 @@ void Level::draw(Graphics &graphics, Player &player)
 	{
 		this->_enemies.at(i)->draw(graphics, this->_offset);
 	}
-	this->drawDebug(graphics);
+	// this->drawDebug(graphics);
 }
 
 void Level::drawDebug(Graphics &graphics)
