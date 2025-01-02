@@ -129,14 +129,19 @@ void Camera::handleScrollOffset(int playerX, float elapsedTime)
     }
     else if (this->_player->getFacing() == LEFT)
     {
-      this->_offset.x = this->_maxXScroll;
+
+      float playerDistanceRelativeToCenter = std::min(static_cast<float>(playerX - cameraXMiddle), this->_maxXScroll);
+
+      this->_offset.x = std::max(0.0f, playerDistanceRelativeToCenter);
+      if (playerX >= this->_rightLimit)
+      {
+        this->startMoving();
+      }
     }
   }
   else if (this->cameraIsMoving() && !this->reachedMaxXScroll())
   {
-    float playerDistanceRelativeToCenter = std::min(static_cast<float>(playerX - cameraXMiddle), this->_maxXScroll);
-
-    this->_offset.x = std::max(0.0f, playerDistanceRelativeToCenter);
+    this->_offset.x += this->_dx * elapsedTime;
   }
 }
 
