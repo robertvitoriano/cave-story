@@ -1,19 +1,19 @@
-#include "level.h"
-#include "graphics.h"
-#include "globals.h"
-#include "utils.h"
-#include "player.h"
-#include "enemy.h"
-#include "bat.h"
+#include <level.h>
+#include <graphics.h>
+#include <globals.h>
+#include <utils.h>
+#include <player.h>
+#include <enemy.h>
+#include <bat.h>
 #include <nlohmann/json.hpp>
 
 #include <SDL2/SDL.h>
-#include "globals.h"
+#include <globals.h>
 
 #include <sstream>
 #include <algorithm>
 #include <cmath>
-#include "LevelPassage.h"
+#include <LevelPassage.h>
 #include <fstream>
 #include <vector>
 

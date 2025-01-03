@@ -1,8 +1,8 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
-#include "globals.h"
-#include "graphics.h"
+#include <globals.h>
+#include <graphics.h>
 class Rectangle
 {
 public:

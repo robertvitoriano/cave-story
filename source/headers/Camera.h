@@ -1,16 +1,16 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "globals.h"
+#include <globals.h>
 #include <SDL2/SDL.h>
-#include "level.h"
-#include "door.h"
-#include "LevelPassage.h"
-#include "rectangle.h"
-#include "player.h"
-#include "enemy.h"
-#include "rectangle.h"
-#include "slope.h"
+#include <level.h>
+#include <door.h>
+#include <LevelPassage.h>
+#include <rectangle.h>
+#include <player.h>
+#include <enemy.h>
+#include <rectangle.h>
+#include <slope.h>
 
 class Camera : public Rectangle
 {

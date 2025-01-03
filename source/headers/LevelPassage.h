@@ -1,8 +1,8 @@
 #ifndef LEVEL_PASSAGE_H
 #define LEVEL_PASSAGE_H
 
-#include "globals.h"
-#include "rectangle.h"
+#include <globals.h>
+#include <rectangle.h>
 #include <string>
 #include <iostream>
 class LevelPassage : public Rectangle

@@ -5,8 +5,8 @@
 
 #include <string>
 
-#include "rectangle.h"
-#include "globals.h"
+#include <rectangle.h>
+#include <globals.h>
 
 class Graphics;
 

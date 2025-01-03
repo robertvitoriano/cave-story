@@ -4,14 +4,14 @@
 #include <string>
 #include <vector>
 
-#include "globals.h"
-#include "tile.h"
-#include "rectangle.h"
-#include "slope.h"
-#include "animatedtile.h"
-#include "door.h"
-#include "LevelPassage.h"
-#include "GravityChange.h"
+#include <globals.h>
+#include <tile.h>
+#include <rectangle.h>
+#include <slope.h>
+#include <animatedtile.h>
+#include <door.h>
+#include <LevelPassage.h>
+#include <GravityChange.h>
 #include <iostream>
 #include <nlohmann/json.hpp>
 class Graphics;

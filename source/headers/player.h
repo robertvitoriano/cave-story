@@ -1,14 +1,14 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "animatedsprite.h"
-#include "globals.h"
-#include "slope.h"
-#include "level.h"
-#include "enemy.h"
-#include "sword.h"
-#include "GravityChange.h"
-#include "Camera.h"
+#include <animatedsprite.h>
+#include <globals.h>
+#include <slope.h>
+#include <level.h>
+#include <enemy.h>
+#include <sword.h>
+#include <GravityChange.h>
+#include <Camera.h>
 class Graphics;
 
 class Player : public AnimatedSprite

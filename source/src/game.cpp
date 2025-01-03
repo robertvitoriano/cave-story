@@ -1,7 +1,7 @@
 
-#include "game.h"
-#include "graphics.h"
-#include "weapon.h"
+#include <game.h>
+#include <graphics.h>
+#include <weapon.h>
 namespace
 {
 	const int FPS = 50;

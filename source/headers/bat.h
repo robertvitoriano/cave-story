@@ -1,8 +1,8 @@
 #ifndef BAT_H
 #define BAT_H
 
-#include "enemy.h"
-#include "player.h"
+#include <enemy.h>
+#include <player.h>
 #include <iostream>
 class Bat : public Enemy
 {

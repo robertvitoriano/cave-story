@@ -1,6 +1,6 @@
-#include "player.h"
-#include "graphics.h"
-#include "MusicPlayer.h"
+#include <player.h>
+#include <graphics.h>
+#include <MusicPlayer.h>
 namespace player_constants
 {
 	const float WALK_SPEED = 0.2f;
