@@ -1,12 +1,13 @@
 #ifndef HUD_H
 #define HUD_H
 
-#include "sprite.h"
-#include "player.h"
+#include <sprite.h>
+#include <player.h>
 
 class Graphics;
 
-class HUD {
+class HUD
+{
 public:
 	HUD();
 	HUD(Graphics &graphics, Player &player);
@@ -16,17 +17,17 @@ public:
 private:
 	Player _player;
 
-	//Health sprites
+	// Health sprites
 	Sprite _healthBarSprite;
 	Sprite _healthNumber1;
 	Sprite _currentHealthBar;
 
-	//Exp sprites
+	// Exp sprites
 	Sprite _lvWord;
 	Sprite _lvNumber;
 	Sprite _expBar;
 
-	//Weapon info
+	// Weapon info
 	Sprite _slash;
 	Sprite _dashes;
 };

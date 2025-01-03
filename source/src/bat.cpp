@@ -1,4 +1,4 @@
-#include "bat.h"
+#include <bat.h>
 
 Bat::Bat() {}
 

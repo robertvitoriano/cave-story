@@ -1,19 +1,19 @@
-#include "level.h"
-#include "graphics.h"
-#include "globals.h"
-#include "utils.h"
-#include "player.h"
-#include "enemy.h"
-#include "bat.h"
+#include <level.h>
+#include <graphics.h>
+#include <globals.h>
+#include <utils.h>
+#include <player.h>
+#include <enemy.h>
+#include <bat.h>
 #include <nlohmann/json.hpp>
 
 #include <SDL2/SDL.h>
-#include "globals.h"
+#include <globals.h>
 
 #include <sstream>
 #include <algorithm>
 #include <cmath>
-#include "LevelPassage.h"
+#include <LevelPassage.h>
 #include <fstream>
 #include <vector>
 
@@ -320,7 +320,6 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 
 void Level::update(int elapsedTime, Player &player)
 {
-	this->handleLevelScrolling(player, elapsedTime);
 
 	for (int i = 0; i < this->_animatedTileList.size(); i++)
 	{
@@ -346,7 +345,6 @@ void Level::update(int elapsedTime, Player &player)
 
 void Level::draw(Graphics &graphics, Player &player)
 {
-	Camera &camera = Camera::getInstance();
 
 	for (int i = 0; i < this->_tileList.size(); i++)
 	{
@@ -360,7 +358,6 @@ void Level::draw(Graphics &graphics, Player &player)
 	{
 		this->_enemies.at(i)->draw(graphics, this->_offset);
 	}
-	// this->drawDebug(graphics);
 }
 
 void Level::drawDebug(Graphics &graphics)
@@ -373,6 +370,12 @@ void Level::drawDebug(Graphics &graphics)
 	{
 		this->_levelPassagesList.at(i).draw(graphics);
 	}
+	for (int i = 0; i < this->_slopes.size(); i++)
+	{
+		this->_slopes.at(i).draw(graphics);
+	}
+
+	Camera &camera = Camera::getInstance();
 }
 
 Vector2 Level::parsePosition(std::string positionString)
@@ -397,13 +400,10 @@ std::string Level::parseString(const char *stringValue)
 
 std::vector<Rectangle> Level::checkTileCollisions(Rectangle other)
 {
-	Camera &camera = Camera::getInstance();
-
 	std::vector<Rectangle> others;
 	for (int i = 0; i < this->_collisionRects.size(); i++)
 	{
-		Vector2 collisionRectOriginalPosition = this->_collisionRects.at(i).getPosition();
-		this->_collisionRects.at(i).setPosition({collisionRectOriginalPosition.x + this->_offset.x, collisionRectOriginalPosition.y + this->_offset.y});
+
 		if (this->_collisionRects.at(i).collidesWith(other))
 		{
 			others.push_back(this->_collisionRects.at(i));
@@ -415,22 +415,12 @@ std::vector<Rectangle> Level::checkTileCollisions(Rectangle other)
 std::vector<Slope> Level::checkSlopeCollisions(Rectangle &other)
 {
 	std::vector<Slope> others;
-	Camera &camera = Camera::getInstance();
 
 	for (int i = 0; i < this->_slopes.size(); i++)
 	{
-		Vector2 firstPointOriginalPosition = this->_slopes.at(i).getP1();
-		Vector2 secondPointOriginalPosition = this->_slopes.at(i).getP2();
-
-		this->_slopes.at(i).setFirstPointPosition({firstPointOriginalPosition.x + this->_offset.x, firstPointOriginalPosition.y});
-		this->_slopes.at(i).setSecondPointPosition({secondPointOriginalPosition.x + this->_offset.x, secondPointOriginalPosition.y});
-
-		if (other.getPosition().x <= camera.getCenter().x)
+		if (this->_slopes.at(i).collidesWith(other))
 		{
-			if (this->_slopes.at(i).collidesWith(other))
-			{
-				others.push_back(this->_slopes.at(i));
-			}
+			others.push_back(this->_slopes.at(i));
 		}
 	}
 	return others;
@@ -439,14 +429,9 @@ std::vector<Slope> Level::checkSlopeCollisions(Rectangle &other)
 std::vector<Door> Level::checkDoorCollisions(Rectangle &other)
 {
 	std::vector<Door> others;
-	Camera &camera = Camera::getInstance();
 
 	for (int i = 0; i < this->_doorList.size(); i++)
 	{
-		Vector2 doorRectOriginalPosition = this->_doorList.at(i).getPosition();
-
-		this->_doorList.at(i).setPosition({doorRectOriginalPosition.x + this->_offset.x, doorRectOriginalPosition.y});
-
 		if (this->_doorList.at(i).collidesWith(other))
 		{
 			others.push_back(this->_doorList.at(i));
@@ -458,14 +443,9 @@ std::vector<Door> Level::checkDoorCollisions(Rectangle &other)
 std::vector<LevelPassage> Level::checkLevelPassage(Rectangle &rectangle)
 {
 	std::vector<LevelPassage> levelPassages;
-	Camera &camera = Camera::getInstance();
 
 	for (int i = 0; i < this->_levelPassagesList.size(); i++)
 	{
-
-		Vector2 levelPassageOriginalPosition = this->_levelPassagesList.at(i).getPosition();
-		this->_levelPassagesList.at(i).setPosition({levelPassageOriginalPosition.x + this->_offset.x, levelPassageOriginalPosition.y});
-
 		if (this->_levelPassagesList.at(i).collidesWith(rectangle))
 		{
 			levelPassages.push_back(this->_levelPassagesList.at(i));
@@ -479,8 +459,6 @@ std::vector<GravityChange> Level::checkGravityChange(Rectangle &rectangle)
 	std::vector<GravityChange> gravityChangersCollided;
 	for (int i = 0; i < this->_gravityChangersList.size(); i++)
 	{
-		Vector2 gravityChangerOriginalPosition = this->_gravityChangersList.at(i).getPosition();
-		this->_gravityChangersList.at(i).setPosition({gravityChangerOriginalPosition.x + this->_offset.x, gravityChangerOriginalPosition.y + this->_offset.y});
 		if (this->_gravityChangersList.at(i).collidesWith(rectangle))
 		{
 			gravityChangersCollided.push_back(this->_gravityChangersList.at(i));
@@ -495,8 +473,6 @@ std::vector<Enemy *> Level::checkEnemyCollisions(Rectangle &other)
 
 	for (int i = 0; i < this->_enemies.size(); i++)
 	{
-		Vector2 enemyOriginalPosition = this->_enemies.at(i)->getPosition();
-		this->_enemies.at(i)->getBoundingBox().setPosition({enemyOriginalPosition.x + this->_offset.x, enemyOriginalPosition.y});
 		if (this->_enemies.at(i)->getBoundingBox().collidesWith(other))
 		{
 			others.push_back(this->_enemies.at(i));
@@ -535,38 +511,54 @@ Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int t
 
 	return Vector2(tileXPosition, tileYPosition);
 }
-void Level::handleLevelScrolling(Player &player, int elapsedTime)
+
+std::vector<AnimatedTile> &Level::getAnimatedTileList()
 {
-	float playerX = player.getX();
-	float screenCenterX = globals::SCREEN_WIDTH / 2;
+	return this->_animatedTileList;
+}
+std::vector<Slope> &Level::getSlopesList()
+{
+	return this->_slopes;
+}
 
-	if (this->_levelIsWiderThanScreen)
-	{
-		float cameraX = playerX - screenCenterX;
+std::vector<Tile> &Level::getTileList()
+{
+	return this->_tileList;
+}
 
-		cameraX = std::max(0.0f, std::min(cameraX, (this->_size.x * this->_tileSize.x * globals::SPRITE_SCALE) - globals::SCREEN_WIDTH));
+std::vector<Door> &Level::getDoorsList()
+{
+	return this->_doorList;
+}
 
-		for (Tile &tile : this->_tileList)
-		{
-			tile.setOffset(Vector2(-cameraX, 0));
-		}
+std::vector<GravityChange> &Level::getGravityChangersList()
+{
+	return this->_gravityChangersList;
+}
 
-		for (AnimatedTile &animatedTile : this->_animatedTileList)
-		{
-			animatedTile.setOffset(Vector2(-cameraX, 0));
-		}
+std::vector<LevelPassage> &Level::getLevelPassagesList()
+{
+	return this->_levelPassagesList;
+}
 
-		for (Rectangle &collisionRectangle : this->_collisionRects)
-		{
-			collisionRectangle.setOffset(Vector2(-cameraX, 0));
-		}
-		for (Rectangle &door : this->_doorList)
-		{
-			door.setOffset(Vector2(-cameraX, 0));
-		}
-		for (Rectangle &levelPassage : this->_levelPassagesList)
-		{
-			levelPassage.setOffset(Vector2(-cameraX, 0));
-		}
-	}
+std::vector<Enemy *> &Level::getEnemiesList()
+{
+	return this->_enemies;
+}
+std::vector<Rectangle> &Level::getCollisionRects()
+{
+	return this->_collisionRects;
+}
+bool Level::isLevelWiderThanScreen()
+{
+	return this->_levelIsWiderThanScreen;
+}
+Vector2 &Level::getTileSize()
+{
+	return this->_tileSize;
+}
+
+Vector2 &Level::getSize()
+{
+	return this->_size;
 }

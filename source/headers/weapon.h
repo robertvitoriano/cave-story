@@ -1,8 +1,8 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-#include "animatedsprite.h"
-#include "globals.h"
+#include <animatedsprite.h>
+#include <globals.h>
 
 class Graphics;
 

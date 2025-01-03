@@ -1,6 +1,6 @@
-#include "player.h"
-#include "graphics.h"
-#include "MusicPlayer.h"
+#include <player.h>
+#include <graphics.h>
+#include <MusicPlayer.h>
 namespace player_constants
 {
 	const float WALK_SPEED = 0.2f;
@@ -28,7 +28,8 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 																												 _blinkStartTime(0),
 																												 _blinkDuration(1000),
 																												 _blinkInterval(100),
-																												 _isPerformingAttack(false)
+																												 _isPerformingAttack(false),
+																												 _moveCamera(false)
 {
 	graphics.loadImage("content/sprites/MyChar-no-bg.png");
 
@@ -90,6 +91,7 @@ void Player::moveRight()
 	{
 		return;
 	}
+
 	this->_dx = player_constants::WALK_SPEED;
 	if (this->_lookingUp == false)
 	{
@@ -284,6 +286,8 @@ void Player::handleDoorCollision(std::vector<Door> &doors, Level &level, Graphic
 		if (this->_grounded == true && this->_lookingDown == true)
 		{
 			level = Level(doors.at(i).getDestination(), graphics);
+			Camera &camera = Camera::getInstance();
+			camera.follow(this, &level);
 			bool positionIsValid = doors.at(i).getSpawnPosition().x != 0 && doors.at(i).getSpawnPosition().y != 0;
 			if (positionIsValid)
 			{
@@ -333,11 +337,18 @@ void Player::handleLevelPassage(std::vector<LevelPassage> &levelPassages, Level 
 	for (int i = 0; i < levelPassages.size(); i++)
 	{
 		level = Level(levelPassages.at(i).getDestination(), graphics);
+		Camera &camera = Camera::getInstance();
+		camera.follow(this, &level);
 		if (levelPassages.at(i).getSpawnPosition().x != 0 && levelPassages.at(i).getSpawnPosition().y != 0)
 		{
 
 			this->_x = levelPassages.at(i).getSpawnPosition().x;
 			this->_y = levelPassages.at(i).getSpawnPosition().y;
+
+			if (levelPassages.at(i).getSpawnPosition().x >= globals::SCREEN_WIDTH * 0.8)
+			{
+				camera.setOffset(Vector2(camera.getMaxXScroll(), camera.getY()));
+			}
 		}
 		else
 		{
@@ -386,6 +397,7 @@ void Player::update(float elapsedTime)
 	}
 
 	this->_x += this->_dx * elapsedTime;
+
 	this->_y += this->_dy * elapsedTime;
 
 	AnimatedSprite::update(elapsedTime);
@@ -393,6 +405,10 @@ void Player::update(float elapsedTime)
 	this->_currentWeapon.update(elapsedTime);
 }
 
+void Player::disableVelocity()
+{
+	this->_dx = 0;
+}
 void Player::renderBlinkingPlayer(Graphics &graphics)
 {
 
@@ -453,4 +469,8 @@ float Player::getXVelocity()
 float Player::getYVelocity()
 {
 	return this->_dy;
+}
+Direction Player::getFacing()
+{
+	return this->_facing;
 }

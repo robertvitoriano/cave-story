@@ -1,8 +1,8 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
-#include "globals.h"
-#include "graphics.h"
+#include <globals.h>
+#include <graphics.h>
 class Rectangle
 {
 public:
@@ -80,13 +80,12 @@ public:
 		return this->_y + this->_offset.y;
 	}
 
-private:
-	int _x,
-			_y,
-			_width,
-			_height;
-
+protected:
 	Vector2 _offset;
+	float _x, _y;
+
+	int _width,
+			_height;
 };
 
 #endif

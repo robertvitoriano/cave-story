@@ -1,8 +1,8 @@
 #ifndef GRAVITY_CHANGE_H
 #define GRAVITY_CHANGE_H
 
-#include "globals.h"
-#include "rectangle.h"
+#include <globals.h>
+#include <rectangle.h>
 #include <string>
 #include <iostream>
 class GravityChange : public Rectangle

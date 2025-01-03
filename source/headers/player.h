@@ -1,14 +1,14 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "animatedsprite.h"
-#include "globals.h"
-#include "slope.h"
-#include "level.h"
-#include "enemy.h"
-#include "sword.h"
-#include "GravityChange.h"
-#include "Camera.h"
+#include <animatedsprite.h>
+#include <globals.h>
+#include <slope.h>
+#include <level.h>
+#include <enemy.h>
+#include <sword.h>
+#include <GravityChange.h>
+#include <Camera.h>
 class Graphics;
 
 class Player : public AnimatedSprite
@@ -96,6 +96,8 @@ public:
 	void attack();
 	void stopAttack();
 	bool isAttacking();
+	void disableVelocity();
+	Direction getFacing();
 
 private:
 	float _dx,
@@ -107,6 +109,7 @@ private:
 	bool _shouldApplyGravity;
 	bool _lookingUp;
 	bool _lookingDown;
+	bool _moveCamera;
 
 	int _maxHealth;
 	int _currentHealth;

@@ -1,9 +1,9 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "animatedsprite.h"
-#include "player.h"	 // Include Player class for reference
-#include "globals.h" // Assuming it contains global definitions like Direction
+#include <animatedsprite.h>
+#include <player.h>	 // Include Player class for reference
+#include <globals.h> // Assuming it contains global definitions like Direction
 
 class Graphics; // Forward declaration of Graphics class
 

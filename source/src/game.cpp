@@ -1,14 +1,14 @@
 
-#include "game.h"
-#include "graphics.h"
-#include "weapon.h"
+#include <game.h>
+#include <graphics.h>
+#include <weapon.h>
 namespace
 {
 	const int FPS = 50;
 	const int MAX_FRAME_TIME = 1000 / FPS;
 }
 
-Game::Game() : gameIsLost(false)
+Game::Game() : gameIsLost(false), _displayDebug(false)
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
@@ -28,6 +28,8 @@ void Game::gameLoop()
 	this->_level = Level("Map_1", graphics);
 	this->_player = Player(graphics, this->_level.getPlayerSpawnPoint());
 	this->_hud = HUD(graphics, this->_player);
+	Camera &camera = Camera::getInstance();
+	camera.follow(&this->_player, &this->_level);
 	Sword sword = Sword(graphics, this->_level.getPlayerSpawnPoint());
 
 	this->_player.setWeapon(sword);
@@ -79,6 +81,8 @@ void Game::gameLoop()
 
 void Game::handleInput(Input &input)
 {
+	Camera &camera = Camera::getInstance();
+
 	if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE))
 	{
 		return;
@@ -93,7 +97,16 @@ void Game::handleInput(Input &input)
 	}
 	else if (input.isKeyHeld(SDL_SCANCODE_D))
 	{
-		this->_player.moveRight();
+		if (camera.cameraIsMoving())
+		{
+			this->_player.disableVelocity();
+			camera.moveLeft();
+		}
+		else
+		{
+			camera.stopMoving();
+			this->_player.moveRight();
+		}
 	}
 	else if (input.isKeyHeld(SDL_SCANCODE_W) && !this->_player.isGravityEnabled())
 	{
@@ -130,6 +143,10 @@ void Game::handleInput(Input &input)
 	{
 		this->_player.jump();
 	}
+	if (input.wasKeyPressed(SDL_SCANCODE_J))
+	{
+		this->toggleDebug();
+	}
 
 	if (!input.isKeyHeld(SDL_SCANCODE_A) &&
 			!input.isKeyHeld(SDL_SCANCODE_D) &&
@@ -137,11 +154,14 @@ void Game::handleInput(Input &input)
 			!input.isKeyHeld(SDL_SCANCODE_W))
 	{
 		this->_player.stopMoving();
+		camera.stopMoving();
 	}
 }
 
 void Game::draw(Graphics &graphics)
 {
+	Camera &camera = Camera::getInstance();
+
 	graphics.clear();
 
 	if (!gameIsLost)
@@ -152,6 +172,11 @@ void Game::draw(Graphics &graphics)
 		this->_hud.draw(graphics);
 
 		this->_player.draw(graphics);
+		if (this->_displayDebug)
+		{
+			this->_level.drawDebug(graphics);
+			camera.drawDebug(graphics);
+		}
 	}
 	else
 	{
@@ -161,12 +186,19 @@ void Game::draw(Graphics &graphics)
 	}
 	graphics.flip();
 }
+void Game::toggleDebug()
+{
+	this->_displayDebug = !this->_displayDebug;
+}
 
 void Game::update(float elapsedTime, Graphics &graphics)
 {
 	this->_player.update(elapsedTime);
 	this->_level.update(elapsedTime, this->_player);
 	this->_hud.update(elapsedTime, this->_player);
+	Camera &camera = Camera::getInstance();
+
+	camera.update(elapsedTime);
 
 	if (this->_player.getCurrentHealth() == 0)
 	{

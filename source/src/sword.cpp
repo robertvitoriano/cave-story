@@ -1,4 +1,4 @@
-#include "sword.h"
+#include <sword.h>
 
 Sword::Sword() {}
 
