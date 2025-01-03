@@ -12,7 +12,7 @@ public:
 																									 _y(y),
 																									 _width(width),
 																									 _height(height),
-																									 _offset(Vector2(0, 0))
+																									 _offset(Vector2(0.0f, 0.0f))
 	{
 	}
 
@@ -78,6 +78,10 @@ public:
 	int getY()
 	{
 		return this->_y + this->_offset.y;
+	}
+	Vector2 getOffset()
+	{
+		return this->_offset;
 	}
 
 protected:

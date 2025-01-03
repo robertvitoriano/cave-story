@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX := g++
-CXXFLAGS := -Wall -Wextra -g -std=c++17 -I source/headers -I /usr/include/nlohmann/json.hpp $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf SDL2_mixer SDL2_ttf)
+CXXFLAGS := -Wall -Wextra -g -std=c++17 -I source/headers -I /usr/include $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf SDL2_mixer SDL2_ttf)
 LDFLAGS := $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer SDL2_ttf) 
 
 # Directories

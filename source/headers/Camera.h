@@ -32,6 +32,7 @@ public:
   void startMoving();
   bool cameraIsMoving();
   float getMaxXScroll();
+  void moveRight();
 
 private:
   Camera();
