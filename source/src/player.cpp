@@ -71,11 +71,16 @@ const float Player::getY() const
 
 void Player::moveLeft()
 {
+	Camera &camera = Camera::getInstance();
+
 	if (this->_lookingDown == true && this->_grounded == true && this->_shouldApplyGravity)
 	{
 		return;
 	}
-	this->_dx = -player_constants::WALK_SPEED;
+	if (camera.getOffset().x == 0)
+	{
+		this->_dx = -player_constants::WALK_SPEED;
+	}
 	if (this->_lookingUp == false)
 	{
 		MusicPlayer &musicPlayer = MusicPlayer::getInstance();
@@ -91,8 +96,11 @@ void Player::moveRight()
 	{
 		return;
 	}
-
-	this->_dx = player_constants::WALK_SPEED;
+	Camera &camera = Camera::getInstance();
+	if (camera.reachedMaxXScroll())
+	{
+		this->_dx = player_constants::WALK_SPEED;
+	}
 	if (this->_lookingUp == false)
 	{
 		MusicPlayer &musicPlayer = MusicPlayer::getInstance();

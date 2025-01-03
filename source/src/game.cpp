@@ -93,20 +93,13 @@ void Game::handleInput(Input &input)
 	}
 	else if (input.isKeyHeld(SDL_SCANCODE_A))
 	{
+		camera.moveRight();
 		this->_player.moveLeft();
 	}
 	else if (input.isKeyHeld(SDL_SCANCODE_D))
 	{
-		if (camera.cameraIsMoving())
-		{
-			this->_player.disableVelocity();
-			camera.moveLeft();
-		}
-		else
-		{
-			camera.stopMoving();
-			this->_player.moveRight();
-		}
+		camera.moveLeft();
+		this->_player.moveRight();
 	}
 	else if (input.isKeyHeld(SDL_SCANCODE_W) && !this->_player.isGravityEnabled())
 	{
