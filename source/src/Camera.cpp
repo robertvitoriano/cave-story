@@ -125,9 +125,8 @@ void Camera::moveLeft()
 void Camera::moveRight()
 {
 
-  if (this->_offset.x > 10.0f)
+  if (this->_offset.x > 0)
   {
-    std::cout << "should move camera" << this->_offset.x << std::endl;
     this->_dx = -camera_constants::SPEED;
   }
   else
