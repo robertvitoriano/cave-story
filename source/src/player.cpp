@@ -344,6 +344,11 @@ void Player::handleLevelPassage(std::vector<LevelPassage> &levelPassages, Level 
 
 			this->_x = levelPassages.at(i).getSpawnPosition().x;
 			this->_y = levelPassages.at(i).getSpawnPosition().y;
+
+			if (levelPassages.at(i).getSpawnPosition().x >= globals::SCREEN_WIDTH * 0.8)
+			{
+				camera.setOffset(Vector2(camera.getMaxXScroll(), camera.getY()));
+			}
 		}
 		else
 		{

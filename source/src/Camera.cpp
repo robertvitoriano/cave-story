@@ -172,3 +172,7 @@ bool Camera::cameraIsMoving()
 {
   return this->_moveCamera;
 }
+float Camera::getMaxXScroll()
+{
+  return this->_maxXScroll;
+}
