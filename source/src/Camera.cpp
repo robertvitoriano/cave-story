@@ -56,6 +56,7 @@ void Camera::drawDebug(Graphics &graphics)
 void Camera::follow(Player *player, Level *level)
 {
   this->_player = player;
+  this->_player->enableVelocity();
   this->_level = level;
   this->_offset.x = 0;
 }
