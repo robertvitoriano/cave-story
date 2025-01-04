@@ -49,6 +49,8 @@ void Camera::drawDebug(Graphics &graphics)
                      this->getHeight());
 
   SDL_SetRenderDrawColor(graphics.getRenderer(), 255, 255, 255, SDL_ALPHA_OPAQUE);
+
+  graphics.drawText("Scroll X: " + std::to_string(this->_offset.x), {255, 255, 255}, {globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT - 20});
 }
 
 void Camera::follow(Player *player, Level *level)
@@ -110,7 +112,7 @@ void Camera::handleScrollOffset(int playerX, float elapsedTime)
   int cameraXMiddle = globals::SCREEN_WIDTH / 2;
   bool playerIsMoving = this->_player->getXVelocity() != 0;
   float newXOffset = std::min(this->_dx * elapsedTime, this->_maxXScroll);
-  if (this->reachedMaxXScroll() || this->_offset.x + newXOffset < 0)
+  if ((this->reachedMaxXScroll() && this->_player->getFacing() == RIGHT) || this->_offset.x + newXOffset < 0)
   {
     this->stopMoving();
     return;
