@@ -109,6 +109,7 @@ void Camera::update(float elapsedTime)
 
 void Camera::handleScrollOffset(int playerX, float elapsedTime)
 {
+
   float levelWidth = this->_level->getSize().x * this->_level->getTileSize().x * globals::SPRITE_SCALE;
   this->_maxXScroll = levelWidth - globals::SCREEN_WIDTH;
 
@@ -116,7 +117,7 @@ void Camera::handleScrollOffset(int playerX, float elapsedTime)
   bool playerIsMoving = this->_player->getXVelocity() != 0;
   float newXOffset = std::min(this->_dx * elapsedTime, this->_maxXScroll);
 
-  if ((this->reachedMaxXScroll() && this->_player->getFacing() == RIGHT) || this->_offset.x + newXOffset < 0)
+  if ((this->reachedMaxXScroll() && this->_player->getFacing() == RIGHT) || this->_offset.x <= 0 && this->_player->getFacing() == LEFT)
   {
     this->_player->enableVelocity();
     this->stopMoving();
