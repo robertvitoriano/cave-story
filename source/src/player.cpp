@@ -28,7 +28,8 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 																												 _blinkStartTime(0),
 																												 _blinkDuration(1000),
 																												 _blinkInterval(100),
-																												 _isPerformingAttack(false)
+																												 _isPerformingAttack(false),
+																												 _velocityIsEnabled(true)
 {
 	graphics.loadImage("content/sprites/MyChar-no-bg.png");
 
@@ -400,7 +401,10 @@ void Player::update(float elapsedTime)
 		this->_dy += player_constants::GRAVITY * elapsedTime;
 	}
 
-	this->_x += this->_dx * elapsedTime;
+	if (this->isVelocityEnabled())
+	{
+		this->_x += this->_dx * elapsedTime;
+	}
 
 	this->_y += this->_dy * elapsedTime;
 
@@ -411,7 +415,15 @@ void Player::update(float elapsedTime)
 
 void Player::disableVelocity()
 {
-	this->_dx = 0;
+	this->_velocityIsEnabled = false;
+}
+void Player::enableVelocity()
+{
+	this->_velocityIsEnabled = true;
+}
+bool Player::isVelocityEnabled()
+{
+	return this->_velocityIsEnabled;
 }
 void Player::renderBlinkingPlayer(Graphics &graphics)
 {

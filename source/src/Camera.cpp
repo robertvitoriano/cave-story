@@ -115,9 +115,11 @@ void Camera::handleScrollOffset(int playerX, float elapsedTime)
   float newXOffset = std::min(this->_dx * elapsedTime, this->_maxXScroll);
   if ((this->reachedMaxXScroll() && this->_player->getFacing() == RIGHT) || this->_offset.x + newXOffset < 0)
   {
+    this->_player->enableVelocity();
     this->stopMoving();
     return;
   }
+  this->_player->disableVelocity();
   this->_offset.x += newXOffset;
 }
 

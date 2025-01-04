@@ -97,6 +97,8 @@ public:
 	void stopAttack();
 	bool isAttacking();
 	void disableVelocity();
+	void enableVelocity();
+	bool isVelocityEnabled();
 	Direction getFacing();
 
 private:
@@ -110,6 +112,7 @@ private:
 	bool _lookingUp;
 	bool _lookingDown;
 	bool _moveCamera;
+	bool _velocityIsEnabled;
 
 	int _maxHealth;
 	int _currentHealth;
