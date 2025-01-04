@@ -71,8 +71,6 @@ const float Player::getY() const
 
 void Player::moveLeft()
 {
-	Camera &camera = Camera::getInstance();
-
 	if (this->_lookingDown == true && this->_grounded == true && this->_shouldApplyGravity)
 	{
 		return;

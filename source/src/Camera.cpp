@@ -66,6 +66,7 @@ void Camera::update(float elapsedTime)
   {
     return;
   }
+  Vector2 offsetVector = Vector2(-this->_offset.x, 0);
   float playerX = this->_player->getX();
 
   if (this->_level->isLevelWiderThanScreen())
@@ -74,29 +75,29 @@ void Camera::update(float elapsedTime)
 
     for (Tile &tile : this->_level->getTileList())
     {
-      tile.setOffset(Vector2(-this->_offset.x, 0));
+      tile.setOffset(offsetVector);
     }
 
     for (AnimatedTile &animatedTile : this->_level->getAnimatedTileList())
     {
-      animatedTile.setOffset(Vector2(-this->_offset.x, 0));
+      animatedTile.setOffset(offsetVector);
     }
 
     for (Rectangle &collisionRectangle : this->_level->getCollisionRects())
     {
-      collisionRectangle.setOffset(Vector2(-this->_offset.x, 0));
+      collisionRectangle.setOffset(offsetVector);
     }
     for (Rectangle &door : this->_level->getDoorsList())
     {
-      door.setOffset(Vector2(-this->_offset.x, 0));
+      door.setOffset(offsetVector);
     }
     for (Rectangle &levelPassage : this->_level->getLevelPassagesList())
     {
-      levelPassage.setOffset(Vector2(-this->_offset.x, 0));
+      levelPassage.setOffset(offsetVector);
     }
     for (Slope &slope : this->_level->getSlopesList())
     {
-      slope.setOffset(Vector2(-this->_offset.x, 0));
+      slope.setOffset(offsetVector);
     }
 
     // for (Enemy *enemy : this->_level->getEnemiesList())
@@ -114,6 +115,7 @@ void Camera::handleScrollOffset(int playerX, float elapsedTime)
   int cameraXMiddle = globals::SCREEN_WIDTH / 2;
   bool playerIsMoving = this->_player->getXVelocity() != 0;
   float newXOffset = std::min(this->_dx * elapsedTime, this->_maxXScroll);
+
   if ((this->reachedMaxXScroll() && this->_player->getFacing() == RIGHT) || this->_offset.x + newXOffset < 0)
   {
     this->_player->enableVelocity();
