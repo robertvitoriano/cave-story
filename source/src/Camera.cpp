@@ -109,13 +109,13 @@ void Camera::handleScrollOffset(int playerX, float elapsedTime)
 
   int cameraXMiddle = globals::SCREEN_WIDTH / 2;
   bool playerIsMoving = this->_player->getXVelocity() != 0;
-
-  if (!this->reachedMaxXScroll())
+  float newXOffset = std::min(this->_dx * elapsedTime, this->_maxXScroll);
+  if (this->reachedMaxXScroll() || this->_offset.x + newXOffset < 0)
   {
-    float playerDistanceRelativeToCenter = std::min(static_cast<float>(playerX - cameraXMiddle), this->_maxXScroll);
-
-    this->_offset.x += std::min(this->_dx * elapsedTime, this->_maxXScroll);
+    this->stopMoving();
+    return;
   }
+  this->_offset.x += newXOffset;
 }
 
 void Camera::moveLeft()
@@ -124,15 +124,7 @@ void Camera::moveLeft()
 }
 void Camera::moveRight()
 {
-
-  if (this->_offset.x > 0)
-  {
-    this->_dx = -camera_constants::SPEED;
-  }
-  else
-  {
-    this->_dx = 0;
-  }
+  this->_dx = -camera_constants::SPEED;
 }
 void Camera::stopMoving()
 {
