@@ -76,10 +76,9 @@ void Player::moveLeft()
 	{
 		return;
 	}
-	if (camera.getOffset().x == 0)
-	{
-		this->_dx = -player_constants::WALK_SPEED;
-	}
+
+	this->_dx = -player_constants::WALK_SPEED;
+
 	if (this->_lookingUp == false)
 	{
 		MusicPlayer &musicPlayer = MusicPlayer::getInstance();
