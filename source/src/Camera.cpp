@@ -57,6 +57,7 @@ void Camera::follow(Player *player, Level *level)
 {
   this->_player = player;
   this->_level = level;
+  this->_offset.x = 0;
 }
 void Camera::update(float elapsedTime)
 {
