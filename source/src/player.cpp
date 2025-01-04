@@ -28,8 +28,7 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 																												 _blinkStartTime(0),
 																												 _blinkDuration(1000),
 																												 _blinkInterval(100),
-																												 _isPerformingAttack(false),
-																												 _moveCamera(false)
+																												 _isPerformingAttack(false)
 {
 	graphics.loadImage("content/sprites/MyChar-no-bg.png");
 
@@ -96,11 +95,9 @@ void Player::moveRight()
 	{
 		return;
 	}
-	Camera &camera = Camera::getInstance();
-	if (camera.reachedMaxXScroll())
-	{
-		this->_dx = player_constants::WALK_SPEED;
-	}
+
+	this->_dx = player_constants::WALK_SPEED;
+
 	if (this->_lookingUp == false)
 	{
 		MusicPlayer &musicPlayer = MusicPlayer::getInstance();
