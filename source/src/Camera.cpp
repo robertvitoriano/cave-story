@@ -123,8 +123,12 @@ void Camera::handleScrollOffset(int playerX, float elapsedTime)
     this->stopMoving();
     return;
   }
-  this->_player->disableVelocity();
-  this->_offset.x += newXOffset;
+  else if (!this->_player->getCollisionState().horizontal)
+  {
+
+    this->_player->disableVelocity();
+    this->_offset.x += newXOffset;
+  }
 }
 
 void Camera::moveLeft()

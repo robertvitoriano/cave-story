@@ -29,7 +29,8 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 																												 _blinkDuration(1000),
 																												 _blinkInterval(100),
 																												 _isPerformingAttack(false),
-																												 _velocityIsEnabled(true)
+																												 _velocityIsEnabled(true),
+																												 _collisionState(false, false)
 {
 	graphics.loadImage("content/sprites/MyChar-no-bg.png");
 
@@ -249,8 +250,10 @@ void Player::handleTileCollisions(std::vector<Rectangle> &others)
 				break;
 			case sides::LEFT:
 				this->_x = others.at(i).getRight() + 1;
+				this->_collisionState.horizontal = true;
 				break;
 			case sides::RIGHT:
+				this->_collisionState.horizontal = true;
 				this->_x = others.at(i).getLeft() - this->_boundingBox.getWidth() - 1;
 				break;
 			}
@@ -487,4 +490,14 @@ float Player::getYVelocity()
 Direction Player::getFacing()
 {
 	return this->_facing;
+}
+
+CollisionState Player::getCollisionState()
+{
+	return this->_collisionState;
+}
+
+void Player::setCollisionState(CollisionState collisionState)
+{
+	this->_collisionState = collisionState;
 }

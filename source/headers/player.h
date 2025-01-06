@@ -99,6 +99,8 @@ public:
 	void disableVelocity();
 	void enableVelocity();
 	bool isVelocityEnabled();
+	CollisionState getCollisionState();
+	void setCollisionState(CollisionState collisionState);
 	Direction getFacing();
 
 private:
@@ -124,6 +126,7 @@ private:
 	int _blinkInterval;
 	Sword _currentWeapon;
 	bool _isPerformingAttack;
+	CollisionState _collisionState;
 };
 
 #endif

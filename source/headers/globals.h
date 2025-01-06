@@ -39,6 +39,15 @@ enum Direction
 	DOWN
 };
 
+struct CollisionState
+{
+	bool horizontal;
+	bool vertical;
+
+	CollisionState(bool hor = false, bool ver = false)
+			: horizontal(hor), vertical(ver) {}
+};
+
 struct Vector2
 {
 	float x, y;

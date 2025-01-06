@@ -210,6 +210,11 @@ void Game::update(float elapsedTime, Graphics &graphics)
 		// Player collided with at least one tile. Handle it.
 		this->_player.handleTileCollisions(others);
 	}
+	else
+	{
+		CollisionState collisionState(false, false);
+		this->_player.setCollisionState(collisionState);
+	}
 	// Check slopes
 	std::vector<Slope> otherSlopes;
 	if ((otherSlopes = this->_level.checkSlopeCollisions(this->_player.getBoundingBox())).size() > 0)
