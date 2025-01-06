@@ -13,7 +13,7 @@ Camera &Camera::getInstance()
 }
 Camera::Camera() : Rectangle(0, 0, globals ::SCREEN_WIDTH,
                              globals::SCREEN_HEIGHT),
-                   _dx(camera_constants::SPEED), _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}), _rightLimit(globals::SCREEN_WIDTH - 100), _moveTimer(0), _moveSpeedDelay(5), _maxXScroll(0.0f), _moveCamera(false)
+                   _dx(camera_constants::SPEED), _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}), _rightLimit(globals::SCREEN_WIDTH - 100), _moveTimer(0), _moveSpeedDelay(5), _maxXScroll(0.0f), _moveCamera(true)
 {
   this->_offset = {0, 0};
 }
@@ -116,18 +116,23 @@ void Camera::handleScrollOffset(int playerX, float elapsedTime)
   int cameraXMiddle = globals::SCREEN_WIDTH / 2;
   bool playerIsMoving = this->_player->getXVelocity() != 0;
   float newXOffset = std::min(this->_dx * elapsedTime, this->_maxXScroll);
-
-  if ((this->reachedMaxXScroll() && this->_player->getFacing() == RIGHT) || this->_offset.x <= 0 && this->_player->getFacing() == LEFT)
+  if (playerIsMoving)
   {
-    this->_player->enableVelocity();
-    this->stopMoving();
-    return;
-  }
-  else if (!this->_player->getCollisionState().horizontal)
-  {
+    if ((this->reachedMaxXScroll() && this->_player->getFacing() == RIGHT) || this->_offset.x <= 0 && this->_player->getFacing() == LEFT)
+    {
+      this->_player->enableVelocity();
+      this->stopMoving();
+      return;
+    }
+    std::cout << "PLAYER IS MOVING" << std::endl;
 
     this->_player->disableVelocity();
     this->_offset.x += newXOffset;
+  }
+  else
+  {
+    this->stopMoving();
+    std::cout << "PLAYER IS NOT MOVING" << std::endl;
   }
 }
 
