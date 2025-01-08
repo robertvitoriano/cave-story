@@ -3,7 +3,6 @@
 namespace camera_constants
 {
   const float SPEED = 0.2f;
-
 }
 
 Camera &Camera::getInstance()
@@ -11,46 +10,40 @@ Camera &Camera::getInstance()
   static Camera instance;
   return instance;
 }
-Camera::Camera() : Rectangle(0, 0, globals ::SCREEN_WIDTH,
-                             globals::SCREEN_HEIGHT),
-                   _dx(camera_constants::SPEED), _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}), _rightLimit(globals::SCREEN_WIDTH - 100), _moveTimer(0), _moveSpeedDelay(5), _maxXScroll(0.0f), _moveCamera(true)
+Camera::Camera()
+    : Rectangle(0, 0, globals ::SCREEN_WIDTH, globals::SCREEN_HEIGHT),
+      _dx(camera_constants::SPEED),
+      _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}),
+      _rightLimit(globals::SCREEN_WIDTH - 100), _moveTimer(0),
+      _moveSpeedDelay(5), _maxXScroll(0.0f), _moveCamera(true)
 {
   this->_offset = {0, 0};
 }
 
-Vector2 Camera::getCenter()
-{
-  return this->_center;
-}
-void Camera::setCenter(Vector2 position)
-{
-  this->_center = position;
-}
-int Camera::getRightLimit()
-{
-  return this->_rightLimit;
-}
+Vector2 Camera::getCenter() { return this->_center; }
+
+void Camera::setCenter(Vector2 position) { this->_center = position; }
+
+int Camera::getRightLimit() { return this->_rightLimit; }
 
 void Camera::drawDebug(Graphics &graphics)
 {
   SDL_SetRenderDrawColor(graphics.getRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
 
-  SDL_Rect centerRect = {
-      static_cast<int>(this->_center.x - 2),
-      static_cast<int>(this->_center.y - 2),
-      4,
-      4};
+  SDL_Rect centerRect = {static_cast<int>(this->_center.x - 2),
+                         static_cast<int>(this->_center.y - 2), 4, 4};
+
   SDL_RenderFillRect(graphics.getRenderer(), &centerRect);
 
-  SDL_RenderDrawLine(graphics.getRenderer(),
-                     this->_rightLimit,
-                     0,
-                     this->_rightLimit,
-                     this->getHeight());
+  SDL_RenderDrawLine(graphics.getRenderer(), this->_rightLimit, 0,
+                     this->_rightLimit, this->getHeight());
 
-  SDL_SetRenderDrawColor(graphics.getRenderer(), 255, 255, 255, SDL_ALPHA_OPAQUE);
+  SDL_SetRenderDrawColor(graphics.getRenderer(), 255, 255, 255,
+                         SDL_ALPHA_OPAQUE);
 
-  graphics.drawText("Scroll X: " + std::to_string(this->_offset.x), {255, 255, 255}, {globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT - 20});
+  graphics.drawText("Scroll X: " + std::to_string(this->_offset.x),
+                    {255, 255, 255},
+                    {globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT - 20});
 }
 
 void Camera::follow(Player *player, Level *level)
@@ -110,40 +103,52 @@ void Camera::update(float elapsedTime)
 void Camera::handleScrollOffset(int playerX, float elapsedTime)
 {
 
-  float levelWidth = this->_level->getSize().x * this->_level->getTileSize().x * globals::SPRITE_SCALE;
+  float levelWidth = this->_level->getSize().x * this->_level->getTileSize().x *
+                     globals::SPRITE_SCALE;
   this->_maxXScroll = levelWidth - globals::SCREEN_WIDTH;
 
   int cameraXMiddle = globals::SCREEN_WIDTH / 2;
-  bool playerIsMoving = this->_player->getXVelocity() != 0;
-  float newXOffset = std::min(this->_dx * elapsedTime, this->_maxXScroll);
-  if (playerIsMoving)
-  {
-    if ((this->reachedMaxXScroll() && this->_player->getFacing() == RIGHT) || this->_offset.x <= 0 && this->_player->getFacing() == LEFT)
-    {
-      this->_player->enableVelocity();
-      this->stopMoving();
-      return;
-    }
-    std::cout << "PLAYER IS MOVING" << std::endl;
 
-    this->_player->disableVelocity();
-    this->_offset.x += newXOffset;
+  bool playerIsMoving = this->_player->getXVelocity() != 0;
+
+  float newXOffset = std::min(this->_dx * elapsedTime, this->_maxXScroll);
+
+  CollisionState playerCollisionState = this->_player->getCollisionState();
+  Rectangle collidingRect = this->_player->getCollidingRect();
+  sides::Side collisionSide = this->_player->getCollisionSide(collidingRect);
+
+  if ((this->reachedMaxXScroll() && this->_player->getFacing() == RIGHT) || this->_offset.x <= 0 && this->_player->getFacing() == LEFT)
+  {
+    this->_player->enableVelocity();
+    this->stopMoving();
+    return;
+  }
+
+  this->_player->disableVelocity();
+
+  if (collisionSide == sides::RIGHT || collisionSide == sides::LEFT)
+  {
+    if (collisionSide == sides::RIGHT && this->_dx < 0)
+    {
+      this->_offset.x += newXOffset;
+    }
+    if (collisionSide == sides::LEFT && this->_dx > 0)
+    {
+      this->_offset.x += newXOffset;
+    }
   }
   else
   {
-    this->stopMoving();
-    std::cout << "PLAYER IS NOT MOVING" << std::endl;
+    this->move(newXOffset);
   }
 }
 
-void Camera::moveLeft()
-{
-  this->_dx = camera_constants::SPEED;
-}
-void Camera::moveRight()
-{
-  this->_dx = -camera_constants::SPEED;
-}
+void Camera::move(float newXOffset) { this->_offset.x += newXOffset; }
+
+void Camera::moveLeft() { this->_dx = camera_constants::SPEED; }
+
+void Camera::moveRight() { this->_dx = -camera_constants::SPEED; }
+
 void Camera::stopMoving()
 {
   this->_dx = 0;
@@ -155,15 +160,8 @@ bool Camera::reachedMaxXScroll()
   return static_cast<float>(this->_offset.x) >= this->_maxXScroll;
 }
 
-void Camera::startMoving()
-{
-  this->_moveCamera = true;
-}
-bool Camera::cameraIsMoving()
-{
-  return this->_moveCamera;
-}
-float Camera::getMaxXScroll()
-{
-  return this->_maxXScroll;
-}
+void Camera::startMoving() { this->_moveCamera = true; }
+
+bool Camera::cameraIsMoving() { return this->_moveCamera; }
+
+float Camera::getMaxXScroll() { return this->_maxXScroll; }

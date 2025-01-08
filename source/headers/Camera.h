@@ -38,6 +38,8 @@ private:
   Camera();
   void handleScrollOffset(int playerX, float elapsedTime);
 
+  void move(float newXOffset);
+
   int _rightLimit;
   float _maxXScroll;
   Vector2 _center;

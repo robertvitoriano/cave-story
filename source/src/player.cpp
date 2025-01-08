@@ -30,7 +30,8 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 																												 _blinkInterval(100),
 																												 _isPerformingAttack(false),
 																												 _velocityIsEnabled(true),
-																												 _collisionState(false, false)
+																												 _collisionState(false, false),
+																												 _collidingRect(Rectangle())
 {
 	graphics.loadImage("content/sprites/MyChar-no-bg.png");
 
@@ -214,6 +215,7 @@ void Player::jump()
 		this->_dy = 0;
 		this->_dy -= player_constants::JUMP_SPEED;
 		this->_grounded = false;
+		this->_collidingRect = Rectangle();
 	}
 }
 
@@ -229,6 +231,7 @@ void Player::handleTileCollisions(std::vector<Rectangle> &others)
 		sides::Side collisionSide = Sprite::getCollisionSide(others.at(i));
 		if (collisionSide != sides::NONE)
 		{
+
 			switch (collisionSide)
 			{
 			case sides::TOP:
@@ -253,6 +256,8 @@ void Player::handleTileCollisions(std::vector<Rectangle> &others)
 				this->_collisionState.horizontal = true;
 				break;
 			case sides::RIGHT:
+				this->_collidingRect = Rectangle();
+				this->_collidingRect = others.at(i);
 				this->_collisionState.horizontal = true;
 				this->_x = others.at(i).getLeft() - this->_boundingBox.getWidth() - 1;
 				break;
@@ -500,4 +505,8 @@ CollisionState Player::getCollisionState()
 void Player::setCollisionState(CollisionState collisionState)
 {
 	this->_collisionState = collisionState;
+}
+Rectangle Player::getCollidingRect()
+{
+	return this->_collidingRect;
 }

@@ -66,11 +66,10 @@ void Game::gameLoop()
 				return;
 			}
 		}
-
-		handleInput(input);
-
 		const int CURRENT_TIME_MS = SDL_GetTicks();
 		int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
+
+		handleInput(input, std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME));
 
 		this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME), graphics);
 		LAST_UPDATE_TIME = CURRENT_TIME_MS;
@@ -79,7 +78,7 @@ void Game::gameLoop()
 	}
 }
 
-void Game::handleInput(Input &input)
+void Game::handleInput(Input &input, float elapsedTime)
 {
 	Camera &camera = Camera::getInstance();
 
@@ -131,7 +130,16 @@ void Game::handleInput(Input &input)
 	{
 		this->_player.stopAttack();
 	}
-
+	if (input.wasKeyPressed(SDL_SCANCODE_SPACE) && input.isKeyHeld(SDL_SCANCODE_A))
+	{
+		this->_player.moveLeft();
+		this->_player.jump();
+	}
+	if (input.wasKeyPressed(SDL_SCANCODE_SPACE) && input.isKeyHeld(SDL_SCANCODE_D))
+	{
+		this->_player.moveRight();
+		this->_player.jump();
+	}
 	if (input.wasKeyPressed(SDL_SCANCODE_SPACE))
 	{
 		this->_player.jump();
@@ -207,13 +215,11 @@ void Game::update(float elapsedTime, Graphics &graphics)
 	std::vector<Rectangle> others;
 	if ((others = this->_level.checkTileCollisions(this->_player.getBoundingBox())).size() > 0)
 	{
-		// Player collided with at least one tile. Handle it.
 		this->_player.handleTileCollisions(others);
 	}
 	else
 	{
-		CollisionState collisionState(false, false);
-		this->_player.setCollisionState(collisionState);
+		// CollisionState collisionState(false, false);
 	}
 	// Check slopes
 	std::vector<Slope> otherSlopes;

@@ -6,13 +6,14 @@
 class Rectangle
 {
 public:
-	Rectangle() {}
+	Rectangle() : _isNull(true) {}
 
 	Rectangle(int x, int y, int width, int height) : _x(x),
 																									 _y(y),
 																									 _width(width),
 																									 _height(height),
-																									 _offset(Vector2(0.0f, 0.0f))
+																									 _offset(Vector2(0.0f, 0.0f)),
+																									 _isNull(false)
 	{
 	}
 
@@ -87,6 +88,7 @@ public:
 protected:
 	Vector2 _offset;
 	float _x, _y;
+	bool _isNull;
 
 	int _width,
 			_height;

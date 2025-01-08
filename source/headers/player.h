@@ -102,6 +102,7 @@ public:
 	CollisionState getCollisionState();
 	void setCollisionState(CollisionState collisionState);
 	Direction getFacing();
+	Rectangle getCollidingRect();
 
 private:
 	float _dx,
@@ -115,7 +116,7 @@ private:
 	bool _lookingDown;
 	bool _moveCamera;
 	bool _velocityIsEnabled;
-
+	Rectangle _collidingRect;
 	int _maxHealth;
 	int _currentHealth;
 	Uint32 _hitTimer;

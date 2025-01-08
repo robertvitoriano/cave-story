@@ -63,7 +63,10 @@
     "span": "cpp",
     "valarray": "cpp",
     "variant": "cpp",
-    "queue": "cpp"
+    "queue": "cpp",
+    "semaphore": "cpp",
+    "stop_token": "cpp",
+    "thread": "cpp"
   },
   "editor.wordWrap": "wordWrapColumn",
   "editor.wordWrapColumn": 140,
