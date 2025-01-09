@@ -130,16 +130,7 @@ void Game::handleInput(Input &input, float elapsedTime)
 	{
 		this->_player.stopAttack();
 	}
-	if (input.wasKeyPressed(SDL_SCANCODE_SPACE) && input.isKeyHeld(SDL_SCANCODE_A))
-	{
-		this->_player.moveLeft();
-		this->_player.jump();
-	}
-	if (input.wasKeyPressed(SDL_SCANCODE_SPACE) && input.isKeyHeld(SDL_SCANCODE_D))
-	{
-		this->_player.moveRight();
-		this->_player.jump();
-	}
+
 	if (input.wasKeyPressed(SDL_SCANCODE_SPACE))
 	{
 		this->_player.jump();
