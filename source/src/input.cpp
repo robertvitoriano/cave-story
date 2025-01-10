@@ -6,6 +6,7 @@ void Input::beginNewFrame()
 	this->_releasedKeys.clear();
 	this->_pressedMouseButtons.clear();
 	this->_releasedMouseButtons.clear();
+	// this->_heldJoystickButtons.clear();
 }
 
 void Input::keyDownEvent(const SDL_Event &event)
@@ -13,15 +14,26 @@ void Input::keyDownEvent(const SDL_Event &event)
 	this->_pressedKeys[event.key.keysym.scancode] = true;
 	this->_heldKeys[event.key.keysym.scancode] = true;
 }
-void Input::AxisMovedEvent(const SDL_Event &event)
-{
-	this->_pressedAxis[event.jaxis.axis] = event.jaxis.value;
-	this->_heldAxis[event.jaxis.axis] = event.jaxis.value;
-}
 void Input::keyUpEvent(const SDL_Event &event)
 {
 	this->_releasedKeys[event.key.keysym.scancode] = true;
 	this->_heldKeys[event.key.keysym.scancode] = false;
+}
+void Input::joystickButtonDownEvent(int button)
+{
+	this->_pressedJoystickButtons[button] = true;
+	this->_heldJoystickButtons[button] = true;
+}
+void Input::joystickButtonUpEvent(int joystickButton)
+{
+	this->_releasedJoystickButtons[joystickButton] = true;
+	this->_heldJoystickButtons[joystickButton] = false;
+	this->_pressedJoystickButtons[joystickButton] = true;
+}
+void Input::AxisMovedEvent(const SDL_Event &event)
+{
+	this->_pressedAxis[event.jaxis.axis] = event.jaxis.value;
+	this->_heldAxis[event.jaxis.axis] = event.jaxis.value;
 }
 
 void Input::mouseButtonDownEvent(const SDL_Event &event)
@@ -49,6 +61,20 @@ bool Input::wasKeyReleased(SDL_Scancode key)
 bool Input::isKeyHeld(SDL_Scancode key)
 {
 	return this->_heldKeys[key];
+}
+bool Input::wasJoystickButtonPressed(int joystickButton)
+{
+	return this->_pressedJoystickButtons[joystickButton];
+}
+
+bool Input::wasJoystickButtonReleased(int joystickButton)
+{
+	return this->_releasedJoystickButtons[joystickButton];
+}
+
+bool Input::isJoystickButtonHeld(int joystickButton)
+{
+	return this->_heldJoystickButtons[joystickButton];
 }
 Sint16 Input::wasAxisReleased(int axis)
 {
