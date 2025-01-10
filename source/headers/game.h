@@ -22,7 +22,7 @@ public:
 private:
 	void gameLoop();
 	void draw(Graphics &graphics);
-	void update(float elapsedTime, Graphics &graphics);
+	void update(float elapsedTime, Graphics &graphics, Input &input);
 	void handleInput(Input &input, float elapsedTime);
 	void handleScrolling();
 	void toggleDebug();

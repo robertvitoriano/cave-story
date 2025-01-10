@@ -89,33 +89,33 @@ void Game::gameLoop()
 			case SDL_QUIT:
 				return;
 
-			case SDL_JOYAXISMOTION:
-				if ((event.jaxis.value < -3200) || (event.jaxis.value > 3200))
-				{
-					if (event.jaxis.axis == 0)
-					{
-						if (event.jaxis.value > 0)
-						{
-							this->_player.moveRight();
-						}
-						else if (event.jaxis.value < 0)
-						{
-							this->_player.moveLeft();
-						}
-					}
-					else if (event.jaxis.axis == 1)
-					{
-						if (event.jaxis.value < 0)
-						{
-							this->_player.moveUp();
-						}
-						else if (event.jaxis.value > 0)
-						{
-							this->_player.moveDown();
-						}
-					}
-				}
-				break;
+				// case SDL_JOYAXISMOTION:
+				// 	if ((event.jaxis.value < -3200) || (event.jaxis.value > 3200))
+				// 	{
+				// 		if (event.jaxis.axis == 0)
+				// 		{
+				// 			if (event.jaxis.value > 0)
+				// 			{
+				// 				this->_player.moveRight();
+				// 			}
+				// 			else if (event.jaxis.value < 0)
+				// 			{
+				// 				this->_player.moveLeft();
+				// 			}
+				// 		}
+				// 		else if (event.jaxis.axis == 1)
+				// 		{
+				// 			if (event.jaxis.value < 0)
+				// 			{
+				// 				this->_player.moveUp();
+				// 			}
+				// 			else if (event.jaxis.value > 0)
+				// 			{
+				// 				this->_player.moveDown();
+				// 			}
+				// 		}
+				// 	}
+				// 	break;
 
 			default:
 				break;
@@ -127,7 +127,7 @@ void Game::gameLoop()
 
 		handleInput(input, std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME));
 
-		this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME), graphics);
+		this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME), graphics, input);
 		LAST_UPDATE_TIME = CURRENT_TIME_MS;
 
 		this->draw(graphics);
@@ -146,12 +146,12 @@ void Game::handleInput(Input &input, float elapsedTime)
 	{
 		this->_player.attack();
 	}
-	else if (input.isKeyHeld(SDL_SCANCODE_A) || SDL_JoystickGetButton(this->_joystick, JoystickButtons::JOYSTICK_LEFT))
+	else if (input.isKeyHeld(SDL_SCANCODE_A) || input.isJoystickButtonHeld(JoystickButtons::JOYSTICK_LEFT))
 	{
 		camera.moveRight();
 		this->_player.moveLeft();
 	}
-	else if (input.isKeyHeld(SDL_SCANCODE_D) || SDL_JoystickGetButton(this->_joystick, JoystickButtons::JOYSTICK_RIGHT))
+	else if (input.isKeyHeld(SDL_SCANCODE_D) || input.isJoystickButtonHeld(JoystickButtons::JOYSTICK_RIGHT))
 	{
 		camera.moveLeft();
 		this->_player.moveRight();
@@ -169,7 +169,7 @@ void Game::handleInput(Input &input, float elapsedTime)
 	{
 		this->_player.lookUp();
 	}
-	else if (input.isKeyHeld(SDL_SCANCODE_S) && this->_player.isGravityEnabled())
+	else if ((input.isKeyHeld(SDL_SCANCODE_S) || input.isJoystickButtonHeld(JoystickButtons::JOYSTICK_DOWN)) && this->_player.isGravityEnabled())
 	{
 		this->_player.lookDown();
 	}
@@ -182,12 +182,14 @@ void Game::handleInput(Input &input, float elapsedTime)
 	{
 		this->_player.stopLookingDown();
 	}
-	if (input.wasKeyReleased(SDL_SCANCODE_F) || input.wasMouseButtonReleased(SDL_BUTTON_LEFT))
+	if (input.wasKeyReleased(SDL_SCANCODE_F) ||
+			input.wasMouseButtonReleased(SDL_BUTTON_LEFT) ||
+			input.wasJoystickButtonReleased(JoystickButtons::RECTANGLE))
 	{
 		this->_player.stopAttack();
 	}
 
-	if (input.wasKeyPressed(SDL_SCANCODE_SPACE) || SDL_JoystickGetButton(this->_joystick, 0))
+	if (input.wasKeyPressed(SDL_SCANCODE_SPACE) || SDL_JoystickGetButton(this->_joystick, JoystickButtons::X))
 	{
 		this->_player.jump();
 	}
@@ -199,7 +201,11 @@ void Game::handleInput(Input &input, float elapsedTime)
 	if (!input.isKeyHeld(SDL_SCANCODE_A) &&
 			!input.isKeyHeld(SDL_SCANCODE_D) &&
 			!input.isKeyHeld(SDL_SCANCODE_S) &&
-			!input.isKeyHeld(SDL_SCANCODE_W))
+			!input.isKeyHeld(SDL_SCANCODE_W) &&
+			!input.isJoystickButtonHeld(JoystickButtons::JOYSTICK_LEFT) &&
+			!input.isJoystickButtonHeld(JoystickButtons::JOYSTICK_UP) &&
+			!input.isJoystickButtonHeld(JoystickButtons::JOYSTICK_RIGHT) &&
+			!input.isJoystickButtonHeld(JoystickButtons::JOYSTICK_DOWN))
 	{
 		this->_player.stopMoving();
 		camera.stopMoving();
@@ -239,7 +245,7 @@ void Game::toggleDebug()
 	this->_displayDebug = !this->_displayDebug;
 }
 
-void Game::update(float elapsedTime, Graphics &graphics)
+void Game::update(float elapsedTime, Graphics &graphics, Input &input)
 {
 	this->_player.update(elapsedTime);
 	this->_level.update(elapsedTime, this->_player);
@@ -252,10 +258,15 @@ void Game::update(float elapsedTime, Graphics &graphics)
 	{
 		if (SDL_JoystickGetButton(this->_joystick, i))
 		{
-
-			printf("Button pressed: %d\n", i);
+			input.joystickButtonDownEvent(i);
+			std::cout << "PRESSED " << i << std::endl;
+		}
+		else
+		{
+			input.joystickButtonUpEvent(i);
 		}
 	}
+
 	if (this->_player.getCurrentHealth() == 0)
 	{
 		gameIsLost = true;

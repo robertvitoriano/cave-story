@@ -6,7 +6,8 @@ void Input::beginNewFrame()
 	this->_releasedKeys.clear();
 	this->_pressedMouseButtons.clear();
 	this->_releasedMouseButtons.clear();
-	// this->_heldJoystickButtons.clear();
+	this->_pressedJoystickButtons.clear();
+	this->_releasedJoystickButtons.clear();
 }
 
 void Input::keyDownEvent(const SDL_Event &event)
@@ -28,7 +29,6 @@ void Input::joystickButtonUpEvent(int joystickButton)
 {
 	this->_releasedJoystickButtons[joystickButton] = true;
 	this->_heldJoystickButtons[joystickButton] = false;
-	this->_pressedJoystickButtons[joystickButton] = true;
 }
 void Input::AxisMovedEvent(const SDL_Event &event)
 {
