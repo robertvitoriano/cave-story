@@ -2,22 +2,45 @@
 #include <game.h>
 #include <graphics.h>
 #include <weapon.h>
+#include <stdio.h>
 namespace
 {
 	const int FPS = 50;
 	const int MAX_FRAME_TIME = 1000 / FPS;
 }
 
-Game::Game() : gameIsLost(false), _displayDebug(false)
+Game::Game() : gameIsLost(false), _displayDebug(false), _joystick(nullptr)
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
 	musicPlayer.playSound("content/sounds/background.mp3", -1);
+	int numberOfJoysticks = SDL_NumJoysticks();
+	printf("%d joysticks found\n", numberOfJoysticks);
+	if (numberOfJoysticks > 0)
+	{
+		this->_joystick = SDL_JoystickOpen(0);
+		if (this->_joystick)
+		{
+			printf("Opened Joystick 0\n");
+			printf("Name: %s\n", SDL_JoystickName(this->_joystick));
+			printf("Number of Axes: %d\n", SDL_JoystickNumAxes(this->_joystick));
+			printf("Number of Buttons: %d\n", SDL_JoystickNumButtons(this->_joystick));
+			printf("Number of Balls: %d\n", SDL_JoystickNumBalls(this->_joystick));
+		}
+		else
+		{
+			printf("Couldn't open Joystick 0\n");
+		}
+	}
 	this->gameLoop();
 }
 
 Game::~Game()
 {
+	if (this->_joystick)
+		SDL_JoystickClose(this->_joystick);
+
+	this->_joystick = nullptr;
 }
 
 void Game::gameLoop()
@@ -25,7 +48,7 @@ void Game::gameLoop()
 	Graphics graphics;
 	Input input;
 	SDL_Event event;
-	this->_level = Level("Map_1_7", graphics);
+	this->_level = Level("Map_1", graphics);
 	this->_player = Player(graphics, this->_level.getPlayerSpawnPoint());
 	this->_hud = HUD(graphics, this->_player);
 	Camera &camera = Camera::getInstance();
@@ -42,30 +65,63 @@ void Game::gameLoop()
 
 		if (SDL_PollEvent(&event))
 		{
-			if (event.type == SDL_KEYDOWN)
+			switch (event.type)
 			{
+			case SDL_KEYDOWN:
 				if (event.key.repeat == 0)
 				{
 					input.keyDownEvent(event);
 				}
-			}
-			else if (event.type == SDL_KEYUP)
-			{
+				break;
+
+			case SDL_KEYUP:
 				input.keyUpEvent(event);
-			}
-			else if (event.type == SDL_MOUSEBUTTONDOWN)
-			{
+				break;
+
+			case SDL_MOUSEBUTTONDOWN:
 				input.mouseButtonDownEvent(event);
-			}
-			else if (event.type == SDL_MOUSEBUTTONUP)
-			{
+				break;
+
+			case SDL_MOUSEBUTTONUP:
 				input.mouseButtonUpEvent(event);
-			}
-			else if (event.type == SDL_QUIT)
-			{
+				break;
+
+			case SDL_QUIT:
 				return;
+
+			case SDL_JOYAXISMOTION:
+				if ((event.jaxis.value < -3200) || (event.jaxis.value > 3200))
+				{
+					if (event.jaxis.axis == 0)
+					{
+						if (event.jaxis.value > 0)
+						{
+							this->_player.moveRight();
+						}
+						else if (event.jaxis.value < 0)
+						{
+							this->_player.moveLeft();
+						}
+					}
+					else if (event.jaxis.axis == 1)
+					{
+						if (event.jaxis.value < 0)
+						{
+							this->_player.moveUp();
+						}
+						else if (event.jaxis.value > 0)
+						{
+							this->_player.moveDown();
+						}
+					}
+				}
+				break;
+
+			default:
+				break;
 			}
 		}
+
 		const int CURRENT_TIME_MS = SDL_GetTicks();
 		int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
 
@@ -86,16 +142,16 @@ void Game::handleInput(Input &input, float elapsedTime)
 	{
 		return;
 	}
-	if (input.isKeyHeld(SDL_SCANCODE_F) || input.isMouseButtonHeld(SDL_BUTTON_LEFT))
+	if (input.isKeyHeld(SDL_SCANCODE_F) || input.isMouseButtonHeld(SDL_BUTTON_LEFT) || SDL_JoystickGetButton(this->_joystick, JoystickButtons::RECTANGLE))
 	{
 		this->_player.attack();
 	}
-	else if (input.isKeyHeld(SDL_SCANCODE_A))
+	else if (input.isKeyHeld(SDL_SCANCODE_A) || SDL_JoystickGetButton(this->_joystick, JoystickButtons::JOYSTICK_LEFT))
 	{
 		camera.moveRight();
 		this->_player.moveLeft();
 	}
-	else if (input.isKeyHeld(SDL_SCANCODE_D))
+	else if (input.isKeyHeld(SDL_SCANCODE_D) || SDL_JoystickGetButton(this->_joystick, JoystickButtons::JOYSTICK_RIGHT))
 	{
 		camera.moveLeft();
 		this->_player.moveRight();
@@ -131,7 +187,7 @@ void Game::handleInput(Input &input, float elapsedTime)
 		this->_player.stopAttack();
 	}
 
-	if (input.wasKeyPressed(SDL_SCANCODE_SPACE))
+	if (input.wasKeyPressed(SDL_SCANCODE_SPACE) || SDL_JoystickGetButton(this->_joystick, 0))
 	{
 		this->_player.jump();
 	}
@@ -191,7 +247,15 @@ void Game::update(float elapsedTime, Graphics &graphics)
 	Camera &camera = Camera::getInstance();
 
 	camera.update(elapsedTime);
+	printf("Checking joystick button presses...\n");
+	for (int i = 0; i < SDL_JoystickNumButtons(this->_joystick); i++)
+	{
+		if (SDL_JoystickGetButton(this->_joystick, i))
+		{
 
+			printf("Button pressed: %d\n", i);
+		}
+	}
 	if (this->_player.getCurrentHealth() == 0)
 	{
 		gameIsLost = true;

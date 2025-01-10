@@ -19,6 +19,10 @@ public:
 	bool wasMouseButtonPressed(Uint8 button);
 	bool wasMouseButtonReleased(Uint8 button);
 	bool isMouseButtonHeld(Uint8 button);
+	void AxisMovedEvent(const SDL_Event &event);
+	Sint16 wasAxisReleased(int axis);
+	Sint16 isAxisHeld(int axis);
+	Sint16 wasAxisPressed(int axis);
 
 private:
 	std::map<SDL_Scancode, bool> _heldKeys;
@@ -28,6 +32,10 @@ private:
 	std::map<Uint8, bool> _heldMouseButtons;
 	std::map<Uint8, bool> _pressedMouseButtons;
 	std::map<Uint8, bool> _releasedMouseButtons;
+
+	std::map<Uint8, Sint16> _heldAxis;
+	std::map<Uint8, Sint16> _pressedAxis;
+	std::map<Uint8, Sint16> _releasedAxis;
 };
 
 #endif

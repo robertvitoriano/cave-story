@@ -33,6 +33,7 @@ private:
 	HUD _hud;
 	bool gameIsLost;
 	bool _displayDebug;
+	SDL_Joystick *_joystick;
 };
 
 #endif

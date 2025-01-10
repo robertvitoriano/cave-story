@@ -38,7 +38,17 @@ enum Direction
 	UP,
 	DOWN
 };
-
+enum JoystickButtons
+{
+	JOYSTICK_LEFT = 13,
+	JOYSTICK_RIGHT = 14,
+	JOYSTICK_UP = 11,
+	JOYSTICK_DOWN = 12,
+	X = 0,
+	BALL = 1,
+	RECTANGLE = 2,
+	TRIANGLE = 3
+};
 struct CollisionState
 {
 	bool horizontal;

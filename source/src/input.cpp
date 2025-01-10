@@ -13,7 +13,11 @@ void Input::keyDownEvent(const SDL_Event &event)
 	this->_pressedKeys[event.key.keysym.scancode] = true;
 	this->_heldKeys[event.key.keysym.scancode] = true;
 }
-
+void Input::AxisMovedEvent(const SDL_Event &event)
+{
+	this->_pressedAxis[event.jaxis.axis] = event.jaxis.value;
+	this->_heldAxis[event.jaxis.axis] = event.jaxis.value;
+}
 void Input::keyUpEvent(const SDL_Event &event)
 {
 	this->_releasedKeys[event.key.keysym.scancode] = true;
@@ -46,7 +50,18 @@ bool Input::isKeyHeld(SDL_Scancode key)
 {
 	return this->_heldKeys[key];
 }
-
+Sint16 Input::wasAxisReleased(int axis)
+{
+	return this->_releasedAxis[axis];
+}
+Sint16 Input::isAxisHeld(int axis)
+{
+	return this->_heldAxis[axis];
+}
+Sint16 Input::wasAxisPressed(int axis)
+{
+	return this->_pressedAxis[axis];
+}
 bool Input::wasMouseButtonPressed(Uint8 button)
 {
 	return this->_pressedMouseButtons[button];
