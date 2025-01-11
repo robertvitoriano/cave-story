@@ -41,6 +41,8 @@ Game::Game() : _gameState(gameState::MAIN_MENU), _displayDebug(false), _joystick
 
 	this->_pauseMenu->addItem("Resume", [this]()
 														{ this->_gameState = gameState::PLAYING; });
+	this->_pauseMenu->addItem("Main menu", [this]()
+														{ this->_gameState = gameState::MAIN_MENU; });
 
 	this->_menuManager.setMenu(this->_mainMenu);
 	this->gameLoop();
@@ -130,10 +132,11 @@ void Game::handleInput(Input &input, float elapsedTime)
 
 	if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE))
 	{
-		return;
-	}
-	if (input.wasKeyPressed(SDL_SCANCODE_RETURN))
-	{
+		if (this->_gameState == gameState::PAUSED)
+		{
+			this->_gameState = gameState::PLAYING;
+			return;
+		}
 		if (this->_gameState == gameState::PLAYING)
 		{
 			this->_gameState = gameState::PAUSED;
