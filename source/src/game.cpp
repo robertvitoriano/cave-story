@@ -9,7 +9,7 @@ namespace
 	const int MAX_FRAME_TIME = 1000 / FPS;
 }
 
-Game::Game() : gameIsLost(false), _displayDebug(false), _joystick(nullptr)
+Game::Game() : gameIsLost(false), _displayDebug(false), _joystick(nullptr), _mainMenu(std::make_shared<Menu>())
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
@@ -33,15 +33,15 @@ Game::Game() : gameIsLost(false), _displayDebug(false), _joystick(nullptr)
 		}
 	}
 	this->gameLoop();
-	MenuManager menuManager;
 
-	auto mainMenu = std::make_shared<Menu>();
-	mainMenu->addItem("Start Game", []() {});
-	mainMenu->addItem("Options", []() {});
-	mainMenu->addItem("Exit", []()
-										{ SDL_Quit(); exit(0); });
+	this->_mainMenu->addItem("Start Game", []()
+													 { std::cout << " GAME SHOULD START" << std::endl; });
+	this->_mainMenu->addItem("Options", []()
+													 { std::cout << " options SHOULD show" << std::endl; });
+	this->_mainMenu->addItem("Exit", []()
+													 { SDL_Quit(); exit(0); });
 
-	menuManager.setMenu(mainMenu);
+	this->_menuManager.setMenu(this->_mainMenu);
 }
 
 Game::~Game()
@@ -74,6 +74,7 @@ void Game::gameLoop()
 
 		if (SDL_PollEvent(&event))
 		{
+			this->_mainMenu->handleInput(event);
 			switch (event.type)
 			{
 			case SDL_KEYDOWN:
@@ -229,7 +230,7 @@ void Game::draw(Graphics &graphics)
 
 	if (!gameIsLost)
 	{
-
+		this->_mainMenu->render(graphics.getRenderer(), globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2);
 		this->_level.draw(graphics, this->_player);
 
 		this->_hud.draw(graphics);

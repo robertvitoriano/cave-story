@@ -39,6 +39,7 @@ private:
 	bool _displayDebug;
 	SDL_Joystick *_joystick;
 	MenuManager _menuManager;
+	std::shared_ptr<Menu> _mainMenu;
 };
 
 #endif
