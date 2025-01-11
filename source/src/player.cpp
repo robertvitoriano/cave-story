@@ -324,11 +324,6 @@ void Player::handleDoorCollision(std::vector<Door> &doors, Level &level, Graphic
 	}
 }
 
-void Player::handle3DimensionalLevel()
-{
-	std::cout << "Handle 3d Level" << std::endl;
-}
-
 void Player::handleGravityChange(std::vector<GravityChange> &gravityChangers)
 {
 	for (int i = 0; i < gravityChangers.size(); i++)

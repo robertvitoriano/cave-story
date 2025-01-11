@@ -4,12 +4,14 @@
 #include <SDL2/SDL.h>
 #include <string>
 #include <functional>
+#include <graphics.h>
+#include <globals.h>
 class MenuItem
 {
 public:
   MenuItem(const std::string &text, std::function<void()> action);
 
-  void render(SDL_Renderer *renderer, int x, int y, bool selected);
+  void render(Graphics &graphics, int x, int y, bool selected);
   void executeAction();
 
 private:

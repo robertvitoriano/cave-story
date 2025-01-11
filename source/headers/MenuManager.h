@@ -8,7 +8,7 @@ class MenuManager
 public:
   void setMenu(std::shared_ptr<Menu> menu);
   void handleInput(SDL_Event &event);
-  void render(SDL_Renderer *renderer);
+  void render(Graphics &graphics);
 
 private:
   std::shared_ptr<Menu> currentMenu;

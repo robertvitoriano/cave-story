@@ -9,7 +9,7 @@ namespace
 	const int MAX_FRAME_TIME = 1000 / FPS;
 }
 
-Game::Game() : gameIsLost(false), _displayDebug(false), _joystick(nullptr), _mainMenu(std::make_shared<Menu>())
+Game::Game() : _gameIsLost(false), _gameIsPaused(false), _gameStarted(false), _displayDebug(false), _joystick(nullptr), _mainMenu(std::make_shared<Menu>())
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
@@ -32,16 +32,15 @@ Game::Game() : gameIsLost(false), _displayDebug(false), _joystick(nullptr), _mai
 			printf("Couldn't open Joystick 0\n");
 		}
 	}
-	this->gameLoop();
-
-	this->_mainMenu->addItem("Start Game", []()
-													 { std::cout << " GAME SHOULD START" << std::endl; });
+	this->_mainMenu->addItem("Start Game", [this]()
+													 { this->_gameStarted = true; });
 	this->_mainMenu->addItem("Options", []()
 													 { std::cout << " options SHOULD show" << std::endl; });
 	this->_mainMenu->addItem("Exit", []()
 													 { SDL_Quit(); exit(0); });
 
 	this->_menuManager.setMenu(this->_mainMenu);
+	this->gameLoop();
 }
 
 Game::~Game()
@@ -228,9 +227,8 @@ void Game::draw(Graphics &graphics)
 
 	graphics.clear();
 
-	if (!gameIsLost)
+	if (!this->_gameIsLost && this->_gameStarted && !this->_gameIsPaused)
 	{
-		this->_mainMenu->render(graphics.getRenderer(), globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2);
 		this->_level.draw(graphics, this->_player);
 
 		this->_hud.draw(graphics);
@@ -242,7 +240,11 @@ void Game::draw(Graphics &graphics)
 			camera.drawDebug(graphics);
 		}
 	}
-	else
+	else if (!this->_gameStarted)
+	{
+		this->_mainMenu->render(graphics, globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2);
+	}
+	else if (this->_gameIsLost)
 	{
 		SDL_Color white = {255, 255, 255, 255};
 		Vector2 position = {globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2};
@@ -263,13 +265,12 @@ void Game::update(float elapsedTime, Graphics &graphics, Input &input)
 	Camera &camera = Camera::getInstance();
 
 	camera.update(elapsedTime);
-	printf("Checking joystick button presses...\n");
+	// printf("Checking joystick button presses...\n");
 	for (int i = 0; i < SDL_JoystickNumButtons(this->_joystick); i++)
 	{
 		if (SDL_JoystickGetButton(this->_joystick, i))
 		{
 			input.joystickButtonDownEvent(i);
-			std::cout << "PRESSED " << i << std::endl;
 		}
 		else
 		{
@@ -279,12 +280,12 @@ void Game::update(float elapsedTime, Graphics &graphics, Input &input)
 
 	if (this->_player.getCurrentHealth() == 0)
 	{
-		gameIsLost = true;
+		this->_gameIsLost = true;
 	}
 
 	if (this->_player.getY() >= globals::SCREEN_HEIGHT)
 	{
-		gameIsLost = true;
+		this->_gameIsLost = true;
 	}
 
 	// Check collisions

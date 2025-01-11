@@ -5,11 +5,11 @@ void Menu::addItem(const std::string &text, std::function<void()> action)
   this->items.emplace_back(text, action);
 }
 
-void Menu::render(SDL_Renderer *renderer, int x, int y)
+void Menu::render(Graphics &graphics, int x, int y)
 {
   for (size_t i = 0; i < this->items.size(); ++i)
   {
-    this->items[i].render(renderer, x, y + static_cast<int>(i * 30), i == this->selectedIndex);
+    this->items[i].render(graphics, x, y + static_cast<int>(i * 30), i == this->selectedIndex);
   }
 }
 

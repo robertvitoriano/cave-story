@@ -35,7 +35,9 @@ private:
 	Level _level;
 
 	HUD _hud;
-	bool gameIsLost;
+	bool _gameIsLost;
+	bool _gameStarted;
+	bool _gameIsPaused;
 	bool _displayDebug;
 	SDL_Joystick *_joystick;
 	MenuManager _menuManager;
