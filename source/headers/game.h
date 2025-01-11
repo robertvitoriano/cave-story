@@ -30,6 +30,7 @@ private:
 	void handleInput(Input &input, float elapsedTime);
 	void handleScrolling();
 	void toggleDebug();
+	void drawGame(Graphics &graphics);
 	Player _player;
 
 	Level _level;
@@ -42,6 +43,7 @@ private:
 	SDL_Joystick *_joystick;
 	MenuManager _menuManager;
 	std::shared_ptr<Menu> _mainMenu;
+	std::shared_ptr<Menu> _pauseMenu;
 };
 
 #endif

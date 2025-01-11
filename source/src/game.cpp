@@ -9,7 +9,7 @@ namespace
 	const int MAX_FRAME_TIME = 1000 / FPS;
 }
 
-Game::Game() : _gameIsLost(false), _gameIsPaused(false), _gameStarted(false), _displayDebug(false), _joystick(nullptr), _mainMenu(std::make_shared<Menu>())
+Game::Game() : _gameIsLost(false), _gameIsPaused(false), _gameStarted(false), _displayDebug(false), _joystick(nullptr), _mainMenu(std::make_shared<Menu>()), _pauseMenu(std::make_shared<Menu>())
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
@@ -38,6 +38,9 @@ Game::Game() : _gameIsLost(false), _gameIsPaused(false), _gameStarted(false), _d
 													 { std::cout << " options SHOULD show" << std::endl; });
 	this->_mainMenu->addItem("Exit", []()
 													 { SDL_Quit(); exit(0); });
+
+	this->_pauseMenu->addItem("Resume", [this]()
+														{ this->_gameIsPaused = false; });
 
 	this->_menuManager.setMenu(this->_mainMenu);
 	this->gameLoop();
@@ -151,6 +154,13 @@ void Game::handleInput(Input &input, float elapsedTime)
 	{
 		return;
 	}
+	if (input.wasKeyPressed(SDL_SCANCODE_RETURN))
+	{
+		if (!this->_gameIsPaused && this->_gameStarted)
+		{
+			this->_gameIsPaused = true;
+		}
+	}
 	if (input.isKeyHeld(SDL_SCANCODE_F) || input.isMouseButtonHeld(SDL_BUTTON_LEFT) || SDL_JoystickGetButton(this->_joystick, JoystickButtons::RECTANGLE))
 	{
 		this->_player.attack();
@@ -223,22 +233,16 @@ void Game::handleInput(Input &input, float elapsedTime)
 
 void Game::draw(Graphics &graphics)
 {
-	Camera &camera = Camera::getInstance();
-
 	graphics.clear();
 
-	if (!this->_gameIsLost && this->_gameStarted && !this->_gameIsPaused)
+	if (!this->_gameIsLost && this->_gameStarted)
 	{
-		this->_level.draw(graphics, this->_player);
-
-		this->_hud.draw(graphics);
-
-		this->_player.draw(graphics);
-		if (this->_displayDebug)
-		{
-			this->_level.drawDebug(graphics);
-			camera.drawDebug(graphics);
-		}
+		this->drawGame(graphics);
+	}
+	else if (this->_gameIsPaused)
+	{
+		this->drawGame(graphics);
+		this->_pauseMenu->render(graphics, globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2);
 	}
 	else if (!this->_gameStarted)
 	{
@@ -251,6 +255,21 @@ void Game::draw(Graphics &graphics)
 		graphics.drawText("You Lost", white, position);
 	}
 	graphics.flip();
+}
+void Game::drawGame(Graphics &graphics)
+{
+	Camera &camera = Camera::getInstance();
+
+	this->_level.draw(graphics, this->_player);
+
+	this->_hud.draw(graphics);
+
+	this->_player.draw(graphics);
+	if (this->_displayDebug)
+	{
+		this->_level.drawDebug(graphics);
+		camera.drawDebug(graphics);
+	}
 }
 void Game::toggleDebug()
 {
