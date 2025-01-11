@@ -16,7 +16,13 @@
 #include <Menu.h>
 #include <MenuItem.h>
 #include <MenuManager.h>
-
+enum gameState
+{
+	PAUSED,
+	PLAYING,
+	MAIN_MENU,
+	LOST
+};
 class Game
 {
 public:
@@ -31,14 +37,13 @@ private:
 	void handleScrolling();
 	void toggleDebug();
 	void drawGame(Graphics &graphics);
+	void playingUpdate(float elapsedTime, Graphics &graphics, Input &input);
 	Player _player;
 
 	Level _level;
 
 	HUD _hud;
-	bool _gameIsLost;
-	bool _gameStarted;
-	bool _gameIsPaused;
+	gameState _gameState;
 	bool _displayDebug;
 	SDL_Joystick *_joystick;
 	MenuManager _menuManager;

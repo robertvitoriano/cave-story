@@ -9,7 +9,7 @@ namespace
 	const int MAX_FRAME_TIME = 1000 / FPS;
 }
 
-Game::Game() : _gameIsLost(false), _gameIsPaused(false), _gameStarted(false), _displayDebug(false), _joystick(nullptr), _mainMenu(std::make_shared<Menu>()), _pauseMenu(std::make_shared<Menu>())
+Game::Game() : _gameState(gameState::MAIN_MENU), _displayDebug(false), _joystick(nullptr), _mainMenu(std::make_shared<Menu>()), _pauseMenu(std::make_shared<Menu>())
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	MusicPlayer &musicPlayer = MusicPlayer::getInstance();
@@ -33,14 +33,14 @@ Game::Game() : _gameIsLost(false), _gameIsPaused(false), _gameStarted(false), _d
 		}
 	}
 	this->_mainMenu->addItem("Start Game", [this]()
-													 { this->_gameStarted = true; });
+													 { this->_gameState = gameState::PLAYING; });
 	this->_mainMenu->addItem("Options", []()
 													 { std::cout << " options SHOULD show" << std::endl; });
 	this->_mainMenu->addItem("Exit", []()
 													 { SDL_Quit(); exit(0); });
 
 	this->_pauseMenu->addItem("Resume", [this]()
-														{ this->_gameIsPaused = false; });
+														{ this->_gameState = gameState::PLAYING; });
 
 	this->_menuManager.setMenu(this->_mainMenu);
 	this->gameLoop();
@@ -76,7 +76,14 @@ void Game::gameLoop()
 
 		if (SDL_PollEvent(&event))
 		{
-			this->_mainMenu->handleInput(event);
+			if (this->_gameState == gameState::MAIN_MENU)
+			{
+				this->_mainMenu->handleInput(event);
+			}
+			if (this->_gameState == gameState::PAUSED)
+			{
+				this->_pauseMenu->handleInput(event);
+			}
 			switch (event.type)
 			{
 			case SDL_KEYDOWN:
@@ -100,35 +107,6 @@ void Game::gameLoop()
 
 			case SDL_QUIT:
 				return;
-
-				// case SDL_JOYAXISMOTION:
-				// 	if ((event.jaxis.value < -3200) || (event.jaxis.value > 3200))
-				// 	{
-				// 		if (event.jaxis.axis == 0)
-				// 		{
-				// 			if (event.jaxis.value > 0)
-				// 			{
-				// 				this->_player.moveRight();
-				// 			}
-				// 			else if (event.jaxis.value < 0)
-				// 			{
-				// 				this->_player.moveLeft();
-				// 			}
-				// 		}
-				// 		else if (event.jaxis.axis == 1)
-				// 		{
-				// 			if (event.jaxis.value < 0)
-				// 			{
-				// 				this->_player.moveUp();
-				// 			}
-				// 			else if (event.jaxis.value > 0)
-				// 			{
-				// 				this->_player.moveDown();
-				// 			}
-				// 		}
-				// 	}
-				// 	break;
-
 			default:
 				break;
 			}
@@ -156,9 +134,9 @@ void Game::handleInput(Input &input, float elapsedTime)
 	}
 	if (input.wasKeyPressed(SDL_SCANCODE_RETURN))
 	{
-		if (!this->_gameIsPaused && this->_gameStarted)
+		if (this->_gameState == gameState::PLAYING)
 		{
-			this->_gameIsPaused = true;
+			this->_gameState = gameState::PAUSED;
 		}
 	}
 	if (input.isKeyHeld(SDL_SCANCODE_F) || input.isMouseButtonHeld(SDL_BUTTON_LEFT) || SDL_JoystickGetButton(this->_joystick, JoystickButtons::RECTANGLE))
@@ -235,25 +213,25 @@ void Game::draw(Graphics &graphics)
 {
 	graphics.clear();
 
-	if (!this->_gameIsLost && this->_gameStarted)
+	switch (this->_gameState)
 	{
+	case gameState::MAIN_MENU:
+		this->_mainMenu->render(graphics, globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2);
+		break;
+	case gameState::PLAYING:
 		this->drawGame(graphics);
-	}
-	else if (this->_gameIsPaused)
-	{
+		break;
+	case gameState::PAUSED:
 		this->drawGame(graphics);
 		this->_pauseMenu->render(graphics, globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2);
-	}
-	else if (!this->_gameStarted)
-	{
-		this->_mainMenu->render(graphics, globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2);
-	}
-	else if (this->_gameIsLost)
-	{
+		break;
+	case gameState::LOST:
 		SDL_Color white = {255, 255, 255, 255};
 		Vector2 position = {globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2};
 		graphics.drawText("You Lost", white, position);
+		break;
 	}
+
 	graphics.flip();
 }
 void Game::drawGame(Graphics &graphics)
@@ -278,6 +256,16 @@ void Game::toggleDebug()
 
 void Game::update(float elapsedTime, Graphics &graphics, Input &input)
 {
+	switch (this->_gameState)
+	{
+	case gameState::PLAYING:
+		this->playingUpdate(elapsedTime, graphics, input);
+		break;
+	}
+}
+
+void Game::playingUpdate(float elapsedTime, Graphics &graphics, Input &input)
+{
 	this->_player.update(elapsedTime);
 	this->_level.update(elapsedTime, this->_player);
 	this->_hud.update(elapsedTime, this->_player);
@@ -297,26 +285,17 @@ void Game::update(float elapsedTime, Graphics &graphics, Input &input)
 		}
 	}
 
-	if (this->_player.getCurrentHealth() == 0)
+	if (this->_player.getY() >= globals::SCREEN_HEIGHT || this->_player.getCurrentHealth() == 0)
 	{
-		this->_gameIsLost = true;
+		this->_gameState = gameState::LOST;
 	}
 
-	if (this->_player.getY() >= globals::SCREEN_HEIGHT)
-	{
-		this->_gameIsLost = true;
-	}
-
-	// Check collisions
 	std::vector<Rectangle> others;
 	if ((others = this->_level.checkTileCollisions(this->_player.getBoundingBox())).size() > 0)
 	{
 		this->_player.handleTileCollisions(others);
 	}
-	else
-	{
-		// CollisionState collisionState(false, false);
-	}
+
 	// Check slopes
 	std::vector<Slope> otherSlopes;
 	if ((otherSlopes = this->_level.checkSlopeCollisions(this->_player.getBoundingBox())).size() > 0)
