@@ -33,6 +33,15 @@ Game::Game() : gameIsLost(false), _displayDebug(false), _joystick(nullptr)
 		}
 	}
 	this->gameLoop();
+	MenuManager menuManager;
+
+	auto mainMenu = std::make_shared<Menu>();
+	mainMenu->addItem("Start Game", []() {});
+	mainMenu->addItem("Options", []() {});
+	mainMenu->addItem("Exit", []()
+										{ SDL_Quit(); exit(0); });
+
+	menuManager.setMenu(mainMenu);
 }
 
 Game::~Game()

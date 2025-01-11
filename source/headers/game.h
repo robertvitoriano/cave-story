@@ -13,6 +13,10 @@
 #include <sword.h>
 #include <GravityChange.h>
 #include <Camera.h>
+#include <Menu.h>
+#include <MenuItem.h>
+#include <MenuManager.h>
+
 class Game
 {
 public:
@@ -34,6 +38,7 @@ private:
 	bool gameIsLost;
 	bool _displayDebug;
 	SDL_Joystick *_joystick;
+	MenuManager _menuManager;
 };
 
 #endif

@@ -1,0 +1,17 @@
+#ifndef MENU_H
+#define MENU_H
+#include <MenuItem.h>
+
+class Menu
+{
+public:
+  void addItem(const std::string &text, std::function<void()> action);
+  void render(SDL_Renderer *renderer, int x, int y);
+  void handleInput(SDL_Event &event);
+
+private:
+  std::vector<MenuItem> items;
+  size_t selectedIndex = 0;
+};
+
+#endif
