@@ -1,0 +1,25 @@
+CompileFlags:
+  Add: 
+    - -I${project_root}/source/headers
+    - -I${project_root}/source/src
+
+ClangTidy:
+  Checks: '-*,clang-analyzer-*,modernize-*'
+
+Index:
+  Background: true
+  Threads: 4
+
+Diagnostics:
+  Suppress: 
+    - "unused-variable"
+
+PathMappings:
+  "/source/src": "${project_root}/source/src"
+  "/source/headers": "${project_root}/source/headers"
+  
+FileExtensions:
+  - .cpp
+  - .h
+  - .cc
+  - .hpp
