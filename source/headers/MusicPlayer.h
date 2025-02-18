@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <vector>
 #include <SDL_mixer.h>
-
+#include <algorithm>
 class MusicPlayer
 {
 private:
