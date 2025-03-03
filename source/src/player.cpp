@@ -28,7 +28,6 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 																												 _blinkStartTime(0),
 																												 _blinkDuration(1000),
 																												 _blinkInterval(100),
-																												 _isPerformingAttack(false),
 																												 _velocityIsEnabled(true),
 																												 _collisionState(false, false),
 																												 _collidingRect(Rectangle())
@@ -410,8 +409,6 @@ void Player::update(float elapsedTime)
 	this->_y += this->_dy * elapsedTime;
 
 	AnimatedSprite::update(elapsedTime);
-
-	this->_currentWeapon.update(elapsedTime);
 }
 
 void Player::disableVelocity()
@@ -455,29 +452,8 @@ void Player::draw(Graphics &graphics)
 		return;
 	}
 	AnimatedSprite::draw(graphics, this->_x, this->_y);
-	this->_currentWeapon.draw(graphics, this->_x, this->_y, this->_facing);
 }
 
-void Player::setWeapon(Sword &weapon)
-{
-	this->_currentWeapon = weapon;
-}
-
-void Player::attack()
-{
-	this->_isPerformingAttack = true;
-	this->_currentWeapon.performAttack();
-}
-
-void Player::stopAttack()
-{
-	this->_currentWeapon.stopAttack();
-	this->_isPerformingAttack = false;
-}
-bool Player::isAttacking()
-{
-	return this->_isPerformingAttack;
-}
 float Player::getXVelocity()
 {
 	return this->_dx;
@@ -504,4 +480,8 @@ void Player::setCollisionState(CollisionState collisionState)
 Rectangle Player::getCollidingRect()
 {
 	return this->_collidingRect;
+}
+
+void Player::shoot()
+{
 }

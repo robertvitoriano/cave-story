@@ -10,7 +10,6 @@
 #include <globals.h>
 #include <input.h>
 #include <SDL2/SDL.h>
-#include <sword.h>
 #include <GravityChange.h>
 #include <Camera.h>
 #include <Menu.h>
@@ -38,6 +37,7 @@ private:
 	void toggleDebug();
 	void drawGame(Graphics &graphics);
 	void playingUpdate(float elapsedTime, Graphics &graphics, Input &input);
+	void attack();
 	Player _player;
 
 	Level _level;

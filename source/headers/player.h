@@ -92,13 +92,10 @@ public:
 	bool isGravityEnabled();
 	void handle3DimensionalLevel();
 	void renderBlinkingPlayer(Graphics &graphics);
-	void setWeapon(Sword &weapon);
-	void attack();
-	void stopAttack();
-	bool isAttacking();
 	void disableVelocity();
 	void enableVelocity();
 	bool isVelocityEnabled();
+	void shoot();
 	CollisionState getCollisionState();
 	void setCollisionState(CollisionState collisionState);
 	Direction getFacing();
@@ -126,7 +123,6 @@ private:
 	int _blinkDuration;
 	int _blinkInterval;
 	Sword _currentWeapon;
-	bool _isPerformingAttack;
 	CollisionState _collisionState;
 };
 
