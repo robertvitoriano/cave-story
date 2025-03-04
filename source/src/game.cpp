@@ -4,7 +4,7 @@
 #include <stdio.h>
 namespace
 {
-	const int FPS = 50;
+	const int FPS = 60;
 	const int MAX_FRAME_TIME = 1000 / FPS;
 }
 
