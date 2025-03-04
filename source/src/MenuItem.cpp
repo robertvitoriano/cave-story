@@ -6,7 +6,7 @@ MenuItem::MenuItem(const std::string &text, std::function<void()> action)
 void MenuItem::render(Graphics &graphics, int x, int y, bool selected)
 {
   SDL_Color color = selected ? SDL_Color{255, 255, 0, 255} : SDL_Color{255, 255, 255, 255};
-  Vector2 position = {x, y};
+  Vector2 position = {static_cast<float>(x), static_cast<float>(y)};
   graphics.drawText(this->text, color, position);
 }
 
