@@ -1,7 +1,6 @@
 
 #include <game.h>
 #include <graphics.h>
-#include <weapon.h>
 #include <stdio.h>
 namespace
 {

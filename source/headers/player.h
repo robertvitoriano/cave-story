@@ -6,7 +6,7 @@
 #include <slope.h>
 #include <level.h>
 #include <enemy.h>
-#include <sword.h>
+#include <gun.hpp>
 #include <GravityChange.h>
 #include <Camera.h>
 class Graphics;
@@ -122,7 +122,7 @@ private:
 	Uint32 _blinkStartTime;
 	int _blinkDuration;
 	int _blinkInterval;
-	Sword _currentWeapon;
+	Gun _currentGun;
 	CollisionState _collisionState;
 };
 

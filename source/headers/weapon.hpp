@@ -1,12 +1,10 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-#include <animatedsprite.h>
+#include <sprite.h>
 #include <globals.h>
 
-class Graphics;
-
-class Weapon : public AnimatedSprite
+class Weapon : public Sprite
 {
 public:
   Weapon();

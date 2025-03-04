@@ -36,6 +36,7 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) : AnimatedSprite(graphics
 
 	this->setupAnimations();
 	this->playAnimation("IdleRight");
+	this->_currentGun = Gun();
 }
 
 void Player::setupAnimations()

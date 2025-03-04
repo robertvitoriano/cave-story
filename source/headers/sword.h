@@ -1,9 +1,9 @@
 #ifndef SWORD_H
 #define SWORD_H
 
-#include <weapon.h>
+#include <animatedWeapon.hpp>
 #include <iostream>
-class Sword : public Weapon
+class Sword : public AnimatedWeapon
 {
 public:
   Sword();
