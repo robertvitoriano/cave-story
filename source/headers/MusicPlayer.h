@@ -4,8 +4,9 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <SDL_mixer.h>
+#include <SDL2/SDL_mixer.h>
 #include <algorithm>
+#include <map>
 class MusicPlayer
 {
 private:

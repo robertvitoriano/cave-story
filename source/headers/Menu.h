@@ -2,6 +2,7 @@
 #define MENU_H
 #include <MenuItem.h>
 #include <graphics.h>
+#include <vector>
 class Menu
 {
 public:

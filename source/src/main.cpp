@@ -4,7 +4,7 @@
 
 #include <game.h>
 
-int main(int argc, const char *argv[])
+int SDL_main(int argc, char *argv[])
 {
 	Game game;
 	return 0;
