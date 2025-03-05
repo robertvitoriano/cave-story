@@ -74,6 +74,8 @@ void AnimatedSprite::update(int elapsedTime)
 	Sprite::update();
 
 	this->_timeElapsed += elapsedTime;
+	std::cout << "CURRENT ANIMATION " << this->_currentAnimation << "  FRAME INDEX " << std::to_string(this->_frameIndex) << std::endl;
+
 	if (this->_timeElapsed > this->_timeToUpdate)
 	{
 		this->_timeElapsed -= this->_timeToUpdate;
