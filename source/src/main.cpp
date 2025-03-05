@@ -1,7 +1,3 @@
-/* Main.cpp
- * The entry point of the program
- */
-
 #include <game.h>
 
 #ifdef _WIN32
