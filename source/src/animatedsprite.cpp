@@ -72,9 +72,12 @@ void AnimatedSprite::stopAnimation()
 void AnimatedSprite::update(int elapsedTime)
 {
 	Sprite::update();
-
+	std::cout << "ELAPSED TIME " << elapsedTime << std::endl;
+	std::cout << "TIME ELAPSED " << this->_timeElapsed << std::endl;
+	std::cout << "TIME TO UPDATE " << this->_timeToUpdate << std::endl;
 	this->_timeElapsed += elapsedTime;
-	std::cout << "CURRENT ANIMATION " << this->_currentAnimation << "  FRAME INDEX " << std::to_string(this->_frameIndex) << std::endl;
+
+	// std::cout << "CURRENT ANIMATION " << this->_currentAnimation << "  FRAME INDEX " << std::to_string(this->_frameIndex) << "CURRENT ANIMATION SIZE " << this->_animations[this->_currentAnimation].size() << std::endl;
 
 	if (this->_timeElapsed > this->_timeToUpdate)
 	{
