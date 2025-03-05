@@ -14,7 +14,8 @@ AnimatedSprite::AnimatedSprite(Graphics &graphics, const std::string &filePath, 
 																																																		_timeToUpdate(timeToUpdate),
 																																																		_visible(true),
 																																																		_currentAnimationOnce(false),
-																																																		_currentAnimation("")
+																																																		_currentAnimation(""),
+																																																		_timeElapsed(0)
 {
 }
 
