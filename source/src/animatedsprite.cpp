@@ -14,7 +14,8 @@ AnimatedSprite::AnimatedSprite(Graphics &graphics, const std::string &filePath, 
 																																																		_timeToUpdate(timeToUpdate),
 																																																		_visible(true),
 																																																		_currentAnimationOnce(false),
-																																																		_currentAnimation("")
+																																																		_currentAnimation(""),
+																																																		_timeElapsed(0)
 {
 }
 
@@ -72,8 +73,7 @@ void AnimatedSprite::stopAnimation()
 void AnimatedSprite::update(int elapsedTime)
 {
 	Sprite::update();
-
-	std::cout << "CURRENT ANIMATION " << this->_currentAnimation << "  FRAME INDEX " << std::to_string(this->_frameIndex) << std::endl;
+	this->_timeElapsed += elapsedTime;
 
 	if (this->_timeElapsed > this->_timeToUpdate)
 	{
