@@ -14,5 +14,5 @@ void MenuManager::handleInput(SDL_Event &event)
 void MenuManager::render(Graphics &graphics)
 {
   if (currentMenu)
-    currentMenu->render(graphics, 100, 100); // Example starting position
+    currentMenu->render(graphics, 100, 100);
 }
