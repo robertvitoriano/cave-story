@@ -6,7 +6,7 @@
 #include <slope.h>
 #include <level.h>
 #include <enemy.h>
-#include <sword.h>
+#include <gun.hpp>
 #include <GravityChange.h>
 #include <Camera.h>
 class Graphics;
@@ -92,13 +92,10 @@ public:
 	bool isGravityEnabled();
 	void handle3DimensionalLevel();
 	void renderBlinkingPlayer(Graphics &graphics);
-	void setWeapon(Sword &weapon);
-	void attack();
-	void stopAttack();
-	bool isAttacking();
 	void disableVelocity();
 	void enableVelocity();
 	bool isVelocityEnabled();
+	void shoot();
 	CollisionState getCollisionState();
 	void setCollisionState(CollisionState collisionState);
 	Direction getFacing();
@@ -125,8 +122,7 @@ private:
 	Uint32 _blinkStartTime;
 	int _blinkDuration;
 	int _blinkInterval;
-	Sword _currentWeapon;
-	bool _isPerformingAttack;
+	Gun _currentGun;
 	CollisionState _collisionState;
 };
 

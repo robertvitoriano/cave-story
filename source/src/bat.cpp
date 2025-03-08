@@ -46,12 +46,6 @@ void Bat::setupAnimations()
 
 void Bat::touchPlayer(Player *player)
 {
-  if (player->isAttacking())
-  {
-    this->_wasHit = true;
-
-    return;
-  }
   player->gainHealth(-1);
 }
 

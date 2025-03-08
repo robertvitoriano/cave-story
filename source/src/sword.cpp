@@ -3,7 +3,7 @@
 Sword::Sword() {}
 
 Sword::Sword(Graphics &graphics, Vector2 spawnPoint)
-    : Weapon(graphics, "content/sprites/sword.png", 0, 0, 16, 16, spawnPoint, 140),
+    : AnimatedWeapon(graphics, "content/sprites/sword.png", 0, 0, 16, 16, spawnPoint, 140),
       _startingX(spawnPoint.x), _startingY(spawnPoint.y), _direction(RIGHT)
 {
   this->setupAnimations();
@@ -16,7 +16,7 @@ void Sword::update(int elapsedTime)
   {
     this->playAnimation((_direction == RIGHT || _direction == UP || _direction == DOWN) ? "sword-idle" : "sword-idle-left");
   }
-  Weapon::update(elapsedTime);
+  AnimatedWeapon::update(elapsedTime);
 }
 
 void Sword::draw(Graphics &graphics, int x, int y, Direction direction)
@@ -24,11 +24,11 @@ void Sword::draw(Graphics &graphics, int x, int y, Direction direction)
   this->_direction = direction;
   if (this->_direction == RIGHT || _direction == UP || _direction == DOWN)
   {
-    Weapon::draw(graphics, x + 15, y);
+    AnimatedWeapon::draw(graphics, x + 15, y);
   }
   if (this->_direction == LEFT)
   {
-    Weapon::draw(graphics, x - 15, y);
+    AnimatedWeapon::draw(graphics, x - 15, y);
   }
 }
 

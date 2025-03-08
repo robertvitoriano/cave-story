@@ -1,11 +1,10 @@
 
 #include <game.h>
 #include <graphics.h>
-#include <weapon.h>
 #include <stdio.h>
 namespace
 {
-	const int FPS = 50;
+	const int FPS = 60;
 	const int MAX_FRAME_TIME = 1000 / FPS;
 }
 
@@ -66,9 +65,6 @@ void Game::gameLoop()
 	this->_hud = HUD(graphics, this->_player);
 	Camera &camera = Camera::getInstance();
 	camera.follow(&this->_player, &this->_level);
-	Sword sword = Sword(graphics, this->_level.getPlayerSpawnPoint());
-
-	this->_player.setWeapon(sword);
 
 	int LAST_UPDATE_TIME = SDL_GetTicks();
 
@@ -144,7 +140,7 @@ void Game::handleInput(Input &input, float elapsedTime)
 	}
 	if (input.isKeyHeld(SDL_SCANCODE_F) || input.isMouseButtonHeld(SDL_BUTTON_LEFT) || SDL_JoystickGetButton(this->_joystick, JoystickButtons::RECTANGLE))
 	{
-		this->_player.attack();
+		this->_player.shoot();
 	}
 	else if (input.isKeyHeld(SDL_SCANCODE_A) || input.isJoystickButtonHeld(JoystickButtons::JOYSTICK_LEFT))
 	{
@@ -181,12 +177,6 @@ void Game::handleInput(Input &input, float elapsedTime)
 	if (input.wasKeyReleased(SDL_SCANCODE_S))
 	{
 		this->_player.stopLookingDown();
-	}
-	if (input.wasKeyReleased(SDL_SCANCODE_F) ||
-			input.wasMouseButtonReleased(SDL_BUTTON_LEFT) ||
-			input.wasJoystickButtonReleased(JoystickButtons::RECTANGLE))
-	{
-		this->_player.stopAttack();
 	}
 
 	if (input.wasKeyPressed(SDL_SCANCODE_SPACE) || SDL_JoystickGetButton(this->_joystick, JoystickButtons::X))
