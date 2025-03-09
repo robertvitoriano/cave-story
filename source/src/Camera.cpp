@@ -52,6 +52,7 @@ void Camera::follow(Player *player, Level *level)
   this->_player->enableVelocity();
   this->_level = level;
   this->_offset.x = 0;
+  this->_offset.y = 0;
 }
 void Camera::update(float elapsedTime)
 {
@@ -59,8 +60,7 @@ void Camera::update(float elapsedTime)
   {
     return;
   }
-  Vector2 offsetVector = Vector2(-this->_offset.x, 0);
-  float playerX = this->_player->getX();
+  Vector2 offsetVector = Vector2(-this->_offset.x, -this->_offset.y);
 
   if (this->_level->isLevelWiderThanScreen())
   {
