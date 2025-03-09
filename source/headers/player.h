@@ -111,7 +111,6 @@ private:
 	bool _shouldApplyGravity;
 	bool _lookingUp;
 	bool _lookingDown;
-	bool _moveCamera;
 	bool _velocityIsEnabled;
 	Rectangle _collidingRect;
 	int _maxHealth;

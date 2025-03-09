@@ -15,7 +15,7 @@ Camera::Camera()
       _dx(camera_constants::SPEED),
       _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}),
       _rightLimit(globals::SCREEN_WIDTH - 100), _moveTimer(0),
-      _moveSpeedDelay(5), _maxXScroll(0.0f), _moveCamera(true)
+      _moveSpeedDelay(5), _maxXScroll(0.0f)
 {
   this->_offset = {0, 0};
 }
@@ -52,6 +52,7 @@ void Camera::follow(Player *player, Level *level)
   this->_player->enableVelocity();
   this->_level = level;
   this->_offset.x = 0;
+  this->_offset.y = 0;
 }
 void Camera::update(float elapsedTime)
 {
@@ -59,12 +60,11 @@ void Camera::update(float elapsedTime)
   {
     return;
   }
-  Vector2 offsetVector = Vector2(-this->_offset.x, 0);
-  float playerX = this->_player->getX();
+  Vector2 offsetVector = Vector2(-this->_offset.x, -this->_offset.y);
 
   if (this->_level->isLevelWiderThanScreen())
   {
-    this->handleScrollOffset(playerX, elapsedTime);
+    this->handleScrollOffset(elapsedTime);
 
     for (Tile &tile : this->_level->getTileList())
     {
@@ -100,22 +100,11 @@ void Camera::update(float elapsedTime)
   }
 }
 
-void Camera::handleScrollOffset(int playerX, float elapsedTime)
+void Camera::handleScrollOffset(float elapsedTime)
 {
+  float levelWidth = this->_level->getSize().x * this->_level->getTileSize().x * globals::SPRITE_SCALE;
 
-  float levelWidth = this->_level->getSize().x * this->_level->getTileSize().x *
-                     globals::SPRITE_SCALE;
   this->_maxXScroll = levelWidth - globals::SCREEN_WIDTH;
-
-  int cameraXMiddle = globals::SCREEN_WIDTH / 2;
-
-  bool playerIsMoving = this->_player->getXVelocity() != 0;
-
-  float newXOffset = std::min(this->_dx * elapsedTime, this->_maxXScroll);
-
-  CollisionState playerCollisionState = this->_player->getCollisionState();
-  Rectangle collidingRect = this->_player->getCollidingRect();
-  sides::Side collisionSide = this->_player->getCollisionSide(collidingRect);
 
   if ((this->reachedMaxXScroll() && this->_player->getFacing() == RIGHT) || this->_offset.x <= 0 && this->_player->getFacing() == LEFT)
   {
@@ -126,18 +115,14 @@ void Camera::handleScrollOffset(int playerX, float elapsedTime)
 
   this->_player->disableVelocity();
 
-  if (collisionSide == sides::RIGHT || collisionSide == sides::LEFT)
-  {
-    if (collisionSide == sides::RIGHT && this->_dx < 0)
-    {
-      this->_offset.x += newXOffset;
-    }
-    if (collisionSide == sides::LEFT && this->_dx > 0)
-    {
-      this->_offset.x += newXOffset;
-    }
-  }
-  else
+  float newXOffset = std::min(this->_dx * elapsedTime, this->_maxXScroll);
+
+  Rectangle collidingRect = this->_player->getCollidingRect();
+  sides::Side collisionSide = this->_player->getCollisionSide(collidingRect);
+
+  bool collidedHorizontally = collisionSide == sides::RIGHT || collisionSide == sides::LEFT;
+
+  if (!collidedHorizontally)
   {
     this->move(newXOffset);
   }
@@ -152,16 +137,11 @@ void Camera::moveRight() { this->_dx = -camera_constants::SPEED; }
 void Camera::stopMoving()
 {
   this->_dx = 0;
-  this->_moveCamera = false;
 }
 
 bool Camera::reachedMaxXScroll()
 {
   return static_cast<float>(this->_offset.x) >= this->_maxXScroll;
 }
-
-void Camera::startMoving() { this->_moveCamera = true; }
-
-bool Camera::cameraIsMoving() { return this->_moveCamera; }
 
 float Camera::getMaxXScroll() { return this->_maxXScroll; }
