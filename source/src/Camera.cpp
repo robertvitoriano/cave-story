@@ -130,11 +130,11 @@ void Camera::handleScrollOffset(float elapsedTime)
   {
     if (collisionSide == sides::RIGHT && this->_dx < 0)
     {
-      this->_offset.x += newXOffset;
+      this->move(newXOffset);
     }
     if (collisionSide == sides::LEFT && this->_dx > 0)
     {
-      this->_offset.x += newXOffset;
+      this->move(newXOffset);
     }
   }
   else
