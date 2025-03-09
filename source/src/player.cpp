@@ -256,9 +256,9 @@ void Player::handleTileCollisions(std::vector<Rectangle> &others)
 			case sides::LEFT:
 				this->_x = others.at(i).getRight() + 1;
 				this->_collisionState.horizontal = true;
+				this->_collidingRect = others.at(i);
 				break;
 			case sides::RIGHT:
-				this->_collidingRect = Rectangle();
 				this->_collidingRect = others.at(i);
 				this->_collisionState.horizontal = true;
 				this->_x = others.at(i).getLeft() - this->_boundingBox.getWidth() - 1;
