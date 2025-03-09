@@ -106,18 +106,17 @@ void Camera::handleScrollOffset(float elapsedTime)
 
   this->_maxXScroll = levelWidth - globals::SCREEN_WIDTH;
 
-  float newXOffset = std::min(this->_dx * elapsedTime, this->_maxXScroll);
-
-  CollisionState playerCollisionState = this->_player->getCollisionState();
-  Rectangle collidingRect = this->_player->getCollidingRect();
-  sides::Side collisionSide = this->_player->getCollisionSide(collidingRect);
-
   if ((this->reachedMaxXScroll() && this->_player->getFacing() == RIGHT) || this->_offset.x <= 0 && this->_player->getFacing() == LEFT)
   {
     this->_player->enableVelocity();
     this->stopMoving();
     return;
   }
+
+  float newXOffset = std::min(this->_dx * elapsedTime, this->_maxXScroll);
+
+  Rectangle collidingRect = this->_player->getCollidingRect();
+  sides::Side collisionSide = this->_player->getCollisionSide(collidingRect);
 
   this->_player->disableVelocity();
 
