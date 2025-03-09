@@ -228,7 +228,9 @@ void Player::handleTileCollisions(std::vector<Rectangle> &others)
 {
 	for (int i = 0; i < others.size(); i++)
 	{
+
 		sides::Side collisionSide = Sprite::getCollisionSide(others.at(i));
+
 		if (collisionSide != sides::NONE)
 		{
 

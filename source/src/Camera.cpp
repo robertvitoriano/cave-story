@@ -113,25 +113,16 @@ void Camera::handleScrollOffset(float elapsedTime)
     return;
   }
 
+  this->_player->disableVelocity();
+
   float newXOffset = std::min(this->_dx * elapsedTime, this->_maxXScroll);
 
   Rectangle collidingRect = this->_player->getCollidingRect();
   sides::Side collisionSide = this->_player->getCollisionSide(collidingRect);
 
-  this->_player->disableVelocity();
+  bool collidedHorizontally = collisionSide == sides::RIGHT || collisionSide == sides::LEFT;
 
-  if (collisionSide == sides::RIGHT || collisionSide == sides::LEFT)
-  {
-    if (collisionSide == sides::RIGHT && this->_dx < 0)
-    {
-      this->move(newXOffset);
-    }
-    if (collisionSide == sides::LEFT && this->_dx > 0)
-    {
-      this->move(newXOffset);
-    }
-  }
-  else
+  if (!collidedHorizontally)
   {
     this->move(newXOffset);
   }
