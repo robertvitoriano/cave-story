@@ -26,17 +26,15 @@ public:
   void drawDebug(Graphics &graphics);
   void update(float elapsedTime);
   void follow(Player *player, Level *level);
-  void moveLeft();
   void stopMoving();
   bool reachedMaxXScroll();
-  void startMoving();
-  bool cameraIsMoving();
   float getMaxXScroll();
+  void moveLeft();
   void moveRight();
 
 private:
   Camera();
-  void handleScrollOffset(int playerX, float elapsedTime);
+  void handleScrollOffset(float elapsedTime);
 
   void move(float newXOffset);
 
@@ -50,7 +48,6 @@ private:
 
   Uint32 _moveTimer;
   Uint32 _moveSpeedDelay;
-  bool _moveCamera;
 };
 
 #endif

@@ -15,7 +15,7 @@ Camera::Camera()
       _dx(camera_constants::SPEED),
       _center({globals::SCREEN_WIDTH / 2, globals::SCREEN_HEIGHT / 2}),
       _rightLimit(globals::SCREEN_WIDTH - 100), _moveTimer(0),
-      _moveSpeedDelay(5), _maxXScroll(0.0f), _moveCamera(true)
+      _moveSpeedDelay(5), _maxXScroll(0.0f)
 {
   this->_offset = {0, 0};
 }
@@ -64,7 +64,7 @@ void Camera::update(float elapsedTime)
 
   if (this->_level->isLevelWiderThanScreen())
   {
-    this->handleScrollOffset(playerX, elapsedTime);
+    this->handleScrollOffset(elapsedTime);
 
     for (Tile &tile : this->_level->getTileList())
     {
@@ -100,7 +100,7 @@ void Camera::update(float elapsedTime)
   }
 }
 
-void Camera::handleScrollOffset(int playerX, float elapsedTime)
+void Camera::handleScrollOffset(float elapsedTime)
 {
 
   float levelWidth = this->_level->getSize().x * this->_level->getTileSize().x *
@@ -152,16 +152,11 @@ void Camera::moveRight() { this->_dx = -camera_constants::SPEED; }
 void Camera::stopMoving()
 {
   this->_dx = 0;
-  this->_moveCamera = false;
 }
 
 bool Camera::reachedMaxXScroll()
 {
   return static_cast<float>(this->_offset.x) >= this->_maxXScroll;
 }
-
-void Camera::startMoving() { this->_moveCamera = true; }
-
-bool Camera::cameraIsMoving() { return this->_moveCamera; }
 
 float Camera::getMaxXScroll() { return this->_maxXScroll; }
