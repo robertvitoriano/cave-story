@@ -487,9 +487,9 @@ const Vector2 Level::getPlayerSpawnPoint() const
 }
 Vector2 Level::getTilesetPosition(Tileset tileset, int gid, int tileWidth, int tileHeight)
 {
-	int tilesetWidth, tilesetHeight;
+	int tilesetWidth;
 
-	SDL_QueryTexture(tileset.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
+	SDL_QueryTexture(tileset.Texture, NULL, NULL, &tilesetWidth, NULL);
 	int numberOfTilesPerRow = tilesetWidth / tileWidth;
 
 	int relativeGid = gid - tileset.FirstGid;
