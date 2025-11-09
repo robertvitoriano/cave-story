@@ -62,7 +62,20 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 	{
 		int firstgid = tileSet["firstgid"];
 		std::string imagePath = tileSet["image"];
-		SDL_Texture *tex = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(imagePath.erase(0, 3)));
+
+		SDL_Surface *surf = graphics.loadImage(imagePath);
+		if (!surf)
+		{
+			std::cerr << "Failed to load image: " << imagePath << " (IMG error: " << IMG_GetError() << ")\n";
+			this->_tilesets.push_back(Tileset(nullptr, firstgid));
+			continue;
+		}
+		SDL_Texture *tex = SDL_CreateTextureFromSurface(graphics.getRenderer(), surf);
+		if (!tex)
+		{
+			std::cerr << "SDL_CreateTextureFromSurface failed for " << imagePath
+								<< " (SDL error: " << SDL_GetError() << ")\n";
+		}
 		this->_tilesets.push_back(Tileset(tex, firstgid));
 		for (nlohmann::json animatedTile : tileSet["tiles"])
 		{
