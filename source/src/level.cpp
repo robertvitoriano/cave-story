@@ -61,8 +61,13 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 	for (nlohmann::json tileSet : levelData["tilesets"])
 	{
 		int firstgid = tileSet["firstgid"];
+
 		std::string imagePath = tileSet["image"];
 
+		if (imagePath.rfind("../", 0) == 0)
+		{
+			imagePath = imagePath.substr(3);
+		}
 		SDL_Surface *surf = graphics.loadImage(imagePath);
 		if (!surf)
 		{
@@ -99,7 +104,11 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 			int tileCounter = 0;
 			for (nlohmann::json tileGID : layer["data"])
 			{
-
+				if (tileGID == 0)
+				{
+					tileCounter++;
+					continue;
+				}
 				Tileset tileset;
 
 				for (int i = 0; i < this->_tilesets.size(); i++)
